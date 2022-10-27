@@ -1,0 +1,9 @@
+# users_admin_password
+# users_admin_password_salt
+# users_admin_name
+# users_admin_keys
+# users_root_password
+# users_root_password_salt
+
+users_admin_passwordless_sudo: yes
+users_admin_groups: [ "sudo" ]

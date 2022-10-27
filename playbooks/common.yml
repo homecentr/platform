@@ -1,0 +1,31 @@
+- name: "Common set up on all servers"
+  hosts: all
+  become: true
+  any_errors_fatal: true
+  tasks:
+  - import_role: name=../roles/common/users
+    tags: [ users ]
+    
+  - import_role: name=../roles/common/hosts
+    tags: [ hosts ]
+
+  - import_role: name=../roles/common/chrony
+    tags: [ chrony, ntp ]
+
+  - import_role: name=../roles/common/benchmarks
+    tags: [ benchmarks ]
+
+  - import_role: name=../roles/common/lynis-hardening
+    tags: [ lynis ]
+
+  - import_role: name=../roles/common/clamav
+    tags: [ clamav ]
+
+  - import_role: name=../roles/common/ssh
+    tags: [ ssh ]
+  
+  - import_role: name=../roles/common/motd
+    tags: [ motd ]
+
+  # - import_role: name=cloudalchemy.node_exporter
+  #   tags: [ node_exporter ]

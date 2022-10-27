@@ -1,0 +1,17 @@
+- name: Delete default banner
+  file:
+    path: /etc/motd
+    state: absent
+
+- name: Find pre-existing scripts
+  find:
+    paths: /etc/update-motd.d/
+    file_type: file
+    excludes: "{{ motd_common_scripts + motd_common_scripts_templates + motd_zfs_scripts + motd_hw_scripts + ['40-services'] }}"
+  register: motd_pre_existing_scripts
+
+- name: Delete pre-existing scripts
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ motd_pre_existing_scripts['files'] }}"

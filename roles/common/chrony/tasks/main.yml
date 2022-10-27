@@ -1,0 +1,11 @@
+---
+- name: Apt update
+  apt:
+    update_cache: yes
+
+- name: "Set up ntp/chrony"
+  import_role:
+    name: oasis_roles.system.chrony
+
+- name: "Force chrony to sync time immediately"
+  command: chronyc makestep

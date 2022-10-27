@@ -1,0 +1,6 @@
+- name: Install recommended packages
+  package:
+    name:
+      - debsums
+      - apt-show-versions
+    state: present

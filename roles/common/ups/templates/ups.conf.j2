@@ -1,0 +1,8 @@
+{% for ups_name in hosted_ups_devices %}
+[{{ ups_name }}]
+driver = {{ (ups_devices | selectattr('name', 'equalto', ups_name) | map(attribute='driver'))[0] }}
+port = {{ (ups_devices | selectattr('name', 'equalto', ups_name) | map(attribute='port'))[0] }}
+{% if 'vendor_id' in (ups_devices | selectattr('name', 'equalto', ups_name))[0] %}vendorid = {{ (ups_devices | selectattr('name', 'equalto', ups_name) | map(attribute='vendor_id'))[0] }}{% endif %}
+desc = {{ (ups_devices | selectattr('name', 'equalto', ups_name) | map(attribute='description'))[0] }}
+
+{% endfor %}

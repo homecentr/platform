@@ -1,0 +1,72 @@
+- name: "Install s-nail"
+  package:
+    name: s-nail
+    state: present
+
+- name: "Install and configure ClamAV"
+  import_role:
+    name: geerlingguy.clamav
+  vars:
+    clamav_daemon_configuration_changes:
+      - regexp: '^.*Example$'
+        state: absent
+      - regexp: '^.*LocalSocket .*$'
+        line: 'LocalSocket {{ clamav_daemon_localsocket }}'
+    clamav_daemon_state: stopped
+    clamav_daemon_enabled: false
+    clamav_freshclam_daemon_state: started
+    clamav_freshclam_daemon_enabled: true
+
+- name: "Create scan script"
+  when: clamav_scanned_dirs is defined and clamav_scanned_dirs != null
+  copy:
+    dest: /usr/bin/scan-clamav
+    owner: root
+    group: root
+    mode: 0700
+    content: |
+      #!/bin/bash
+
+      LOGFILE="/var/log/clamav/clamav-$(date +'%Y-%m-%d')-$(cat /proc/sys/kernel/random/uuid).log";
+      EMAIL_MSG="Please see the log file attached.";
+      EMAIL_FROM="{{ clamav_alert_smtp_sender | mandatory }}";
+      EMAIL_TO="{{ clamav_alert_smtp_recipient | mandatory }}";
+      DIRTOSCAN="{{ clamav_scanned_dirs | join(" ") }}";
+
+      for S in ${DIRTOSCAN}; do
+        DIRSIZE=$(du -sh "$S" 2>/dev/null | cut -f1);
+
+        echo "Starting a daily scan of "$S" directory. Amount of data to be scanned is "$DIRSIZE".";
+
+        clamscan -ri "$S" >> "$LOGFILE";
+
+        # get the value of "Infected lines"
+        MALWARE=$(tail "$LOGFILE" | grep Infected | cut -d" " -f3);
+
+        # if the value is not equal to zero, send an email with the log file attached
+        if [ "$MALWARE" -ne "0" ];then
+          echo "Malware found, sending e-mail alert..."
+          cat "$LOGFILE" | head -n 300 | s-nail -s "ClamAV has found malware on $(hostname)" -r "$EMAIL_FROM" -Sv15-compat -S mta="smtp://{{ clamav_alert_smtp_user }}:{{ clamav_alert_smtp_password }}@{{ clamav_alert_smtp_host }}:{{ clamav_alert_smtp_port }}" "$EMAIL_TO";
+          echo "No malware found"
+        fi
+      done
+
+      exit 0
+
+- name: Create a cron job for ClamAV scan
+  when: clamav_scanned_dirs is defined and clamav_scanned_dirs != null
+  ansible.builtin.cron:
+    name: "ClamAV scan"
+    day: "{{ clamav_cron_day }}"
+    hour: "{{ clamav_cron_hour }}"
+    minute: "0"
+    job: "bash /usr/bin/scan-clamav"
+
+- name: Create a cron job to delete old ClamAV scan logs
+  when: clamav_scanned_dirs is defined and clamav_scanned_dirs != null
+  ansible.builtin.cron:
+    name: "ClamAV log files clean up"
+    day: "{{ clamav_cron_day }}"
+    hour: "{{ (clamav_cron_hour + 1) % 24 }}"
+    minute: "0"
+    job: "find /var/log/clamav/clamav-* -mtime +{{ clamav_log_retention_days }} -exec rm {} \\;"

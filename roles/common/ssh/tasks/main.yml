@@ -1,0 +1,3 @@
+- include_tasks: hardening.yml
+- include_tasks: known-hosts.yml
+- include_tasks: fail2ban.yml

@@ -1,0 +1,5 @@
+- name: Remove hw related scripts
+  file:
+    path: /etc/update-motd.d/{{ item }}
+    state: absent
+  with_items: motd_hw_scripts

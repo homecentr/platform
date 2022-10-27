@@ -1,0 +1,45 @@
+- name: "Configure drivers for connected ups devices"
+  notify: restart ups_driver
+  copy:
+    dest: /etc/nut/ups.conf
+    force: yes
+    mode: 0640
+    owner: root
+    group: nut
+    content: "{{ lookup('template', 'ups.conf.j2') }}"
+
+- name: "Create emulator files for dummy ups"
+  file:
+    path: "/etc/nut/{{ item }}"
+    state: touch
+  with_items: "{{ ups_devices | selectattr('monitored_by', 'equalto', inventory_hostname) | selectattr('driver', 'equalto', 'dummy-ups') | map(attribute='port') }}"
+
+- name: "Configure Network UPS Tools Daemon"
+  notify: restart ups_server
+  copy:
+    dest: /etc/nut/upsd.conf
+    force: yes
+    mode: 0640
+    owner: root
+    group: nut
+    content: "{{ lookup('template', 'upsd.conf.j2') }}"
+
+- name: "Configure Network UPS Tools Daemon users"
+  notify: restart ups_server
+  copy:
+    dest: /etc/nut/upsd.users
+    force: yes
+    mode: 0640
+    owner: root
+    group: nut
+    content: "{{ lookup('template', 'upsd.users.j2') }}"
+
+- name: "Start the ups server"
+  service:
+    name: nut-server
+    state: started
+
+- name: "Start the driver service"
+  service:
+    name: nut-driver
+    state: started

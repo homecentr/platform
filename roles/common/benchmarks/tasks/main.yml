@@ -1,0 +1,7 @@
+---
+- include_tasks: geekbench.yml
+
+- name: Install iperf
+  package:
+    name: iperf
+    state: present

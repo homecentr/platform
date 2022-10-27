@@ -1,0 +1,11 @@
+- name: Check that the /usr/bin/as exists
+  stat:
+    path: /usr/bin/as
+  register: stat_result
+
+- name: "/usr/bin/as"
+  file:
+    path: "/usr/bin/as"
+    state: file
+    mode: 0700
+  when: stat_result.stat.exists

@@ -1,0 +1,5 @@
+- name: Remove zfs related scripts
+  file:
+    path: /etc/update-motd.d/{{ item }}
+    state: absent
+  with_items: "{{ motd_zfs_scripts }}"

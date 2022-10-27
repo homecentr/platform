@@ -1,0 +1,6 @@
+- include_tasks: install-lynis.yml
+- include_tasks: install-rootkit-hunter.yml
+- include_tasks: install-recommended-packages.yml
+- include_tasks: disable-kernel-modules.yml
+- include_tasks: restrict-compilers.yml
+- include_tasks: restrict-file-permissions.yml

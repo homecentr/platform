@@ -1,0 +1,5 @@
+- name: Create profile file
+  copy:
+    dest: /etc/lynis/homecentr.prf
+    content: lynis_hardening_ignore_list
+  when: lynis_hardening_ignore_list != null

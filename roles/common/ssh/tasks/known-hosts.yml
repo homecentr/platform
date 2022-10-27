@@ -1,0 +1,10 @@
+- name: "Get host ssh key"
+  command: "ssh-keyscan -t rsa {{ inventory_hostname }} | cut -d' ' -f 3"
+  register: ssh_key
+
+- name: "Add ssh key to known_hosts"
+  known_hosts:
+    path: /etc/ssh/ssh_known_hosts
+    name: "{{ hostvars[item].inventory_hostname }}"
+    key: "{{ hostvars[item].ansible_hostname }} ssh-rsa {{ hostvars[item].ssh_key }}"
+  with_items: "{{ groups['all'] }}"

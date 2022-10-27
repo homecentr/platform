@@ -1,0 +1,16 @@
+{
+  "name": "homecentr-platform",
+  "version": "1.0.0",
+  "repository": "git@github.com:homecentr/platform.git",
+  "author": "Lukas Holota",
+  "license": "GPL",
+  "private": true,
+  "scripts": {
+    "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-create.ps1",   
+    "lab:apply": "./scripts/apply.sh lab",
+    "prod:apply": "./scripts/apply.sh prod",
+    "secrets:init": "./scripts/vault.sh create",
+    "secrets:edit": "./scripts/vault.sh edit",
+    "secrets:view": "./scripts/vault.sh view"
+  }
+}

@@ -1,0 +1,8 @@
+- name: "Cron directories"
+  file:
+    path: "/etc/cron.{{ item }}"
+    mode: 0700
+  with_items:
+    - hourly
+    - weekly
+    - monthly

@@ -1,0 +1,44 @@
+- name: Install required packages
+  package:
+    name:
+      - figlet
+      - lolcat
+    state: present
+
+- name: Copy apt-check script
+  copy:
+    dest: /usr/local/bin/apt-check
+    mode: 0755
+    owner: root
+    group: root
+    content: "{{ lookup('file', 'apt-check') }}"
+
+- name: Install apt-check dependencies
+  package:
+    name: python3-distro-info
+
+- name: Copy common scripts
+  copy:
+    src: "motd/{{ item }}.sh"
+    dest: /etc/update-motd.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0755
+  with_items: "{{ motd_common_scripts }}"
+
+- name: Get lolcat full path
+  become: false
+  shell: "which lolcat"
+  register: lolcat_lookup
+
+- name: Create common scripts from templates
+  template:
+    src: "{{ item }}.sh.j2"
+    dest: /etc/update-motd.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0755
+    force: yes
+  with_items: "{{ motd_common_scripts_templates }}"
+  vars:
+    lolcat_path: "{{ lolcat_lookup.stdout }}"

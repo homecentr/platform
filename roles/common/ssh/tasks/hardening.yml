@@ -1,0 +1,59 @@
+- name: Ensure SSH daemon is running.
+  service:
+    name: ssh
+    state: started
+
+- name: Update SSH configuration to be more secure
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+    validate: 'sshd -T -f %s'
+    mode: 0644
+  with_items:
+    - regexp: "^PasswordAuthentication"
+      line: "PasswordAuthentication {{ ssh_allow_password_login }}"
+    - regexp: "^PermitRootLogin"
+      line: "PermitRootLogin {{ ssh_allow_root_login }}"
+    - regexp: "^Port"
+      line: "Port {{ ssh_port }}"
+    - regexp: "^UseDNS"
+      line: "UseDNS no"
+    - regexp: "^PermitEmptyPasswords"
+      line: "PermitEmptyPasswords no"
+    - regexp: "^ChallengeResponseAuthentication"
+      line: "ChallengeResponseAuthentication no"
+    - regexp: "^GSSAPIAuthentication"
+      line: "GSSAPIAuthentication no"
+    - regexp: "^X11Forwarding"
+      line: "X11Forwarding no"
+  notify: restart ssh
+
+- name: Add configured users allowed to connect over ssh
+  lineinfile:
+    dest: "/etc/ssh/sshd_config"
+    regexp: '^AllowUsers'
+    line: "AllowUsers {{ ssh_allowed_users | join(' ') }}"
+    state: present
+    create: true
+    validate: 'sshd -T -f %s'
+    mode: 0644
+  when: ssh_allowed_users | length > 0
+  notify: restart ssh
+
+- name: Allow root login from specific hosts
+  when: ssh_allow_root_login_trusted_clients is defined
+  blockinfile:
+    path: /etc/ssh/sshd_config
+    marker: "# {mark} ANSIBLE MANAGED BLOCK"
+    block: |
+      Match Host {{ ssh_allow_root_login_trusted_clients | map('extract', hostvars, 'ansible_host') | join(",") }}
+        PubkeyAuthentication yes
+        AllowUsers root
+        PermitRootLogin without-password
+    backup: yes # Will the without-password work with PVE?
+    state: present
+    validate: 'sshd -T -f %s'
+    mode: 0644
+  notify: restart ssh

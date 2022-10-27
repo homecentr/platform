@@ -1,0 +1,8 @@
+- name: Copy zfs related scripts
+  copy:
+    src: "motd/{{ item }}.sh"
+    dest: /etc/update-motd.d/{{ item }}
+    owner: root
+    group: root
+    mode: 0755
+  with_items: "{{ motd_zfs_scripts }}"
