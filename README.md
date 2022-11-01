@@ -44,10 +44,12 @@ roles/
     - Follow the general node preparation guidelines below
 
 ### Preparing a new node
-Kickstart the node using the bash as shown below:
+Before applying all playbooks, make sure the nodes are initialized using the `init` playbook. Given that the node does not know your SSH keys yet, you will need to connect to it using a pre-existing user using their password as shown below.
 ```bash
-curl https://raw.githubusercontent.com/homecentr/platform/master/scripts/kickstart-pve.sh | bash
+yarn <env>:apply init -u root -e ansible_user=root -k
 ```
+
+This command will install sudo and set up users so that the other playbooks which rely on being applied via sudo can be executed.
 
 ## Applying playbooks
 Simply run the following bash command (requires Linux e.g. in WSL with [Yarn](https://yarnpkg.com/) installed):

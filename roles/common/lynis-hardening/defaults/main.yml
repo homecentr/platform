@@ -1,5 +1,5 @@
-lynis_hardening_ignore_promics_interfaces: no
-lynis_hardening_ignore_root_ssh: no
+lynis_hardening_ignore_promics_interfaces: false
+lynis_hardening_ignore_root_ssh: false
 
 lynis_hardening_disabled_kernel_modules:
   - dccp

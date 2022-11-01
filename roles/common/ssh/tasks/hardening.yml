@@ -1,10 +1,10 @@
 - name: Ensure SSH daemon is running.
-  service:
+  ansible.builtin.service:
     name: ssh
     state: started
 
 - name: Update SSH configuration to be more secure
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
@@ -28,10 +28,10 @@
       line: "GSSAPIAuthentication no"
     - regexp: "^X11Forwarding"
       line: "X11Forwarding no"
-  notify: restart ssh
+  notify: Restart ssh
 
 - name: Add configured users allowed to connect over ssh
-  lineinfile:
+  ansible.builtin.lineinfile:
     dest: "/etc/ssh/sshd_config"
     regexp: '^AllowUsers'
     line: "AllowUsers {{ ssh_allowed_users | join(' ') }}"
@@ -40,11 +40,11 @@
     validate: 'sshd -T -f %s'
     mode: 0644
   when: ssh_allowed_users | length > 0
-  notify: restart ssh
+  notify: Restart ssh
 
 - name: Allow root login from specific hosts
   when: ssh_allow_root_login_trusted_clients is defined
-  blockinfile:
+  ansible.builtin.blockinfile:
     path: /etc/ssh/sshd_config
     marker: "# {mark} ANSIBLE MANAGED BLOCK"
     block: |
@@ -52,8 +52,8 @@
         PubkeyAuthentication yes
         AllowUsers root
         PermitRootLogin without-password
-    backup: yes # Will the without-password work with PVE?
+    backup: true
     state: present
     validate: 'sshd -T -f %s'
     mode: 0644
-  notify: restart ssh
+  notify: Restart ssh

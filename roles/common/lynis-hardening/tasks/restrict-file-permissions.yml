@@ -1,5 +1,5 @@
-- name: "Cron directories"
-  file:
+- name: Cron directories
+  ansible.builtin.file:
     path: "/etc/cron.{{ item }}"
     mode: 0700
   with_items:

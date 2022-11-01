@@ -1,11 +1,10 @@
----
 - name: Apt update
-  apt:
-    update_cache: yes
+  ansible.builtin.apt:
+    update_cache: true
 
 - name: "Set up ntp/chrony"
-  import_role:
+  ansible.builtin.import_role:
     name: oasis_roles.system.chrony
 
-- name: "Force chrony to sync time immediately"
-  command: chronyc makestep
+- name: "Force chrony to sync time immediately"  # noqa no-changed-when
+  ansible.builtin.command: chronyc makestep

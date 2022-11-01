@@ -1,0 +1,26 @@
+- name: Create kubelet.conf
+  notify: Apply kubelet.conf
+  ansible.builtin.copy:
+    dest: /etc/sysctl.d/90-kubelet.conf
+    owner: root
+    group: root
+    mode: 0640
+    content: "{{ lookup('template', 'kubelet.conf.j2') }}"
+    force: true
+
+- name: Create audit log directory
+  ansible.builtin.file:
+    path: /var/lib/rancher/k3s/server/logs
+    owner: root
+    group: root
+    mode: 0700
+    state: directory
+
+- name: Create audit policy
+  ansible.builtin.copy:
+    dest: /var/lib/rancher/k3s/server/audit.yaml
+    owner: root
+    group: root
+    mode: 0644
+    content: "{{ lookup('template', 'audit.yml.j2') }}"
+    force: true

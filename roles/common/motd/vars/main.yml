@@ -1,13 +1,13 @@
 motd_common_scripts:
-- 20-sysinfo
-- 35-disk-space
-- 90-updates
+  - 20-sysinfo
+  - 35-disk-space
+  - 90-updates
 
 motd_common_scripts_templates:
-- 10-hostname-color
+  - 10-hostname-color
 
 motd_zfs_scripts:
-- 30-zpool-bar
+  - 30-zpool-bar
 
 motd_hw_scripts:
-- 36-disk-status
+  - 36-disk-status

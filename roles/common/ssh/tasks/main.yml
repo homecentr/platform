@@ -1,3 +1,11 @@
-- include_tasks: hardening.yml
-- include_tasks: known-hosts.yml
-- include_tasks: fail2ban.yml
+- name: SSH hardening
+  ansible.builtin.include_tasks:
+    file: hardening.yml
+
+- name: Set other servers as known hosts
+  ansible.builtin.include_tasks:
+    file: known-hosts.yml
+
+- name: Install and configure fail2ban
+  ansible.builtin.include_tasks:
+    file: fail2ban.yml

@@ -1,0 +1,18 @@
+- name: Install Gluster server
+  ansible.builtin.apt:
+    name: glusterfs-server
+    state: present
+    update_cache: true
+
+- name: Start the Gluster daemon
+  ansible.builtin.service:
+    name: glusterd
+    state: started
+    enabled: true
+
+- name: Probe servers
+  run_once: true
+  gluster.gluster.gluster_peer:
+    state: present
+    # Current node has to be removed from the list because probing self throws an error
+    nodes: "{{ groups['gluster_servers'] | map('extract', hostvars) | map(attribute='gluster_hostname') | difference([gluster_hostname]) }}"

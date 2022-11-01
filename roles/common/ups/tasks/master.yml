@@ -1,45 +1,50 @@
-- name: "Configure drivers for connected ups devices"
-  notify: restart ups_driver
-  copy:
+- name: Configure drivers for connected ups devices
+  notify: Restart ups_driver
+  ansible.builtin.copy:
     dest: /etc/nut/ups.conf
-    force: yes
+    force: true
     mode: 0640
     owner: root
     group: nut
     content: "{{ lookup('template', 'ups.conf.j2') }}"
 
-- name: "Create emulator files for dummy ups"
-  file:
+- name: Create emulator files for dummy ups
+  ansible.builtin.file:
     path: "/etc/nut/{{ item }}"
     state: touch
+    owner: root
+    group: nut
+    mode: 0640
+  # yamllint disable rule:line-length
   with_items: "{{ ups_devices | selectattr('monitored_by', 'equalto', inventory_hostname) | selectattr('driver', 'equalto', 'dummy-ups') | map(attribute='port') }}"
+  # yamllint enable rule:line-length
 
-- name: "Configure Network UPS Tools Daemon"
-  notify: restart ups_server
-  copy:
+- name: Configure Network UPS Tools Daemon
+  notify: Restart ups_server
+  ansible.builtin.copy:
     dest: /etc/nut/upsd.conf
-    force: yes
+    force: true
     mode: 0640
     owner: root
     group: nut
     content: "{{ lookup('template', 'upsd.conf.j2') }}"
 
-- name: "Configure Network UPS Tools Daemon users"
-  notify: restart ups_server
-  copy:
+- name: Configure Network UPS Tools Daemon users
+  notify: Restart ups_server
+  ansible.builtin.copy:
     dest: /etc/nut/upsd.users
-    force: yes
+    force: true
     mode: 0640
     owner: root
     group: nut
     content: "{{ lookup('template', 'upsd.users.j2') }}"
 
-- name: "Start the ups server"
-  service:
+- name: Start the ups server
+  ansible.builtin.service:
     name: nut-server
     state: started
 
-- name: "Start the driver service"
-  service:
+- name: Start the driver service
+  ansible.builtin.service:
     name: nut-driver
     state: started

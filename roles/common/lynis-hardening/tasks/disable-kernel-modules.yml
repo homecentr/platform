@@ -1,5 +1,5 @@
 - name: "Disable loading kernel module"
-  copy:
+  ansible.builtin.copy:
     dest: /etc/modprobe.d/{{ item }}.conf
     owner: root
     group: root
@@ -8,10 +8,13 @@
   with_items: "{{ lynis_hardening_disabled_kernel_modules }}"
 
 - name: "Blacklist module"
-  lineinfile:
-    create: yes
+  ansible.builtin.lineinfile:
+    create: true
     path: /etc/modprobe.d/blacklist.conf
     state: present
     regexp: '^blacklist {{ item }}$'
     line: 'blacklist {{ item }}'
+    mode: 0644
+    owner: root
+    group: root
   with_items: "{{ lynis_hardening_disabled_kernel_modules }}"

@@ -1,0 +1,15 @@
+- name: "Initialize nodes"
+  hosts: all
+  become: false
+  any_errors_fatal: true
+  tasks:
+  - name: Install sudo
+    ansible.builtin.package:
+      name: sudo
+      state: present
+
+  - name: Create users
+    ansible.builtin.import_role:
+      name: ../roles/common/users
+    tags:
+      - users

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 printHelp() {
-  echo "Usage: apply (staging|prod) <playbook>"
+  echo "Usage: apply (lab|prod) <playbook>"
 }
 
 case "$1" in
- staging)
-  INVENTORY="./environments/staging"
+ lab)
+  INVENTORY="./environments/lab"
   ;;
  prod)
   INVENTORY="./inventories/prod"

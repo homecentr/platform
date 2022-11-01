@@ -1,14 +1,14 @@
 - name: Install required packages for hardware related scripts
-  package:
+  ansible.builtin.package:
     name:
       - hddtemp
     state: present
 
 - name: Copy hw related scripts
-  copy:
+  ansible.builtin.copy:
     src: "motd/{{ item }}.sh"
     dest: /etc/update-motd.d/{{ item }}
     owner: root
     group: root
     mode: 0755
-  with_items: motd_hw_scripts
+  with_items: '{{ motd_hw_scripts }}'

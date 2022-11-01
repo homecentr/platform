@@ -1,40 +1,32 @@
-  - name: Install rkhunter
-    package:
-      name: rkhunter
-      state: present
+- name: Install rkhunter
+  ansible.builtin.package:
+    name: rkhunter
+    state: present
 
-  - name: Disable web_cmd
-    lineinfile:
-      path: /etc/rkhunter.conf
-      line: "WEB_CMD=\"/bin/false\""
-      state: absent
+- name: Disable web_cmd
+  ansible.builtin.lineinfile:
+    path: /etc/rkhunter.conf
+    line: "WEB_CMD=\"/bin/false\""
+    state: absent
 
-  - name: Set UPDATE_MIRRORS
-    lineinfile:
-      path: /etc/rkhunter.conf
-      regexp: "UPDATE_MIRRORS=.*"
-      line: "UPDATE_MIRRORS=1"
-      state: present
+- name: Set UPDATE_MIRRORS
+  ansible.builtin.lineinfile:
+    path: /etc/rkhunter.conf
+    regexp: "UPDATE_MIRRORS=.*"
+    line: "UPDATE_MIRRORS=1"
+    state: present
 
-  - name: Set MIRRORS_MODE
-    lineinfile:
-      path: /etc/rkhunter.conf
-      regexp: "MIRRORS_MODE=.*"
-      line: "MIRRORS_MODE=0"
-      state: present
-    
-  # - name: Set whether root ssh access is supposed to be allowed
-  #   lineinfile:
-  #     path: /etc/rkhunter.conf
-  #     regexp: "ALLOW_SSH_ROOT_USER=.*"
-  #     line: "ALLOW_SSH_ROOT_USER=no"
-  #     state: present
-  #   when: lynis_hardening_ignore_root_ssh
+- name: Set MIRRORS_MODE
+  ansible.builtin.lineinfile:
+    path: /etc/rkhunter.conf
+    regexp: "MIRRORS_MODE=.*"
+    line: "MIRRORS_MODE=0"
+    state: present
 
-  - name: Disable test for promisc interfaces
-    lineinfile:
-      path: /etc/rkhunter.conf
-      regexp: "DISABLE_TESTS =.*"
-      line: "DISABLE_TESTS=promisc"
-      state: present
-    when: lynis_hardening_ignore_promics_interfaces
+- name: Disable test for promisc interfaces
+  ansible.builtin.lineinfile:
+    path: /etc/rkhunter.conf
+    regexp: "DISABLE_TESTS =.*"
+    line: "DISABLE_TESTS=promisc"
+    state: present
+  when: lynis_hardening_ignore_promics_interfaces

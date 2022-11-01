@@ -1,13 +1,12 @@
----
 - name: Add host entries for other nodes (FQDN and hostname)
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/hosts
     regexp: "^.*\\W+{{ item | replace('.', '\\.') }}\\W+{{ hostvars[item].fqdn | replace('.', '\\.') }}\\W*$"
     line: "{{ hostvars[item]['ansible_host'] }} {{ item }} {{ hostvars[item].fqdn }}"
   with_items: "{{ groups['all'] }}"
 
 - name: Add additional hosts
-  lineinfile:
+  ansible.builtin.lineinfile:
     path: /etc/hosts
     regexp: "^.*\\W+{{ item.ip | replace('.', '\\.') }}\\W+{{ item.host | replace('.', '\\.') }}\\W*$"
     line: "{{ item.ip }} {{ item.host }}"

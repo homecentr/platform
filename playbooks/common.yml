@@ -3,29 +3,57 @@
   become: true
   any_errors_fatal: true
   tasks:
-  - import_role: name=../roles/common/users
-    tags: [ users ]
-    
-  - import_role: name=../roles/common/hosts
-    tags: [ hosts ]
+  - name: Create users
+    ansible.builtin.import_role:
+      name: ../roles/common/users
+    tags:
+      - users
 
-  - import_role: name=../roles/common/chrony
-    tags: [ chrony, ntp ]
+  - name: Create host records for servers
+    ansible.builtin.import_role:
+      name: ../roles/common/hosts
+    tags:
+      - hosts
 
-  - import_role: name=../roles/common/benchmarks
-    tags: [ benchmarks ]
+  - name: Setup Chrony (NTP client)
+    ansible.builtin.import_role:
+      name: ../roles/common/chrony
+    tags:
+      - chrony
+      - ntp
 
-  - import_role: name=../roles/common/lynis-hardening
-    tags: [ lynis ]
+  - name: Install benchmarks
+    ansible.builtin.import_role:
+      name: ../roles/common/benchmarks
+    tags:
+      - benchmarks
 
-  - import_role: name=../roles/common/clamav
-    tags: [ clamav ]
+  - name: Harden the system according to lynis recommendations
+    ansible.builtin.import_role:
+      name: ../roles/common/lynis-hardening
+    tags:
+      - lynis
 
-  - import_role: name=../roles/common/ssh
-    tags: [ ssh ]
-  
-  - import_role: name=../roles/common/motd
-    tags: [ motd ]
+  - name: Install ClamAV antivirus
+    ansible.builtin.import_role:
+      name: ../roles/common/clamav
+    tags:
+      - clamav
 
-  # - import_role: name=cloudalchemy.node_exporter
-  #   tags: [ node_exporter ]
+  - name: Configure and secure SSH
+    ansible.builtin.import_role:
+      name: ../roles/common/ssh
+    tags:
+      - ssh
+
+  - name: Set up Message-of-the-day
+    ansible.builtin.import_role:
+      name: ../roles/common/motd
+    tags:
+      - motd
+
+  - name: Install node-exporter
+    ansible.builtin.import_role:
+      name: cloudalchemy.node_exporter
+    tags:
+      - node_exporter

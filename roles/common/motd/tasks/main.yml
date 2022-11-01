@@ -1,41 +1,59 @@
 - name: "Create update-motd.d directory if doesn't exist"
-  file:
+  ansible.builtin.file:
     path: /etc/update-motd.d
     state: directory
     owner: root
     group: root
     mode: 0755
 
-- include_tasks: clear-defaults.yml
+- name: Clear pre-existing default scripts
+  ansible.builtin.include_tasks:
+    file: clear-defaults.yml
 
-- include_tasks: setup-common-scripts.yml
+- name: Create common scripts
+  ansible.builtin.include_tasks:
+    file: setup-common-scripts.yml
 
-- include_tasks: setup-ups-scripts.yml
+- name: Create UPS (NUT) scripts
+  ansible.builtin.include_tasks:
+    file: setup-ups-scripts.yml
   when: "'ups_masters' in group_names or 'ups_masters' in group_names"
 
 # ZFS
-- include_tasks: setup-zfs-scripts.yml
+- name: Create ZFS scripts
+  ansible.builtin.include_tasks:
+    file: setup-zfs-scripts.yml
   when: motd_enable_zfs_status
 
-- include_tasks: clear-zfs-scripts.yml
+- name: Clear ZFS scripts
+  ansible.builtin.include_tasks:
+    file: clear-zfs-scripts.yml
   when: not motd_enable_zfs_status
 
 # HW
-- include_tasks: setup-hw-scripts.yml
+- name: Create HW related scripts
+  ansible.builtin.include_tasks:
+    file: setup-hw-scripts.yml
   when: motd_enable_hw_status
 
-- include_tasks: clear-hw-scripts.yml
+- name: Clear HW related scripts
+  ansible.builtin.include_tasks:
+    file: clear-hw-scripts.yml
   when: not motd_enable_hw_status
 
 # Services
-- include_tasks: setup-services-scripts.yml
+- name: Create services scripts
+  ansible.builtin.include_tasks:
+    file: setup-services-scripts.yml
   when: motd_services is defined and (motd_services | length) > 0
 
-- include_tasks: clear-services-scripts.yml
+- name: Clear services scripts
+  ansible.builtin.include_tasks:
+    file: clear-services-scripts.yml
   when: (not motd_services is defined) or (motd_services | length) == 0
-  
+
 - name: Update PAM configuration to point to correct motd file
-  replace:
+  ansible.builtin.replace:
     path: /etc/pam.d/sshd
     regexp: "motd=/run/motd.dynamic.new$"
     replace: "motd=/run/motd.dynamic"

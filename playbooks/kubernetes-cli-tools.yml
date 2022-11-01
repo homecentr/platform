@@ -1,0 +1,17 @@
+- name: "Install Kubernetes CLI tools"
+  hosts: localhost
+  become: true
+  become_method: sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Install kubectl
+      ansible.builtin.import_role:
+        name: ../roles/kubernetes/cli-kubectl
+
+    - name: Install kubeaudit
+      ansible.builtin.import_role:
+        name: ../roles/kubernetes/cli-kubeaudit
+
+    - name: Install kubescape
+      ansible.builtin.import_role:
+        name: ../roles/kubernetes/cli-kubescape

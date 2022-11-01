@@ -1,10 +1,10 @@
-- name: "Install s-nail"
-  package:
+- name: Install s-nail
+  ansible.builtin.package:
     name: s-nail
     state: present
 
-- name: "Install and configure ClamAV"
-  import_role:
+- name: Install and configure ClamAV
+  ansible.builtin.import_role:
     name: geerlingguy.clamav
   vars:
     clamav_daemon_configuration_changes:
@@ -19,11 +19,12 @@
 
 - name: "Create scan script"
   when: clamav_scanned_dirs is defined and clamav_scanned_dirs != null
-  copy:
+  ansible.builtin.copy:
     dest: /usr/bin/scan-clamav
     owner: root
     group: root
     mode: 0700
+    # yamllint disable rule:line-length
     content: |
       #!/bin/bash
 
@@ -52,6 +53,7 @@
       done
 
       exit 0
+    # yamllint enable rule:line-length
 
 - name: Create a cron job for ClamAV scan
   when: clamav_scanned_dirs is defined and clamav_scanned_dirs != null

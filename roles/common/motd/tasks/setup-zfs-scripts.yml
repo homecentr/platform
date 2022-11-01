@@ -1,5 +1,5 @@
 - name: Copy zfs related scripts
-  copy:
+  ansible.builtin.copy:
     src: "motd/{{ item }}.sh"
     dest: /etc/update-motd.d/{{ item }}
     owner: root

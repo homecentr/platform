@@ -1,9 +1,11 @@
-- name: "Get host ssh key"
-  command: "ssh-keyscan -t rsa {{ inventory_hostname }} | cut -d' ' -f 3"
+- name: Get host ssh key
+  ansible.builtin.command:
+    cmd: "ssh-keyscan -t rsa {{ inventory_hostname }} | cut -d' ' -f 3"
   register: ssh_key
+  changed_when: false
 
-- name: "Add ssh key to known_hosts"
-  known_hosts:
+- name: Add ssh key to known_hosts
+  ansible.builtin.known_hosts:
     path: /etc/ssh/ssh_known_hosts
     name: "{{ hostvars[item].inventory_hostname }}"
     key: "{{ hostvars[item].ansible_hostname }} ssh-rsa {{ hostvars[item].ssh_key }}"

@@ -5,5 +5,6 @@
 # users_root_password
 # users_root_password_salt
 
-users_admin_passwordless_sudo: yes
-users_admin_groups: [ "sudo" ]
+users_admin_passwordless_sudo: true
+users_admin_groups:
+  - sudo

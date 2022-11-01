@@ -1,5 +1,8 @@
 - name: Create profile file
-  copy:
+  ansible.builtin.copy:
     dest: /etc/lynis/homecentr.prf
     content: lynis_hardening_ignore_list
+    owner: root
+    group: root
+    mode: 0640
   when: lynis_hardening_ignore_list != null

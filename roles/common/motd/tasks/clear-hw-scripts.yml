@@ -1,5 +1,5 @@
 - name: Remove hw related scripts
-  file:
-    path: /etc/update-motd.d/{{ item }}
+  ansible.builtin.file:
+    path: "/etc/update-motd.d/{{ item }}"
     state: absent
-  with_items: motd_hw_scripts
+  with_items: "{{ motd_hw_scripts }}"

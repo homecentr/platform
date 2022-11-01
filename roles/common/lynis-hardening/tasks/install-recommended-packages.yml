@@ -1,5 +1,5 @@
 - name: Install recommended packages
-  package:
+  ansible.builtin.package:
     name:
       - debsums
       - apt-show-versions

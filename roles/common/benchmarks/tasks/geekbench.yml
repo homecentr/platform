@@ -1,16 +1,19 @@
 - name: Check if Geekbench is already installed
-  stat:
+  ansible.builtin.stat:
     path: /var/lib/geekbench
   register: geekbench_dir
 
-- name: "Download geekbench"
-  get_url:
+- name: Download geekbench
+  ansible.builtin.get_url:
     url: "https://cdn.geekbench.com/Geekbench-{{ benchmarks_geekbench_version }}-Linux.tar.gz"
     dest: /tmp/geekbench.tar.gz
+    owner: root
+    group: root
+    mode: 0700
   when: not geekbench_dir.stat.exists
 
 - name: Create target directory
-  file:
+  ansible.builtin.file:
     path: /var/lib/geekbench
     state: directory
     owner: root
@@ -18,17 +21,17 @@
     mode: 0770
 
 - name: Unpack geekbench
-  unarchive:
+  ansible.builtin.unarchive:
     src: /tmp/geekbench.tar.gz
     dest: /var/lib/geekbench
-    remote_src: yes
+    remote_src: true
     owner: root
     group: root
     mode: 0770
-    extra_opts: [ --strip-components=1 ]
+    extra_opts: [--strip-components=1]
   when: not geekbench_dir.stat.exists
 
 - name: Remove downloaded temp file
-  file:
+  ansible.builtin.file:
     path: /tmp/geekbench.tar.gz
     state: absent

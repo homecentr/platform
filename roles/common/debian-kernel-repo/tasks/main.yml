@@ -16,7 +16,7 @@
     mode: 0640
     marker_begin: "# DEBIAN KERNEL START - Auto generated configuration"
     marker_end: "# DEBIAN KERNEL END"
-    create: yes
+    create: true
     block: |
       Package: *
       Pin: release a=bullseye

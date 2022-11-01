@@ -1,3 +1,7 @@
----
-- include_tasks: ./admin-user.yml
-- include_tasks: ./root-user.yml
+- name: Create admin user
+  ansible.builtin.include_tasks:
+    file: ./admin-user.yml
+
+- name: Configure root user
+  ansible.builtin.include_tasks:
+    file: ./root-user.yml

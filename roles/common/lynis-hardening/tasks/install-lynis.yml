@@ -21,4 +21,4 @@
 - name: "Install Lynis"
   ansible.builtin.apt:
     name: lynis
-    update_cache: yes
+    update_cache: true
