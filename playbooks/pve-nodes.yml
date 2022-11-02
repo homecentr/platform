@@ -1,9 +1,0 @@
-- name: Proxmox Virtual Environment Configuration
-  hosts: pve_nodes
-  become: true
-  become_method: sudo
-  any_errors_fatal: true
-  tasks:
-    - name: Configure Proxmox VE specific components
-      ansible.builtin.include_role:
-        name: ../roles/proxmox/pve-node

@@ -1,3 +1,44 @@
+$ExternalSwitchName = "Homecentr-Lab-External"
+$StorageSwitchName = "Homecentr-Lab-Storage"
+
+Function Create-ExternalSwitch()
+{
+    $Switch = Get-VMSwitch -Name $ExternalSwitchName -ErrorAction SilentlyContinue
+
+    if($Switch -ne $null)
+    {
+        Write-Host "✔️ Hyper-V switch found"
+    }
+    else
+    {
+        Write-Host "Creating switch..."
+        Get-NetAdapter
+
+        $IfIndex = Read-Host "Please enter ifIndex of the NIC you want to use for the virtual switch:"
+        $IfDescription = (Get-NetAdapter -InterfaceIndex $IfIndex).InterfaceDescription
+        
+        New-VMSwitch -Name $ExternalSwitchName -NetAdapterInterfaceDescription $IfDescription -AllowManagementOS $true | Out-Null
+
+        Write-Host "✔️ Hyper-V switch created"
+    }
+}
+
+Function Create-StorageSwitch()
+{
+    $Switch = Get-VMSwitch -Name $StorageSwitchName -ErrorAction SilentlyContinue
+
+    if($Switch -ne $null)
+    {
+        Write-Host "✔️ Hyper-V switch found"
+    }
+    else
+    {
+        New-VMSwitch -Name $StorageSwitchName -SwitchType Private | Out-Null
+
+        Write-Host "✔️ Hyper-V switch created"
+    }
+}
+
 Function Create-VM([string]$VMName)
 {
     $VM = Get-VM -Name $VMName -ErrorAction SilentlyContinue
@@ -12,9 +53,11 @@ Function Create-VM([string]$VMName)
         New-VM -Name $VMName `
             -MemoryStartupBytes 8GB `
             -Generation 2 `
-            -SwitchName $SwitchName `
             -NewVHDPath "$($HypervHost.VirtualHardDiskPath)\$($VMName)_RootDrive.vhdx" `
             -NewVHDSizeBytes 192GB
+
+        Add-VMNetworkAdapter -VMName $VMName -Name $ExternalSwitchName
+        Add-VMNetworkAdapter -VMName $VMName -Name $StorageSwitchName
 
         Write-Host "✔️ [$VMName] VM created"
     }
@@ -76,6 +119,9 @@ else
 
     Write-Host "✔️ Hyper-V switch created"
 }
+
+Create-ExternalSwitch
+Create-StorageSwitch
 
 Create-VM "Homecentr-Lab-Node1"
 Create-VM "Homecentr-Lab-Node2"

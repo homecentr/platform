@@ -1,0 +1,21 @@
+- name: Remove enteprise repository
+  ansible.builtin.file:
+    path: /etc/apt/sources.list.d/pve-enterprise.list
+    state: absent
+
+- name: Get Debian version
+  ansible.builtin.shell:
+    cmd: "grep 'VERSION=' /etc/os-release | grep -Eo '[a-z]+'"
+  register: debver
+  changed_when: false
+
+- name: Add free (no-subscription) repository
+  register: add_nosub
+  notify: APT update
+  ansible.builtin.copy:
+    dest: /etc/apt/sources.list.d/pve-no-subscription.list
+    owner: root
+    group: root
+    mode: 0640
+    content: |
+      deb http://download.proxmox.com/debian/pve {{ debver.stdout }} pve-no-subscription

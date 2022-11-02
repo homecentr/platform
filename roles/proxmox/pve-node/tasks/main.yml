@@ -1,0 +1,15 @@
+- name: Configure apt repositories
+  ansible.builtin.include_tasks:
+    file: apt.yml
+
+- name: Expose Web UI on port 443
+  ansible.builtin.include_tasks:
+    file: port-forwarding.yml
+
+- name: Configure SMTP for alerts
+  ansible.builtin.include_tasks:
+    file: smtp.yml
+
+- name: Configure SSH
+  ansible.builtin.include_tasks:
+    file: ssh.yml

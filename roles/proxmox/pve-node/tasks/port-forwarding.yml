@@ -1,0 +1,26 @@
+- name: "Set up port redirect (443 -> 8006)"
+  ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    destination_port: 443
+    to_ports: 8006
+    jump: REDIRECT
+    comment: "Enable Proxmox admin interface on 443"
+
+- name: "Save iptables state to a file"
+  community.general.iptables_state:
+    ip_version: ipv4
+    table: nat
+    state: saved
+    path: /etc/iptables/nat.rules.v4
+
+- name: "Create iptables restore script"
+  ansible.builtin.copy:
+    dest: /etc/network/if-up.d/run-iptables
+    mode: 0700
+    owner: root
+    group: root
+    content: |
+      #!/bin/sh
+      iptables-restore < /etc/iptables/nat.rules.v4
