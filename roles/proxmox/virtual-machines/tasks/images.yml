@@ -1,0 +1,10 @@
+- name: Download installation image
+  ansible.builtin.get_url:
+    url: "{{ item.url }}"
+    dest: "/var/lib/vz/template/iso/{{ item.name }}"
+    checksum: "{{ item.checksum }}"
+    owner: root
+    group: root
+    mode: 0644
+    validate_certs: true
+  with_items: "{{ pve_vm_images }}"

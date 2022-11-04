@@ -1,3 +1,8 @@
+- name: Install sudo
+  ansible.builtin.package:
+    name: sudo
+    state: present
+
 - name: Create admin user
   ansible.builtin.include_tasks:
     file: ./admin-user.yml

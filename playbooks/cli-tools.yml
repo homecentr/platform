@@ -1,4 +1,4 @@
-- name: "Install Kubernetes CLI tools"
+- name: "Install CLI tools"
   hosts: localhost
   become: true
   become_method: sudo

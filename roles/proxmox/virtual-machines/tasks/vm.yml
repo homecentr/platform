@@ -1,0 +1,44 @@
+- name: Debug
+  debug:
+    msg: "{{ item.os_storage }}:vm-{{ item.vmid }}-disk-1,size={{ item.os_disk_size_gb }}G"
+  when: pve_vm_machines is defined
+  with_items: "{{ pve_vm_machines }}"
+
+# Create zvol manually ???
+
+- name: Create virtual machine
+  community.general.proxmox_kvm:
+    vmid: "{{ item.vmid }}"
+    proxmox_default_behavior: no_defaults
+    node: "{{ ansible_hostname }}"
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: 127.0.0.1
+    name: "{{ item.name }}"
+    protection: "{{ item.protection | default(true) }}"
+    acpi: "{{ item.acpi | default(true) }}"
+    autostart: "{{ item.autostart | default(true) }}"
+    onboot: "{{ item.onboot | default(true) }}"
+    ostype: "{{ item.ostype | default('l26') }}"
+    boot: "{{ item.boot_order | default('cd') }}"
+    # ide: '{"ide0":"local:iso/{{ item.installation_image }},media=cdrom"}'
+    bios: "{{ 'seabios' if (item.bios | default('bios')) != 'efi' else 'ovmf' }}"
+    startup: "down={{ item.shutdown_timeout_seconds }}"
+    net:
+      net0: "virtio,bridge={{ item.nic_bridge }}"
+    efidisk0: "{{ ({'storage': item.os_storage, 'format': 'raw', 'efitype': '4m', 'pre_enrolled_keys': false}) if (item.bios | default('bios')) == 'efi' else none }}"
+    scsihw: virtio-scsi-pci
+    scsi:
+      scsi0: "local:iso/{{ item.installation_image }},media=cdrom"
+      scsi1: "{{ item.os_storage }}:{{ item.os_disk_size_gb }},ssd=1"
+    bootdisk: scsi1
+    tablet: false
+    cpu: "kvm64"
+    vcpus: "{{ item.cpu_count }}"
+    cores: "{{ item.cpu_cores_per_cpu }}"
+    memory: "{{ item.min_memory }}"
+    balloon: "{{ item.max_memory }}"
+    #args: '-append "preseed/url=http:10.1.1.2/ksfile.cfg locale=en_GB.UTF-8 keyboard-configuration/layoutcode=gb hostname=unassigned interface=ens3"'  # noqa yaml[line-length]
+    state: present
+  when: pve_vm_machines is defined
+  with_items: "{{ pve_vm_machines }}"
