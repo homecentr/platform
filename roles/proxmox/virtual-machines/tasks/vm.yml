@@ -1,44 +1,100 @@
 - name: Create virtual machine
   community.general.proxmox_kvm:
-    vmid: "{{ item.vmid }}"
+    vmid: "{{ vm.vmid }}"
     proxmox_default_behavior: no_defaults
     node: "{{ ansible_hostname }}"
+    kvm: true
     api_user: root@pam
     api_password: "{{ users_root_password }}"
     api_host: 127.0.0.1
-    name: "{{ item.name }}"
-    protection: "{{ item.protection | default(true) }}"
-    acpi: "{{ item.acpi | default(true) }}"
-    autostart: "{{ item.autostart | default(true) }}"
-    onboot: "{{ item.onboot | default(true) }}"
-    ostype: "{{ item.ostype | default('l26') }}"
-    boot: "{{ item.boot_order | default('cd') }}"
-    # ide: '{"ide0":"local:iso/{{ item.installation_image }},media=cdrom"}'
-    bios: "{{ 'seabios' if (item.bios | default('bios')) != 'efi' else 'ovmf' }}"
-    startup: "down={{ item.shutdown_timeout_seconds }}"
-    net:
-      net0: "virtio,bridge={{ item.nic_bridge }}"
-    efidisk0: "{{ ({'storage': item.os_storage, 'format': 'raw', 'efitype': '4m', 'pre_enrolled_keys': false}) if (item.bios | default('bios')) == 'efi' else none }}"
-    scsihw: virtio-scsi-pci
+    name: "{{ vm.name }}"
+    # protection: "{{ vm.protection | default(true) }}"
+    acpi: "{{ vm.acpi | default(true) }}"
+    autostart: "{{ vm.autostart | default(true) }}"
+    onboot: "{{ vm.onboot | default(true) }}"
+    ostype: "{{ vm.ostype | default('l26') }}"
+    boot: "{{ vm.boot_order | default('cd') }}"
+    ciuser: "{{ users_admin_username }}"
+    # cipassword: heslo
+    sshkeys: "{{ users_admin_public_keys | join('\n') }}"
+    bios: "{{ 'seabios' if (vm.bios | default('bios')) != 'efi' else 'ovmf' }}"
+    startup: "down={{ vm.shutdown_timeout_seconds }}"
+    # required due to a bug: https://forum.proxmox.com/threads/kernel-panic-after-resizing-a-clone.93738/
+    # which causes kernel panic after resizing the os disk
+    serial:
+      serial0: socket
     scsi:
-      scsi0: "local:iso/{{ item.installation_image }},media=cdrom"
-      scsi1: "{{ item.os_storage }}:{{ item.os_disk_size_gb }},ssd=1"
+      scsi0: 'local-zfs:cloudinit,format=raw'
+    net:
+      net0: "virtio,bridge={{ vm.nic_bridge }}"
+    ipconfig:
+      ipconfig0: "ip={{ (vm.nic_ipv4_address + '/' + vm.nic_ipv4_subnet) | ansible.utils.ipaddr('host/prefix') }},gw={{ vm.nic_ipv4_gateway }}"
+    nameservers: "{{ vm.nameservers }}"
+    efidisk0: "{{ ({'storage': vm.os_storage, 'format': 'raw', 'efitype': '4m', 'pre_enrolled_keys': false}) if (vm.bios | default('bios')) == 'efi' else none }}" # noqa yaml[line-length]
+    scsihw: virtio-scsi-pci
     bootdisk: scsi1
     tablet: false
     cpu: "kvm64"
-    vcpus: "{{ item.cpu_count }}"
-    cores: "{{ item.cpu_cores_per_cpu }}"
-    memory: "{{ item.min_memory }}"
-    balloon: "{{ item.max_memory }}"
-    #args: '-append "preseed/url=http:10.1.1.2/ksfile.cfg locale=en_GB.UTF-8 keyboard-configuration/layoutcode=gb hostname=unassigned interface=ens3"'  # noqa yaml[line-length]
+    vcpus: "{{ vm.cpu_count }}"
+    cores: "{{ vm.cpu_cores_per_cpu }}"
+    memory: "{{ vm.min_memory }}"
+    balloon: "{{ vm.max_memory }}"
     state: present
-  when: pve_vm_machines is defined
-  with_items: "{{ pve_vm_machines }}"
 
-- name: Wait for virtual machines to be available
-  # PASSWORD MISMATCH !!!
+- name: Import disk from cloud image
+  community.general.proxmox_disk:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: 127.0.0.1
+    vmid: "{{ vm.vmid }}"
+    disk: scsi1
+    import_from: "/var/lib/vz/images/{{ vm.cloud_image_filename }}"
+    storage: "{{ vm.os_storage }}"
+    ssd: true
+    state: present
 
-  # When a new VM is created, the connection to PVEs may have been done via an ssh_key
-  # and the new VMs need connection via password
+- name: Resize imported system disk
+  community.general.proxmox_disk:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: 127.0.0.1
+    vmid: "{{ vm.vmid }}"
+    disk: scsi1
+    size: 25G
+    state: resized
 
+# - name: Import init disk
+#   ansible.builtin.command:
+#     cmd: "qm importdisk {{ vm.vmid }} /var/lib/vz/images/{{ vm.cloud_image_filename }} local-zfs --format {{ pve_vm_cloud_images | selectattr('filename', 'equalto', vm.cloud_image_filename) | map(attribute='format') | first }}"
+#     creates: "/dev/zvol/rpool/data/vm-{{ vm.vmid }}-disk-1"
 
+# - name: Attach base image disk
+#   ansible.builtin.lineinfile:
+#     path: /etc/pve/local/qemu-server/{{ vm.vmid }}.conf
+#     regexp: '^scsi1:.*'
+#     line: 'scsi1: local-zfs:vm-{{ vm.vmid }}-disk-1'
+
+# - name: Remove unused disk reference to base disk
+#   ansible.builtin.lineinfile:
+#     path: /etc/pve/local/qemu-server/{{ vm.vmid }}.conf
+#     regexp: '^unused\d+:.*'
+#     state: absent
+
+- name: Start VM
+  community.general.proxmox_kvm:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: 127.0.0.1
+    name: "{{ vm.name }}"
+    node: "{{ ansible_hostname }}"
+    state: started
+
+# TODO: System disk size and ssd emulation
+- name: Wait for VM to start responding on SSH
+  ansible.builtin.wait_for:
+    host: "{{ vm.nic_ipv4_address }}"
+    port: 22
+    delay: 20
+    timeout: 300
+    sleep: 5
+    msg: "VM {{ vm.name }} did not start responding on SSH in time."

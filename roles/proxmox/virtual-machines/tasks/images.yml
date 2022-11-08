@@ -1,10 +1,9 @@
-- name: Download installation image
+- name: Download cloud images
   ansible.builtin.get_url:
-    url: "{{ item.url }}"
-    dest: "/var/lib/vz/template/iso/{{ item.name }}"
-    checksum: "{{ item.checksum }}"
+    url: "{{ item.url }}" # https://cloud.debian.org/cdimage/cloud/bullseye/20221020-1174/debian-11-generic-amd64-20221020-1174.qcow2
+    dest: "/var/lib/vz/images/{{ item.filename }}"
     owner: root
     group: root
     mode: 0644
-    validate_certs: true
-  with_items: "{{ pve_vm_images }}"
+  when: pve_vm_cloud_images is defined
+  with_items: "{{ pve_vm_cloud_images }}"
