@@ -8,14 +8,13 @@
     api_password: "{{ users_root_password }}"
     api_host: 127.0.0.1
     name: "{{ vm.name }}"
-    # protection: "{{ vm.protection | default(true) }}"
+    protection: "{{ vm.protection | default(true) }}"
     acpi: "{{ vm.acpi | default(true) }}"
     autostart: "{{ vm.autostart | default(true) }}"
     onboot: "{{ vm.onboot | default(true) }}"
     ostype: "{{ vm.ostype | default('l26') }}"
     boot: "{{ vm.boot_order | default('cd') }}"
     ciuser: "{{ users_admin_username }}"
-    # cipassword: heslo
     sshkeys: "{{ users_admin_public_keys | join('\n') }}"
     bios: "{{ 'seabios' if (vm.bios | default('bios')) != 'efi' else 'ovmf' }}"
     startup: "down={{ vm.shutdown_timeout_seconds }}"
@@ -63,33 +62,15 @@
     size: 25G
     state: resized
 
-# - name: Import init disk
-#   ansible.builtin.command:
-#     cmd: "qm importdisk {{ vm.vmid }} /var/lib/vz/images/{{ vm.cloud_image_filename }} local-zfs --format {{ pve_vm_cloud_images | selectattr('filename', 'equalto', vm.cloud_image_filename) | map(attribute='format') | first }}"
-#     creates: "/dev/zvol/rpool/data/vm-{{ vm.vmid }}-disk-1"
-
-# - name: Attach base image disk
-#   ansible.builtin.lineinfile:
-#     path: /etc/pve/local/qemu-server/{{ vm.vmid }}.conf
-#     regexp: '^scsi1:.*'
-#     line: 'scsi1: local-zfs:vm-{{ vm.vmid }}-disk-1'
-
-# - name: Remove unused disk reference to base disk
-#   ansible.builtin.lineinfile:
-#     path: /etc/pve/local/qemu-server/{{ vm.vmid }}.conf
-#     regexp: '^unused\d+:.*'
-#     state: absent
-
 - name: Start VM
   community.general.proxmox_kvm:
     api_user: root@pam
     api_password: "{{ users_root_password }}"
     api_host: 127.0.0.1
-    name: "{{ vm.name }}"
+    vmid: "{{ vm.vmid }}"
     node: "{{ ansible_hostname }}"
     state: started
 
-# TODO: System disk size and ssd emulation
 - name: Wait for VM to start responding on SSH
   ansible.builtin.wait_for:
     host: "{{ vm.nic_ipv4_address }}"

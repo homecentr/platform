@@ -7,11 +7,18 @@
   "private": true,
   "scripts": {
     "lint": "ansible-lint -x name[play]",
-    "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-create.ps1",   
+    
+    "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-create.ps1",
+    "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-destroy.ps1",
+    "lab:clear-keys": "./scripts/clearkeys.sh",
     "lab:apply": "./scripts/apply.sh lab",
+    "lab:secrets": "./scripts/vault.sh edit 'lab/group_vars/all/secrets.yml'",
+    "lab:gluster-ca:view": "./scripts/vault.sh view 'lab/group_vars/gluster_nodes/ca.yml'",
+    "lab:gluster-ca:generate": "./scripts/gluster-ca.sh 'lab/group_vars/gluster_nodes/ca.yml' gluster.lab.homecentr.one",
+    
     "prod:apply": "./scripts/apply.sh prod",
-    "secrets:init": "./scripts/vault.sh create",
-    "secrets:edit": "./scripts/vault.sh edit",
-    "secrets:view": "./scripts/vault.sh view"
+    "prod:secrets": "./scripts/vault.sh edit 'prod/group_vars/all/secrets.yml'",
+    "prod:gluster-ca:view": "./scripts/vault.sh view 'prod/group_vars/gluster_nodes/ca.yml'",
+    "prod:gluster-ca:generate": "./scripts/gluster-ca.sh 'prod/group_vars/gluster_nodes/ca.yml' gluster.lab.homecentr.one"
   }
 }

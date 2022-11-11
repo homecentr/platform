@@ -46,9 +46,18 @@
     tags:
       - ssh
 
+  - name: Install and configure Network UPS tools
+    ansible.builtin.import_role:
+      name: ../roles/common/ups
+    when: "'bare_metal_nodes' in group_names"
+    tags:
+      - ups
+
   - name: Set up Message-of-the-day
     ansible.builtin.import_role:
       name: ../roles/common/motd
+    vars:
+      motd_enable_ups_status: "{{ 'bare_metal_nodes' in group_names }}"
     tags:
       - motd
 

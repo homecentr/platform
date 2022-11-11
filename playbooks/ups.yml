@@ -1,8 +1,0 @@
-- name: "Common set up on all servers"
-  hosts: ups_masters:ups_slaves
-  become: true
-  any_errors_fatal: true
-  tasks:
-    - name: Install and configure Network UPS tools
-      ansible.builtin.import_role:
-        name: ../roles/common/ups

@@ -19,3 +19,7 @@
     mode: 0640
     content: |
       deb http://download.proxmox.com/debian/pve {{ debver.stdout }} pve-no-subscription
+
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: true

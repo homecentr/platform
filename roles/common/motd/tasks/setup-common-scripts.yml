@@ -1,5 +1,5 @@
 - name: Install required packages
-  ansible.builtin.package:
+  ansible.builtin.apt:
     name:
       - figlet
       - lolcat
@@ -30,6 +30,8 @@
   become: false
   ansible.builtin.command:
     cmd: "which lolcat"
+  environment:
+    PATH: "{{ ansible_env.PATH }}:/usr/games"
   register: lolcat_lookup
   changed_when: false
 

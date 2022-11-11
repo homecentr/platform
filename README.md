@@ -27,29 +27,29 @@ roles/
 ### Create a Lab environment in Hyper-V
 - Make sure you are running Windows 11 because earlier versions do not support nested virtualization which is required
 - Install latest version of Powershell using [this guide](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2)
-- Create VMs using `yarn lab:create` command (must be executed as admin)
-- Download [Proxmox VE installation image](https://www.proxmox.com/en/downloads/category/iso-images-pve) and mount it to VMs' DVD drives
-- Install the Proxmox VMs with following parameters  
+- Create VMs using `yarn lab:create` command (must be executed as administrator)
+- Start the VMs and install the Proxmox VMs with following parameters  
     - Disk: ZFS with RAID0
     - Country: Czechia
     - Timezone: Europe/Prague
-    - Password: any, just watch out for english keyboard layout when typing numbers
+    - Password: any, just watch out for english keyboard layout when typing numbers and make sure **all nodes have the same password**
     - E-mail: stg-pve&lt;X&gt;@lab.&lt;domain&gt;
     - Hostname: stg-pve&lt;X&gt;.lab.&lt;domain&gt;
     - IP Address: 10.1.8.1&lt;X&gt;/24
     - Gateway: 10.1.8.1
-    - Follow the general node preparation guidelines below
-    - Follow Proxmox manual set up steps
-- Install Debian based Kubernetes nodes VM inside each of Proxmox node
-    - Follow the general node preparation guidelines below
-
-### Preparing a new node
-Before applying all playbooks, make sure the nodes are initialized using the `init` playbook. Given that the node does not know your SSH keys yet, you will need to connect to it using a pre-existing user using their password as shown below.
+- Configure storage network
+    - IP Address: 192.168.1.1&lt;X&gt;/24 (this is an internal HyperV network)
+    - Do not set a gateway
+- Create a Proxmox cluster (there's currently no way to automate this)
+- Remove previous node's SSH keys in case you have re-created the lab using the `ssh-keygen -f ~/.ssh/known_hosts -R 10.1.8.XX` command
+- Apply Ansible playbooks using the command below:
 ```bash
-yarn <env>:apply init -u root -e ansible_user=root -k
+ANSIBLE_HOST_KEY_CHECKING=False yarn lab:apply proxmox -u root -e ansible_user=root --tags init -k
 ```
-
-This command will install sudo and set up users so that the other playbooks which rely on being applied via sudo can be executed.
+- Apply the rest of Ansible playbooks using the command below:
+```bash
+yarn lab:apply site
+```
 
 ## Applying playbooks
 Simply run the following bash command (requires Linux e.g. in WSL with [Yarn](https://yarnpkg.com/) installed):
@@ -57,7 +57,7 @@ Simply run the following bash command (requires Linux e.g. in WSL with [Yarn](ht
 yarn <env>:apply <playbook>
 ```
 
-for example `yarn staging:apply common.yml`
+for example `yarn lab:apply common.yml`
 
 The script automatically installs dependencies from Ansible Galaxy and runs the playbook.
 
@@ -66,4 +66,4 @@ The script automatically installs dependencies from Ansible Galaxy and runs the 
 ## Ansible Vault
 The playbooks use several sensitive variables which are therefore encrypted using Ansible Vault. The vault passphrase is committed into the repository because it is encrypted using gpg with YubiKey. To set from scratch, follow [this guide](https://disjoint.ca/til/2016/12/14/encrypting-the-ansible-vault-passphrase-using-gpg/). This does not give you access to the original passphrase, just the tooling to set up your own. Each user must have their own encrypted version of the password.
 
-To change the encrypted variables, use the `yarn secrets:edit <path>` command (e.g. `yarn secrets:edit prod/secrets.yml`), or `yarn secrets:init <path>` to create a new variable file.
+To change the encrypted variables, use the `yarn <lab>:secrets <path>` command (e.g. `yarn lab:secrets`).

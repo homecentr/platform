@@ -4,7 +4,7 @@ set -e
 
 printHelp() {
   echo "Usage:"
-  echo "\t./secrets edit (staging|prod)"
+  echo "\t./secrets edit (lab|prod)"
 }
 
 echo "CALLED" > /tmp/vault-log.txt
@@ -31,11 +31,6 @@ if [ -z "$2" ]; then
   printHelp
   exit 1
 fi
-
-# if [ "$2" != "staging" ] && [ "$2" != "prod" ]; then
-#   printHelp
-#   exit 1
-# fi
 
 export EDITOR=nano
 

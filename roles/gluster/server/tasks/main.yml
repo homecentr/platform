@@ -11,18 +11,20 @@
     file: install.yml
 
 - name: Configure TLS identity for the node
-  ansible.builtin.include_tasks: ../../shared/tls.yml
+  ansible.builtin.include_tasks:
+    file: ../../shared/tls.yml
   register: gluster_tls
-  notify: Restart server daemon
   vars:
+    gluster_server_restart: true
     gluster_node_hostname: "{{ gluster_hostname }}" # Servers must use their gluster specific identity
     gluster_node_additional_names:
       - "{{ gluster_fqdn }}"
       - "{{ ansible_hostname }}"
       - "{{ fqdn }}"
 
-- name: "Force the Gluster daemon to restart immediately if it needs to happen"
-  ansible.builtin.meta: flush_handlers
+- name: Turn Gluster nodes into a cluster
+  ansible.builtin.include_tasks:
+    file: cluster.yml
 
 - name: Install and configure Prometheus exporter
   ansible.builtin.include_tasks:

@@ -2,6 +2,7 @@
   ansible.builtin.get_url:
     url: "{{ item.url }}" # https://cloud.debian.org/cdimage/cloud/bullseye/20221020-1174/debian-11-generic-amd64-20221020-1174.qcow2
     dest: "/var/lib/vz/images/{{ item.filename }}"
+    checksum: "{{ item.checksum }}"
     owner: root
     group: root
     mode: 0644

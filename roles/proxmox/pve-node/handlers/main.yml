@@ -10,3 +10,7 @@
 - name: APT update
   ansible.builtin.apt:
     update_cache: true
+
+- name: Systemd reload
+  ansible.builtin.systemd:
+    daemon_reload: true

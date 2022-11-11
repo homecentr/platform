@@ -4,18 +4,21 @@
   become_method: sudo
   any_errors_fatal: true
   tasks:
+    # Must run before users to make sure the apt repositories are configured in order to install sudo
+    - name: Configure Proxmox VE specific components
+      ansible.builtin.import_role:
+        name: ../roles/proxmox/pve-node
+      tags:
+        - pve-nodes
+        - init
+
     # Root's password must be set so that it can be used to communicate with Proxmox API
     - name: Create users
       ansible.builtin.import_role:
         name: ../roles/common/users
       tags:
         - users
-
-    - name: Configure Proxmox VE specific components
-      ansible.builtin.import_role:
-        name: ../roles/proxmox/pve-node
-      tags:
-        - pve-nodes
+        - init
 
     - name: Create virtual machines
       ansible.builtin.import_role:

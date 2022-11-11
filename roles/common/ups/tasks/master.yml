@@ -39,12 +39,12 @@
     group: nut
     content: "{{ lookup('template', 'upsd.users.j2') }}"
 
-- name: Start the ups server
-  ansible.builtin.service:
-    name: nut-server
-    state: started
-
 - name: Start the driver service
   ansible.builtin.service:
     name: nut-driver
+    state: started
+
+- name: Start the ups server
+  ansible.builtin.service:
+    name: nut-server
     state: started

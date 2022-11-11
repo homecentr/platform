@@ -1,0 +1,6 @@
+# Common
+ansible_host: 10.1.8.22
+fqdn: lab-kube2.lab.homecentr.one
+
+# Gluster
+gluster_mount_host: lab-pve2

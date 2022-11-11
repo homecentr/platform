@@ -13,3 +13,7 @@
 - name: Configure SSH
   ansible.builtin.include_tasks:
     file: ssh.yml
+
+- name: Improve PVE Cluster auto-heal
+  ansible.builtin.include_tasks:
+    file: cluster.yml

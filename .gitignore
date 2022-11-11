@@ -1,3 +1,7 @@
+*.key
+*.crt
+.images
+
 # Logs
 logs
 *.log

@@ -1,0 +1,26 @@
+# The task below allows the corosync service to automatically restart when it fails on start up.
+# This may happen during a power outage when all nodes start booting at the same time. The first node to boot up
+# then searches for the other nodes and when it finds out that none of the other nodes respond (because they haven't finished booting yet)
+# it gives up and stops the corosync service which will keep the node forever in "waiting for quorum" state.
+# The change below allows automatic recovery of this state.
+- name: Update the corosync systemd unit file
+  notify: Systemd reload
+  ansible.builtin.lineinfile:
+    path: /usr/lib/systemd/system/corosync.service
+    regexp: "^{{ item.field }}="
+    insertafter: "{{ item.after }}"
+    line: "{{ item.field }}={{ item.value }}"
+    firstmatch: true
+  with_items:
+    - field: "StartLimitBurst"
+      value: "10" # Retry 10 times
+      after: "\\[Unit\\]"
+    - field: "StartLimitInterval"
+      value: "120" # How long all retry attempts may take before giving up
+      after: "\\[Unit\\]"
+    - field: "Restart"
+      value: "on-failure" # To make sure it's not started when it's explicitly stopped
+      after: "\\[Service\\]"
+    - field: "RestartSec"
+      value: "5" # Wait 5 seconds before the next retry
+      after: "\\[Service\\]"

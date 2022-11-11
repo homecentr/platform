@@ -17,7 +17,7 @@
 - name: Create UPS (NUT) scripts
   ansible.builtin.include_tasks:
     file: setup-ups-scripts.yml
-  when: "'ups_masters' in group_names or 'ups_masters' in group_names"
+  when: motd_enable_ups_status
 
 # ZFS
 - name: Create ZFS scripts

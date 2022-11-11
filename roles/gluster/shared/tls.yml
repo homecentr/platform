@@ -13,6 +13,7 @@
   changed_when: false
 
 - name: Copy CA certificate
+  register: gluster_tls_ca
   ansible.builtin.copy:
     dest: "{{ gluster_openssl_dir.stdout }}/glusterfs.ca"
     content: "{{ gluster_ca_public_key }}"
@@ -22,7 +23,7 @@
     force: true
 
 - name: Generate private key
-  register: gluster_private_key
+  register: gluster_tls_private_key
   community.crypto.openssl_privatekey:
     path: "{{ gluster_openssl_dir.stdout }}/glusterfs.key"
     size: "{{ gluster_node_tls_key_size }}"
@@ -35,7 +36,7 @@
     subject_alt_name: "{{ gluster_node_additional_names | map('regex_replace', '(.*)', 'DNS:\\1') | join(',') }}"
 
 - name: Generate a node certificate
-  register: gluster_cert
+  register: gluster_tls_cert
   community.crypto.x509_certificate:
     path: "{{ gluster_openssl_dir.stdout }}/glusterfs.pem"
     privatekey_path: "{{ gluster_openssl_dir.stdout }}/glusterfs.key"
@@ -54,7 +55,7 @@
     mode: 0744
 
 - name: Enable Gluster TLS
-  register: gluster_secure_access
+  register: gluster_tls_enabled
   ansible.builtin.file:
     path: /var/lib/glusterd/secure-access
     access_time: preserve # to avoid changing the file when it already exists (causes additional daemon restarts)
@@ -63,3 +64,19 @@
     owner: root
     group: root
     mode: 0644
+
+- name: Restart server daemon  # noqa no-handler include_tasks cannot notify a handler
+  register: gluster_restart
+  until: gluster_restart.status.ActiveState == "active"
+  delay: 20
+  retries: 15
+  throttle: 1
+  when: (gluster_tls_enabled.changed 
+    or gluster_tls_cert.changed 
+    or gluster_tls_private_key.changed 
+    or gluster_tls_ca.changed) 
+    and (gluster_server_restart | default(false))
+  ansible.builtin.service:
+    name: glusterd
+    state: restarted
+    enabled: true
