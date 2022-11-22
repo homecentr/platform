@@ -6,6 +6,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@master
 
-      - run: yarn lint
+      - name: Install Ansible lint
+        run: pip3 install "ansible-lint"
+
+      - name: Lint Ansible files
+        run: yarn lint
