@@ -6,7 +6,7 @@
   "license": "GPL",
   "private": true,
   "scripts": {
-    "lint": "ansible-lint -x name[play]",
+    "lint": "ansible-lint --strict",
     
     "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-create.ps1",
     "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-destroy.ps1",
