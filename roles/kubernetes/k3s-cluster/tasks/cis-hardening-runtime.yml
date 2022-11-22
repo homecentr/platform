@@ -14,7 +14,7 @@
     - name: kernel.panic_on_oops
       value: 1
 
-- name: Reboot machine  # no-qa no-handler Must happen immediately
+- name: Reboot machine  # noqa no-handler (Must happen immediately)
   when: k3s_cluster_kernel_parameters.changed
   throttle: 1
   ansible.builtin.reboot:

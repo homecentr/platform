@@ -21,14 +21,3 @@
       name: ../roles/kubernetes/sealed-secrets
     tags:
       - sealed-secrets
-
-  # - name: Install and configure fluxcd
-  #   ansible.builtin.import_role:
-  #     name: ../roles/kubernetes/fluxcd
-  #   tags:
-  #     - fluxcd
-
-  # GitRepository - add name from a variable
-  #               - add namespace which should be defaulted to flux-system
-
-  # TBA: install and configure the secret provider

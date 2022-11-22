@@ -4,13 +4,15 @@
   become_method: sudo
   any_errors_fatal: true
   tasks:
-  - import_role:
-      name: ../roles/gluster/server
+    - name: Install and configure Gluster servers
+      ansible.builtin.import_role:
+        name: ../roles/gluster/server
 
 - name: Set up gluster clients
   hosts: gluster_clients
   become: true
   become_method: sudo
   tasks:
-  - import_role:
-      name: ../roles/gluster/client
+    - name: Install and configure Gluster clients
+      ansible.builtin.import_role:
+        name: ../roles/gluster/client

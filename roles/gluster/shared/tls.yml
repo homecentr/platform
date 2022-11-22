@@ -71,10 +71,10 @@
   delay: 20
   retries: 15
   throttle: 1
-  when: (gluster_tls_enabled.changed 
-    or gluster_tls_cert.changed 
-    or gluster_tls_private_key.changed 
-    or gluster_tls_ca.changed) 
+  when: (gluster_tls_enabled.changed
+    or gluster_tls_cert.changed
+    or gluster_tls_private_key.changed
+    or gluster_tls_ca.changed)
     and (gluster_server_restart | default(false))
   ansible.builtin.service:
     name: glusterd

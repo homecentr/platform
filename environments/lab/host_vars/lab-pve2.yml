@@ -29,5 +29,5 @@ pve_vm_machines:
     nic_ipv4_subnet: 255.255.255.0
     nic_ipv4_gateway: 10.1.8.1
     nameservers:
-    - 1.1.1.1
-    - 1.0.0.1
+      - 1.1.1.1
+      - 1.0.0.1
