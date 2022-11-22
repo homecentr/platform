@@ -18,7 +18,7 @@
     state: present
 
 - name: Set admin user SSH keys
-  ansible.builtin.authorized_key:
+  ansible.posix.authorized_key:
     user: "{{ users_admin_username }}"
     state: present
     key: "{{ item }}"
