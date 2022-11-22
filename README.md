@@ -19,6 +19,14 @@ roles/
 .vault-pass.gpg               # Vault password encrypted by a hardware token
 ```
 
+## Release process
+- Create a Lab environment
+- Apply the current playbooks from master
+- Make and test your changes against the Lab environment
+- Test the changes against a freshly build Lab environment
+- Merge changes to master via Pull request which will run basic validations
+- Checkout master and apply against Production cluster
+
 ## Environments
 
 - **Lab** - test environment used to develop the roles running locally inside of HyperV on a developer's workstation.
@@ -41,12 +49,15 @@ roles/
     - IP Address: 192.168.1.1&lt;X&gt;/24 (this is an internal HyperV network)
     - Do not set a gateway
 - Create a Proxmox cluster (there's currently no way to automate this)
-- Remove previous node's SSH keys in case you have re-created the lab using the `ssh-keygen -f ~/.ssh/known_hosts -R 10.1.8.XX` command
-- Apply Ansible playbooks using the command below:
+- Remove previous SSH keys in case you have re-created the lab using the following command
+```bash
+yarn lab:clear-keys
+```
+- Apply Ansible playbooks using the following command
 ```bash
 ANSIBLE_HOST_KEY_CHECKING=False yarn lab:apply proxmox -u root -e ansible_user=root --tags init -k
 ```
-- Apply the rest of Ansible playbooks using the command below:
+- Apply the rest of Ansible playbooks using the following command
 ```bash
 yarn lab:apply site
 ```

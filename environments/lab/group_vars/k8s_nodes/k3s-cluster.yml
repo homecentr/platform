@@ -1,0 +1,12 @@
+k3s_cluster_version: "v1.25.3+k3s1"
+k3s_cluster_helm_version: 'v3.8.1'
+k3s_cluster_cidr: 172.16.0.0/16
+k3s_cluster_services_cidr: 172.17.0.0/16
+
+k3s_cluster_dns_internal_ip: 172.17.0.10
+
+k3s_cluster_coredns_version: 1.10.0
+k3s_cluster_coredns_memory_request: 100Mi
+k3s_cluster_coredns_memory_limit: 256Mi
+k3s_cluster_coredns_cpu_request: 250m
+k3s_cluster_coredns_cpu_limit: 750m

@@ -1,0 +1,13 @@
+apiVersion: fleet.cattle.io/v1alpha1
+kind: GitRepo
+metadata:
+  name: {{ repo.name }}
+  namespace: {{ repo.namespace | default('fleet-local') }}
+spec:
+  repo: {{ repo.url }}
+  branch: {{ repo.branch }}
+  pollingInterval: "{{ repo.polling_interval | default('15s') }}"
+  paths:
+{% for path in repo.paths %}
+    - {{ path }}
+{% endfor %}

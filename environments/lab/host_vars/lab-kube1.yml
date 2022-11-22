@@ -4,3 +4,10 @@ fqdn: lab-kube1.lab.homecentr.one
 
 # Gluster
 gluster_mount_host: lab-pve1
+
+# Kubernetes
+k3s_cluster_init: yes
+k3s_cluster_node_labels:
+  homecentr.one/workload-critical: true
+  homecentr.one/workload-standard: true
+  homecentr.one/hardware-gpu: false

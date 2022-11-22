@@ -36,8 +36,8 @@
     cpu: "kvm64"
     vcpus: "{{ vm.cpu_count }}"
     cores: "{{ vm.cpu_cores_per_cpu }}"
-    memory: "{{ vm.min_memory }}"
-    balloon: "{{ vm.max_memory }}"
+    memory: "{{ vm.max_memory }}"
+    balloon: "{{ vm.min_memory }}"
     state: present
 
 - name: Import disk from cloud image

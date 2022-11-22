@@ -1,0 +1,12 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+kind: Kustomization
+metadata:
+  name: {{ repo.name }}
+  namespace: {{ repo.namespace | default('flux-system') }}
+spec:
+  interval: {{ repo.interval }}
+  sourceRef:
+    kind: GitRepository
+    name: {{ repo.name }}
+  path: {{ repo.path }}
+  prune: true

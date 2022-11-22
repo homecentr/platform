@@ -55,7 +55,7 @@ Function Create-VM([string]$VMName)
         New-VM -Name $VMName `
             -Generation 2 `
             -NewVHDPath "$($HypervHost.VirtualHardDiskPath)\$($VMName)_RootDrive.vhdx" `
-            -NewVHDSizeBytes 192GB `
+            -NewVHDSizeBytes 96GB `
             -SwitchName $ExternalSwitchName
 
         Add-VMNetworkAdapter -VMName $VMName -SwitchName $StorageSwitchName

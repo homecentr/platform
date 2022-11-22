@@ -1,0 +1,11 @@
+- name: Add environment label
+  kubernetes.core.k8s_json_patch:
+    kubeconfig: "{{ fleet_kubeconfig_path }}"
+    api_version: fleet.cattle.io/v1alpha1
+    kind: Cluster
+    namespace: fleet-local
+    name: local
+    patch:
+      - op: add
+        path: /metadata/labels/env
+        value: "{{ fleet_cluster_environment }}"

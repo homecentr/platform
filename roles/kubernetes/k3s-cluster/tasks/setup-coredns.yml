@@ -1,0 +1,6 @@
+- name: Create Core DNS resources
+  run_once: true
+  kubernetes.core.k8s:
+    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+    definition: "{{ lookup('template', 'coredns.yml.j2') }}"
+    state: present

@@ -2,6 +2,10 @@ disable:
 - servicelb
 - coredns
 - metrics-server
+- traefik
+disable-helm-controller: true
+bind-address: {{ k3s_cluster_node_ip | default(ansible_host) }}
+node-ip: {{ k3s_cluster_node_ip | default(ansible_host) }}
 cluster-cidr: {{ k3s_cluster_cidr | mandatory }}
 service-cidr: {{ k3s_cluster_services_cidr | mandatory }}
 {% if k3s_cluster_init is defined and k3s_cluster_init %}

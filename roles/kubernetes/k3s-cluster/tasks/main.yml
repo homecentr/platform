@@ -1,17 +1,31 @@
+- name: Install required pip modules
+  ansible.builtin.include_tasks:
+    file: setup-pip-modules.yml
+
 - name: Apply CIS hardening recommendations
-  ansible.builtin.include_tasks: cis-hardening-runtime.yml
+  ansible.builtin.include_tasks:
+    file: cis-hardening-runtime.yml
 
 - name: Set up K3S cluster
-  ansible.builtin.include_tasks: setup-k3s.yml
+  ansible.builtin.include_tasks:
+    file: setup-k3s.yml
+
+- name: Set up Core DNS (required for Flux CD to clone the repository)
+  ansible.builtin.include_tasks:
+    file: setup-coredns.yml
 
 - name: Set up helm
-  ansible.builtin.include_tasks: setup-helm.yml
+  ansible.builtin.include_tasks:
+    file: setup-helm.yml
 
 - name: Restrict file access
-  ansible.builtin.include_tasks: secure-files.yml
+  ansible.builtin.include_tasks:
+    file: secure-files.yml
 
 - name: Load kubeconfig
-  ansible.builtin.include_tasks: kubeconfig-load.yml
+  ansible.builtin.include_tasks:
+    file: kubeconfig-load.yml
 
 - name: Save kubeconfig to localhost
-  ansible.builtin.include_tasks: kubeconfig-store-local.yml
+  ansible.builtin.include_tasks:
+    file: kubeconfig-store-local.yml

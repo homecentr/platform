@@ -1,0 +1,15 @@
+- name: Create git repository CRD
+  run_once: true
+  kubernetes.core.k8s:
+    kubeconfig: "{{ fluxcd_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'git-repository.yml.j2') }}"
+    state: present
+    apply: true
+
+- name: Create kustomization CRD
+  run_once: true
+  kubernetes.core.k8s:
+    kubeconfig: "{{ fluxcd_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'kustomization.yml.j2') }}"
+    state: present
+    apply: true

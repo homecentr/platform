@@ -13,12 +13,20 @@
     "lab:clear-keys": "./scripts/clearkeys.sh",
     "lab:apply": "./scripts/apply.sh lab",
     "lab:secrets": "./scripts/vault.sh edit 'lab/group_vars/all/secrets.yml'",
+    
     "lab:gluster-ca:view": "./scripts/vault.sh view 'lab/group_vars/gluster_nodes/ca.yml'",
-    "lab:gluster-ca:generate": "./scripts/gluster-ca.sh 'lab/group_vars/gluster_nodes/ca.yml' gluster.lab.homecentr.one",
+    "lab:gluster-ca:rotate": "./scripts/rsa-key-rotate.sh 'lab/group_vars/gluster_nodes/ca.yml' 'gluster_ca' 'gluster.lab.homecentr.one'",
+
+    "lab:sealed-secrets-key:view": "./scripts/vault.sh view 'lab/group_vars/k8s_nodes/sealed-secrets-key.yml'",
+    "lab:sealed-secrets-key:rotate": "./scripts/rsa-key-rotate.sh 'lab/group_vars/k8s_nodes/sealed-secrets-key.yml' 'sealed_secrets' 'k8s-secrets.lab.homecentr.one'",
     
     "prod:apply": "./scripts/apply.sh prod",
     "prod:secrets": "./scripts/vault.sh edit 'prod/group_vars/all/secrets.yml'",
+    
     "prod:gluster-ca:view": "./scripts/vault.sh view 'prod/group_vars/gluster_nodes/ca.yml'",
-    "prod:gluster-ca:generate": "./scripts/gluster-ca.sh 'prod/group_vars/gluster_nodes/ca.yml' gluster.lab.homecentr.one"
+    "prod:gluster-ca:generate": "./scripts/rsa-key-rotate.sh 'prod/group_vars/gluster_nodes/ca.yml' 'gluster_ca' 'gluster.homecentr.one'",
+
+    "prod:sealed-secrets-key:view": "./scripts/vault.sh view 'prod/group_vars/k8s_nodes/sealed-secrets-key.yml'",
+    "prod:sealed-secrets-key:rotate": "./scripts/rsa-key-rotate.sh 'prod/group_vars/k8s_nodes/sealed-secrets-key.yml' 'sealed_secrets' 'k8s-secrets.homecentr.one'"
   }
 }

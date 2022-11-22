@@ -16,7 +16,7 @@
   register: gluster_tls_ca
   ansible.builtin.copy:
     dest: "{{ gluster_openssl_dir.stdout }}/glusterfs.ca"
-    content: "{{ gluster_ca_public_key }}"
+    content: "{{ gluster_ca.public_key }}"
     owner: root
     group: root
     mode: 0600
@@ -42,8 +42,8 @@
     privatekey_path: "{{ gluster_openssl_dir.stdout }}/glusterfs.key"
     csr_path: "{{ gluster_openssl_dir.stdout }}/glusterfs.csr"
     ownca_not_after: "+{{ gluster_tls_certificate_validity_days }}d"
-    ownca_content: "{{ gluster_ca_public_key }}"
-    ownca_privatekey_content: "{{ gluster_ca_private_key }}"
+    ownca_content: "{{ gluster_ca.public_key }}"
+    ownca_privatekey_content: "{{ gluster_ca.private_key }}"
     provider: ownca
 
 - name: Enable Gluster TLS (Create dir)

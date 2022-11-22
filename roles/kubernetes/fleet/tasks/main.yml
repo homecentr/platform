@@ -1,0 +1,13 @@
+- name: Install Fleet
+  ansible.builtin.include_tasks:
+    file: install.yml
+
+- name: Configure Fleet Cluster definition
+  ansible.builtin.include_tasks:
+    file: configure-cluster.yml
+
+- name: Configure Fleet Git repository
+  ansible.builtin.include_tasks:
+    file: configure-repository.yml
+  vars:
+    repo: "{{ fleet_git_repository }}"

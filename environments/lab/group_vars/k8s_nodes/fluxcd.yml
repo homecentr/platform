@@ -1,0 +1,8 @@
+fluxcd_version: v0.36.0
+
+fluxcd_git_repositories:
+  - name: homecentr
+    url: https://github.com/homecentr/kubernetes
+    interval: 30s
+    branch: lab
+    path: environments/lab
