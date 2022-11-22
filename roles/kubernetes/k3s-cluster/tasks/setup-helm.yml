@@ -11,7 +11,7 @@
     name: git
     state: present
     update_cache: true
-    force_apt_get: true
+    force_apt_get: yes
     default_release: bullseye
 
 - name: Install Helm diff plugin
