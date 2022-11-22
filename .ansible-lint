@@ -1,7 +1,7 @@
 exclude_paths:
   - .cache/
   - .github/
-  - **/secrets.yml
+  - "**/secrets.yml"
 
 use_default_rules: true
 
