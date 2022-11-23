@@ -2,6 +2,8 @@ exclude_paths:
   - .cache/
   - .github/
   - "**/secrets.yml"
+  - "**/gluster_nodes/ca.yml"
+  - "**/k8s_nodes/sealed-secrets-key.yml"
 
 use_default_rules: true
 
