@@ -22,7 +22,7 @@ pve_vm_machines:
     os_storage: local-zfs
     os_disk_size_gb: 32
     cpu_count: 1
-    cpu_cores_per_cpu: 3
+    cpu_cores_per_cpu: 4
     min_memory: 1024
     max_memory: 4096
     nic_ipv4_address: 10.1.8.23

@@ -53,7 +53,7 @@ roles/
 ```bash
 yarn lab:clear-keys
 ```
-- Apply Ansible playbooks using the following command
+- Apply Ansible playbooks which will set up ssh access using the standard admin user using the following command
 ```bash
 ANSIBLE_HOST_KEY_CHECKING=False yarn lab:apply proxmox -u root -e ansible_user=root --tags init -k
 ```
