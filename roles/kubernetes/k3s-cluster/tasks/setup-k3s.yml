@@ -61,7 +61,7 @@
     mode: 0644
     force: true
 
-- name: Enable and start the k3s service
+- name: Start the k3s service
   retries: 10
   ansible.builtin.systemd:
     name: k3s

@@ -1,3 +1,5 @@
+$ErrorActionPreference = "Stop"
+
 $ExternalSwitchName = "Homecentr-Lab-External"
 $StorageSwitchName = "Homecentr-Lab-Storage"
 $ProxmoxIsoLink = "https://www.proxmox.com/en/downloads?task=callelement&format=raw&item_id=654&element=f85c494b-2b32-4109-b8c1-083cca2b7db6&method=download&args[0]=0cead966a536924afe4fbc82903dd27e"
@@ -52,11 +54,13 @@ Function Create-VM([string]$VMName)
     }
     else
     {
+        # Note: Proxmox fails to start a VM if it has less than 4GB
+        
         New-VM -Name $VMName `
             -Generation 2 `
             -NewVHDPath "$($HypervHost.VirtualHardDiskPath)\$($VMName)_RootDrive.vhdx" `
             -NewVHDSizeBytes 96GB `
-            -MemoryStartupBytes 7GB ` # Proxmox fails to start a VM if it has less than 4GB
+            -MemoryStartupBytes 7GB `
             -SwitchName $ExternalSwitchName
 
         Add-VMNetworkAdapter -VMName $VMName -SwitchName $StorageSwitchName

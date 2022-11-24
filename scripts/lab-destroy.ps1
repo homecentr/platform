@@ -1,3 +1,5 @@
+$ErrorActionPreference = "Stop"
+
 $VMCount = 3
 $VMNumbers = [System.Linq.Enumerable]::Range(1, $VMCount)
 
