@@ -10,6 +10,10 @@
   ansible.builtin.include_tasks:
     file: smtp.yml
 
+- name: Configure ZFS
+  ansible.builtin.include_tasks:
+    file: zfs.yml
+
 - name: Configure SSH
   ansible.builtin.include_tasks:
     file: ssh.yml

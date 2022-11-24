@@ -56,6 +56,7 @@ Function Create-VM([string]$VMName)
             -Generation 2 `
             -NewVHDPath "$($HypervHost.VirtualHardDiskPath)\$($VMName)_RootDrive.vhdx" `
             -NewVHDSizeBytes 96GB `
+            -MemoryStartupBytes 7GB ` # Proxmox fails to start a VM if it has less than 4GB
             -SwitchName $ExternalSwitchName
 
         Add-VMNetworkAdapter -VMName $VMName -SwitchName $StorageSwitchName
@@ -63,12 +64,9 @@ Function Create-VM([string]$VMName)
         Write-Host "✔️ [$VMName] VM created"
     }
 
-    # Proxmox fails to start a VM if it has less than 4GB
+    
     Set-VMMemory -VMName $VMName `
-                 -DynamicMemoryEnabled $true `
-                 -MinimumBytes 4GB `
-                 -StartupBytes 4GB `
-                 -MaximumBytes 6GB
+                 -DynamicMemoryEnabled $false # Proxmox can't work with dynamic memory properly
 
     $DvdDrive = Get-VMDvdDrive -VMName $VMName -ErrorAction SilentlyContinue
     if($DvdDrive -ne $null)

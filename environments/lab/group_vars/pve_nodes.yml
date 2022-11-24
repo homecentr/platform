@@ -1,5 +1,7 @@
 ssh_allow_root_login: "without-password" # This is required for VNC proxy between the nodes
 
+pve_zfs_max_arc_size_gb: 0.5
+
 pve_smtp_host: 10.1.8.130
 pve_smtp_port: 25
 pve_smtp_tls: false
