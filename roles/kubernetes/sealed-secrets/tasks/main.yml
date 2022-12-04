@@ -1,7 +1,7 @@
 - name: Create encryption secret
   run_once: true
   kubernetes.core.k8s:
-    kubeconfig: "{{ fleet_kubeconfig_path }}"
+    kubeconfig: "{{ sealed_secrets_kubeconfig_path }}"
     definition: "{{ lookup('template', 'key-secret.yml.j2') }}"
     state: present
     apply: true

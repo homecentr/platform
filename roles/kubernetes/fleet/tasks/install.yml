@@ -8,6 +8,7 @@
     chart_ref: "https://github.com/rancher/fleet/releases/download/v{{ fleet_version }}/fleet-crd-{{ fleet_version }}.tgz"
     kubeconfig_path: "{{ fleet_kubeconfig_path }}"
     wait: true
+    timeout: 5m0s
 
 - name: Install Fleet Controllers
   run_once: true
@@ -19,3 +20,4 @@
     chart_ref: "https://github.com/rancher/fleet/releases/download/v{{ fleet_version }}/fleet-{{ fleet_version }}.tgz"
     kubeconfig_path: "{{ fleet_kubeconfig_path }}"
     wait: true
+    timeout: 5m0s

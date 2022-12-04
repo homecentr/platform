@@ -1,6 +1,15 @@
-ssh_allow_root_login: "without-password" # This is required for VNC proxy between the nodes
+# This is required for VNC proxy between the nodes
+ssh_allow_root_login_trusted_clients:
+  - lab-pve1
+  - lab-pve2
+  - lab-pve3
 
 pve_zfs_max_arc_size_gb: 0.5
+
+pve_domain: lab.homecentr.one
+pve_nameservers:
+  - 1.1.1.1
+  - 1.0.0.1
 
 pve_smtp_host: 10.1.8.130
 pve_smtp_port: 25

@@ -14,3 +14,12 @@
 - name: Systemd reload
   ansible.builtin.systemd:
     daemon_reload: true
+
+- name: Update initamfs image
+  ansible.builtin.command:
+    cmd: update-initramfs -u -k all
+
+- name: Reboot machine
+  ansible.builtin.reboot:
+    reboot_timeout: 500
+  throttle: 1

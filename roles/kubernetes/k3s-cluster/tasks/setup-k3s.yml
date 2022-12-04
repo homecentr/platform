@@ -63,6 +63,8 @@
 
 - name: Start the k3s service
   retries: 10
+  until: "'status' in k3s_service and k3s_service.status.ActiveState == 'active'"
+  register: k3s_service
   ansible.builtin.systemd:
     name: k3s
     daemon_reload: true
@@ -97,3 +99,12 @@
     port: 6443
     delay: 5
     state: started
+
+
+- name: Wait kube api starts responding
+  retries: 20
+  kubernetes.core.k8s_info:
+    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+    api_version: v1
+    kind: Pod
+    namespace: kube-system

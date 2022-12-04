@@ -20,6 +20,9 @@
         - users
         - init
 
+    - name: Flush handlers before starting the VMs
+      ansible.builtin.meta: flush_handlers
+
     - name: Create virtual machines
       ansible.builtin.import_role:
         name: ../roles/proxmox/virtual-machines

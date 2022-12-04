@@ -1,6 +1,14 @@
+- name: Configure network
+  ansible.builtin.include_tasks:
+    file: network.yml
+
 - name: Configure apt repositories
   ansible.builtin.include_tasks:
-    file: apt.yml
+    file: apt-repositories.yml
+
+- name: Upgrade
+  ansible.builtin.include_tasks:
+    file: apt-upgrade.yml
 
 - name: Expose Web UI on port 443
   ansible.builtin.include_tasks:
@@ -17,6 +25,14 @@
 - name: Configure SSH
   ansible.builtin.include_tasks:
     file: ssh.yml
+
+- name: Configure SSO via OpenID
+  ansible.builtin.include_tasks:
+    file: sso-openid.yml
+
+- name: Configure SSO users
+  ansible.builtin.include_tasks:
+    file: sso-users.yml
 
 - name: Improve PVE Cluster auto-heal
   ansible.builtin.include_tasks:

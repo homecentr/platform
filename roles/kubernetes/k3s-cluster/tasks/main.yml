@@ -6,17 +6,21 @@
   ansible.builtin.include_tasks:
     file: cis-hardening-runtime.yml
 
+- name: Set up helm
+  ansible.builtin.include_tasks:
+    file: setup-helm.yml
+
 - name: Set up K3S cluster
   ansible.builtin.include_tasks:
     file: setup-k3s.yml
 
+- name: Set up MetalLB
+  ansible.builtin.include_tasks:
+    file: setup-metallb.yml
+
 - name: Set up Core DNS (required for Flux CD to clone the repository)
   ansible.builtin.include_tasks:
     file: setup-coredns.yml
-
-- name: Set up helm
-  ansible.builtin.include_tasks:
-    file: setup-helm.yml
 
 - name: Restrict file access
   ansible.builtin.include_tasks:

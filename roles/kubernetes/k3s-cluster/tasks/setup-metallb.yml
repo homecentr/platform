@@ -1,0 +1,51 @@
+- name: Create metallb namespace
+  run_once: true
+  k8s:
+    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+    definition: "{{ lookup('template', 'metallb-namespace.yml.j2') }}"
+    state: present
+
+- name: Install MetalLB
+  run_once: true
+  kubernetes.core.helm:
+    state: present
+    release_name: metallb
+    release_namespace: metallb-system
+    create_namespace: no
+    chart_version: "{{ k3s_cluster_metallb_chart_version }}"
+    chart_ref: metallb # metallb/metallb
+    chart_repo_url: https://metallb.github.io/metallb
+    kubeconfig_path: "/etc/rancher/k3s/k3s.yaml"
+    values:
+      prometheus:
+        scrapeAnnotations: true
+      controller:
+        resources:
+          requests:
+            cpu: "{{ k3s_cluster_metallb_controller_cpu_request }}"
+            memory: "{{ k3s_cluster_metallb_controller_memory_request }}"
+          limits:
+            cpu: "{{ k3s_cluster_metallb_controller_cpu_limit }}"
+            memory: "{{ k3s_cluster_metallb_controller_memory_limit }}"
+      speaker:
+        resources:
+          requests:
+            cpu: "{{ k3s_cluster_metallb_speaker_cpu_request }}"
+            memory: "{{ k3s_cluster_metallb_speaker_memory_request }}"
+          limits:
+            cpu: "{{ k3s_cluster_metallb_speaker_cpu_limit }}"
+            memory: "{{ k3s_cluster_metallb_speaker_memory_limit }}"
+
+- name: Set up MetalLB address pool
+  run_once: true
+  k8s:
+    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+    definition: "{{ lookup('template', 'metallb-pools.yml.j2') }}"
+    state: present
+  
+- name: Set up MetalLB L2 advertisement
+  run_once: true
+  k8s:
+    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
+    definition: "{{ lookup('template', 'metallb-l2-advertisement.yml.j2') }}"
+    state: present

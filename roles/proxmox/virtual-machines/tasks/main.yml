@@ -6,6 +6,10 @@
     pip_install_packages:
       - name: proxmoxer
 
+- name: Enable snippets in local storage
+  ansible.builtin.include_tasks:
+    file: snippets.yml
+
 - name: Download installation cloud images
   ansible.builtin.include_tasks:
     file: images.yml

@@ -5,6 +5,19 @@ k3s_cluster_services_cidr: 172.17.0.0/16
 
 k3s_cluster_dns_internal_ip: 172.17.0.10
 
+k3s_services_external_ip_range: 10.1.2.141-10.1.2.191
+k3s_services_external_reserved_ip_range: 10.1.2.128-10.1.2.140
+
+k3s_cluster_metallb_chart_version: 0.13.7
+k3s_cluster_metallb_controller_memory_request: 256Mi
+k3s_cluster_metallb_controller_memory_limit: 512Mi
+k3s_cluster_metallb_controller_cpu_request: 250m
+k3s_cluster_metallb_controller_cpu_limit: 1500m
+k3s_cluster_metallb_speaker_memory_request: 256Mi
+k3s_cluster_metallb_speaker_memory_limit: 512Mi
+k3s_cluster_metallb_speaker_cpu_request: 250m
+k3s_cluster_metallb_speaker_cpu_limit: 2000m
+
 k3s_cluster_coredns_version: 1.10.0
 k3s_cluster_coredns_memory_request: 100Mi
 k3s_cluster_coredns_memory_limit: 256Mi

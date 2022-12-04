@@ -10,14 +10,14 @@
     tags:
       - k3s
 
-  - name: Install and configure fleet
-    ansible.builtin.import_role:
-      name: ../roles/kubernetes/fleet
-    tags:
-      - fleet
-
   - name: Install and configure Sealed secrets
     ansible.builtin.import_role:
       name: ../roles/kubernetes/sealed-secrets
     tags:
       - sealed-secrets
+
+  - name: Install and configure fleet
+    ansible.builtin.import_role:
+      name: ../roles/kubernetes/fleet
+    tags:
+      - fleet
