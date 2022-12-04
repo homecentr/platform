@@ -1,0 +1,8 @@
+- name: Configure network interface attributes
+  community.general.interfaces_file:
+    dest: /etc/network/interfaces
+    iface: "{{ interface_name }}"
+    option: "{{ item.key }}"
+    value: "{{ item.value }}"
+    state: present
+  loop: "{{ interface_attributes }}"

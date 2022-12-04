@@ -32,7 +32,7 @@
 
 - name: Configure SSO users
   ansible.builtin.include_tasks:
-    file: sso-users.yml
+    file: users.yml
 
 - name: Improve PVE Cluster auto-heal
   ansible.builtin.include_tasks:

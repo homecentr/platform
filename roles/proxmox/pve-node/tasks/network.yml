@@ -1,5 +1,3 @@
-# DNS - render template
-# Interfaces - Loopback, vmbr should remain intact (?)
 - name: Configure nameservers
   ansible.builtin.copy:
     content: "{{ lookup('template', 'resolv.conf.j2') }}"
@@ -8,3 +6,23 @@
     owner: root
     group: root
     force: true
+
+- name: Configure network interfaces
+  ansible.builtin.include_tasks:
+    file: network-interface.yml
+  loop: "{{ pve_network_interfaces | dict2items }}"
+  loop_control:
+    loop_var: interface
+  when: pve_network_interfaces is defined
+  vars:
+    interface_name: "{{ interface.key }}"
+    interface_attributes: "{{ interface.value | dict2items | rejectattr('key', 'equalto', 'auto') }}"
+
+- name: Configure network interface auto
+  ansible.builtin.lineinfile:
+    path: /etc/network/interfaces
+    line: "auto {{ item }}"
+    state: "{{ 'present' if (not 'auto' in pve_network_interfaces[item] or pve_network_interfaces[item].auto == true) else 'absent' }}"
+    insertbefore: "^iface {{ item }}"
+  loop: "{{ pve_network_interfaces | dict2items | map(attribute='key') }}"
+  when: pve_network_interfaces is defined

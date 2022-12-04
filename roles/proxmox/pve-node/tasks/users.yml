@@ -9,9 +9,15 @@
   when: pve_users is defined
 
 - name: Assign roles to users
-  ansible.builtin.include:
-    file: sso-roles.yml
+  ansible.builtin.include_tasks:
+    file: user-permissions.yml
   with_items: "{{ pve_users }}"
   when: pve_users is defined
   vars:
     user: "{{ item }}"
+
+- name: Remove root@pam user
+  ansible.builtin.lineinfile:
+    path: /etc/pve/user.cfg
+    state: absent
+    regex: "^user:root@pam:(.*)"
