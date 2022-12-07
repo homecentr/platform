@@ -14,7 +14,8 @@ gluster_mount_host: lab-pve1
 # PVE
 pve_network_interfaces:
   eth1:
-    address: 192.168.1.81/24
+    method: static
+    address: 192.168.1.11/24
     auto: true
 
 pve_vm_machines:

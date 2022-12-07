@@ -13,6 +13,7 @@
     "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-create.ps1",
     "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-destroy.ps1",
     "lab:clear-keys": "./scripts/clearkeys.sh",
+    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./scripts/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
     "lab:apply": "./scripts/apply.sh lab",
     "lab:secrets": "./scripts/vault.sh edit 'lab/group_vars/all/secrets.yml'",
     
@@ -21,7 +22,8 @@
 
     "lab:sealed-secrets-key:view": "./scripts/vault.sh view 'lab/group_vars/k8s_nodes/sealed-secrets-key.yml'",
     "lab:sealed-secrets-key:rotate": "./scripts/rsa-key-rotate.sh 'lab/group_vars/k8s_nodes/sealed-secrets-key.yml' 'sealed_secrets' 'k8s-secrets.lab.homecentr.one'",
-    
+ 
+    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./scripts/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
     "prod:apply": "./scripts/apply.sh prod",
     "prod:secrets": "./scripts/vault.sh edit 'prod/group_vars/all/secrets.yml'",
     

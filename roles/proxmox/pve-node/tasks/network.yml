@@ -1,28 +1,42 @@
-- name: Configure nameservers
-  ansible.builtin.copy:
-    content: "{{ lookup('template', 'resolv.conf.j2') }}"
-    dest: /etc/resolv.conf
-    mode: 0644
-    owner: root
-    group: root
-    force: true
+# - name: Configure nameservers
+#   ansible.builtin.copy:
+#     content: "{{ lookup('template', 'resolv.conf.j2') }}"
+#     dest: /etc/resolv.conf
+#     mode: 0644
+#     owner: root
+#     group: root
+#     force: true
 
-- name: Configure network interfaces
-  ansible.builtin.include_tasks:
-    file: network-interface.yml
-  loop: "{{ pve_network_interfaces | dict2items }}"
-  loop_control:
-    loop_var: interface
-  when: pve_network_interfaces is defined
-  vars:
-    interface_name: "{{ interface.key }}"
-    interface_attributes: "{{ interface.value | dict2items | rejectattr('key', 'equalto', 'auto') }}"
+# # move all interface loops to network-interface file
+# # finish iface mode - wtf is manual ???
 
-- name: Configure network interface auto
-  ansible.builtin.lineinfile:
-    path: /etc/network/interfaces
-    line: "auto {{ item }}"
-    state: "{{ 'present' if (not 'auto' in pve_network_interfaces[item] or pve_network_interfaces[item].auto == true) else 'absent' }}"
-    insertbefore: "^iface {{ item }}"
-  loop: "{{ pve_network_interfaces | dict2items | map(attribute='key') }}"
-  when: pve_network_interfaces is defined
+# - name: Configure network interface mode
+#   notify: Restart networking
+#   ansible.builtin.lineinfile:
+#     path: /etc/network/interfaces
+#     line: "auto {{ item }}"
+#     state: "{{ 'present' if (not 'auto' in pve_network_interfaces[item] or pve_network_interfaces[item].dhcp == true) else 'absent' }}"
+#   loop: "{{ pve_network_interfaces | dict2items | map(attribute='key') }}"
+#   when: pve_network_interfaces is defined
+
+# - name: Configure network interfaces
+#   ansible.builtin.include_tasks:
+#     file: network-interface.yml
+#   loop: "{{ pve_network_interfaces | dict2items }}"
+#   loop_control:
+#     loop_var: interface
+#   when: pve_network_interfaces is defined
+#   vars:
+#     interface_name: "{{ interface.key }}"
+#     interface_attributes: "{{ interface.value | dict2items | rejectattr('key', 'equalto', 'auto') | rejectattr('key', 'equalto', 'dhcp') }}"
+
+
+# - name: Configure network interface auto
+#   notify: Restart networking
+#   ansible.builtin.lineinfile:
+#     path: /etc/network/interfaces
+#     line: "auto {{ item }}"
+#     state: "{{ 'present' if (not 'auto' in pve_network_interfaces[item] or pve_network_interfaces[item].auto == true) else 'absent' }}"
+#     insertbefore: "^iface {{ item }}"
+#   loop: "{{ pve_network_interfaces | dict2items | map(attribute='key') }}"
+#   when: pve_network_interfaces is defined

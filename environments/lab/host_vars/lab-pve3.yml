@@ -12,6 +12,12 @@ gluster_fqdn: gfs-lab-pve3.lab.homecentr.one
 gluster_mount_host: lab-pve3
 
 # PVE
+pve_network_interfaces:
+  eth1:
+    method: static
+    address: 192.168.1.13/24
+    auto: true
+
 pve_vm_machines:
   - vmid: 301
     name: lab-kube3

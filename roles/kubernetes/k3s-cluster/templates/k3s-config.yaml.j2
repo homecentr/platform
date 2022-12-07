@@ -3,6 +3,7 @@ disable:
 - coredns
 - metrics-server
 - traefik
+- local-storage
 disable-helm-controller: true
 bind-address: {{ k3s_cluster_node_ip | default(ansible_host) }}
 node-ip: {{ k3s_cluster_node_ip | default(ansible_host) }}

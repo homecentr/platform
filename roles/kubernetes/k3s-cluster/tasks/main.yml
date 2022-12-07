@@ -14,11 +14,11 @@
   ansible.builtin.include_tasks:
     file: setup-k3s.yml
 
-- name: Set up MetalLB
-  ansible.builtin.include_tasks:
-    file: setup-metallb.yml
+# - name: Set up MetalLB
+#   ansible.builtin.include_tasks:
+#     file: setup-metallb.yml
 
-- name: Set up Core DNS (required for Flux CD to clone the repository)
+- name: Set up Core DNS (required for Fleet to clone the git repository)
   ansible.builtin.include_tasks:
     file: setup-coredns.yml
 

@@ -54,7 +54,7 @@
 - name: Create config file
   notify: Restart k3s
   ansible.builtin.template:
-    src: "config.yaml.j2"
+    src: "k3s-config.yaml.j2"
     dest: "/etc/rancher/k3s/config.yaml"
     owner: root
     group: root

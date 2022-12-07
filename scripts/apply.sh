@@ -18,12 +18,7 @@ case "$1" in
   ;;
 esac
 
-if [ -z "$2" ]; then
-  printHelp
-  exit 1
-fi
-
-PLAYBOOK="./playbooks/$2.yml"
+PLAYBOOK="./playbooks/${2:-site}.yml"
 
 if [ ! -f "$PLAYBOOK" ]; then
   printHelp

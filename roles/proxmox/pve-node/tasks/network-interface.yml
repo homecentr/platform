@@ -1,8 +1,26 @@
+# - name: Configure network method
+#   notify: Reload networking
+#   ansible.builtin.lineinfile:
+#     path: /etc/network/interfaces
+#     regexp: "^iface {{ interface_name }} inet(.*)"
+#     line: "iface {{ interface_name }} inet {{ pve_network_interfaces[interface_name].method }}"
+#     state: present
+#   when: "'method' in pve_network_interfaces[interface_name]"
+
+- name: Configure network interface auto
+  notify: Reload networking
+  ansible.builtin.lineinfile:
+    path: /etc/network/interfaces
+    line: "auto {{ interface_name }}"
+    state: "{{ 'present' if (not 'auto' in pve_network_interfaces[interface_name] or pve_network_interfaces[interface_name].auto == true) else 'absent' }}"
+    insertbefore: "^iface {{ interface_name }}"
+
 - name: Configure network interface attributes
+  notify: Reload networking
   community.general.interfaces_file:
     dest: /etc/network/interfaces
     iface: "{{ interface_name }}"
     option: "{{ item.key }}"
     value: "{{ item.value }}"
     state: present
-  loop: "{{ interface_attributes }}"
+  loop: "{{ pve_network_interfaces[interface_name] | dict2items | rejectattr('key', 'equalto', 'auto') }}"

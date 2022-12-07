@@ -7,6 +7,10 @@
     name: postfix
     state: restarted
 
+- name: Reload networking
+  ansible.builtin.command:
+    cmd: ifreload -a
+
 - name: APT update
   ansible.builtin.apt:
     update_cache: true

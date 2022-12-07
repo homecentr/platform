@@ -1,6 +1,16 @@
-- name: Configure network
+- name: Configure nameservers
   ansible.builtin.include_tasks:
-    file: network.yml
+    file: network-dns.yml
+
+- name: Configure network interfaces
+  ansible.builtin.include_tasks:
+    file: network-interface.yml
+  loop: "{{ pve_network_interfaces | dict2items }}"
+  loop_control:
+    loop_var: interface
+  when: pve_network_interfaces is defined
+  vars:
+    interface_name: "{{ interface.key }}"
 
 - name: Configure apt repositories
   ansible.builtin.include_tasks:
@@ -37,3 +47,6 @@
 - name: Improve PVE Cluster auto-heal
   ansible.builtin.include_tasks:
     file: cluster.yml
+
+- name: Flush handlers
+  ansible.builtin.meta: flush_handlers # restart networking immediately if needed

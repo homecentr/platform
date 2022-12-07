@@ -7,4 +7,5 @@ fleet_git_repository:
   polling_interval: 10s
   branch: lab
   paths:
-    - /*
+    - /infra/*
+    - /apps/*

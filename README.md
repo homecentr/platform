@@ -45,9 +45,6 @@ roles/
     - Hostname: stg-pve&lt;X&gt;.lab.&lt;domain&gt;
     - IP Address: 10.1.8.1&lt;X&gt;/24
     - Gateway: 10.1.8.1
-- Configure storage network
-    - IP Address: 192.168.1.1&lt;X&gt;/24 (this is an internal HyperV network)
-    - Do not set a gateway
 - Create a Proxmox cluster (there's currently no way to automate this)
 - Remove previous SSH keys in case you have re-created the lab using the following command
 ```bash
@@ -55,7 +52,7 @@ yarn lab:clear-keys
 ```
 - Apply Ansible playbooks which will set up ssh access using the standard admin user using the following command
 ```bash
-ANSIBLE_HOST_KEY_CHECKING=False yarn lab:apply proxmox -u root -e ansible_user=root --tags init -k
+yarn lab:init
 ```
 - Apply the rest of Ansible playbooks using the following command
 ```bash

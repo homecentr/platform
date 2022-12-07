@@ -12,6 +12,7 @@
   hosts: gluster_clients
   become: true
   become_method: sudo
+  any_errors_fatal: true
   tasks:
     - name: Install and configure Gluster clients
       ansible.builtin.import_role:

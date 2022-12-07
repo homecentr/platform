@@ -66,6 +66,9 @@
     state: present
 
 - name: Import disk from cloud image
+  register: pve_vm_disk
+  retries: 5 # transient timeouts
+  until: pve_vm_disk.vmid == vm.vmid
   community.general.proxmox_disk:
     api_user: root@pam
     api_password: "{{ users_root_password }}"
@@ -102,5 +105,5 @@
     host: "{{ vm.nic_ipv4_address }}"
     port: 22
     timeout: 400
-    sleep: 5
+    sleep: 2
     msg: "VM {{ vm.name }} did not start responding on SSH in time."
