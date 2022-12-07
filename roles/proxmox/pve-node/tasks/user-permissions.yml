@@ -4,7 +4,7 @@
     create: false
     regex: "^acl:1:{{ permission.scope | default('/') }}:{{ user.username }}@{{ user.realm }}:(.*)"
     line: "acl:1:{{ permission.scope | default('/') }}:{{ user.username }}@{{ user.realm }}:{{ permission.roles | join(',') }}:"
-    insertafter: "^user:.*" 
+    insertafter: "^user:.*"
   loop: "{{ user.permissions }}"
   loop_control:
     loop_var: permission

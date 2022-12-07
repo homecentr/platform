@@ -10,13 +10,13 @@
   ansible.builtin.include_tasks:
     file: setup-helm.yml
 
-- name: Set up K3S cluster
+- name: Set up k3s cluster
   ansible.builtin.include_tasks:
     file: setup-k3s.yml
 
-# - name: Set up MetalLB
-#   ansible.builtin.include_tasks:
-#     file: setup-metallb.yml
+- name: Set up network policies for default namespaces
+  ansible.builtin.include_tasks:
+    file: setup-network-policies.yml
 
 - name: Set up Core DNS (required for Fleet to clone the git repository)
   ansible.builtin.include_tasks:

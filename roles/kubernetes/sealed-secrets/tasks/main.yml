@@ -6,6 +6,14 @@
     state: present
     apply: true
 
+# - name: Create network policy
+#   run_once: true
+#   kubernetes.core.k8s:
+#     kubeconfig: "{{ sealed_secrets_kubeconfig_path }}"
+#     definition: "{{ lookup('template', 'network-policy.yml.j2') }}"
+#     state: present
+#     apply: true
+
 - name: Install Sealed Secrets helm chart
   run_once: true
   kubernetes.core.helm:
@@ -18,3 +26,6 @@
     chart_version: "{{ sealed_secrets_chart_version }}"
     kubeconfig_path: "{{ sealed_secrets_kubeconfig_path }}"
     wait: true
+    values:
+      networkPolicy:
+        enabled: true
