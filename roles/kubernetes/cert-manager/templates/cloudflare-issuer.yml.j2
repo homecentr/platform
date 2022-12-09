@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: cloudflare
+  namespace: cert-manager
+spec:
+  acme:
+    email: {{ certmanager_acme_email }}
+    server: {{ "https://acme-staging-v02.api.letsencrypt.org/directory" if certmanager_acme_use_staging else "https://acme-v02.api.letsencrypt.org/directory" }}
+    privateKeySecretRef:
+      name: cloudflare-issuer-account-key
+    solvers:
+    - dns01:
+        cloudflare:
+          email: {{ certmanager_cloudflare_email }}
+          apiTokenSecretRef:
+            name: cloudflare-api-token
+            key: api-token

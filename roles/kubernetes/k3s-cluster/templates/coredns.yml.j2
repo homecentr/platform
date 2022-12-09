@@ -83,7 +83,7 @@ data:
           tls_servername {{ k3s_cluster_coredns_forwarders_tls_servername }}
           health_check 5s
         }
-        prometheus :9153
+        prometheus :9090
         cache 30
         loop
         reload
@@ -233,23 +233,29 @@ spec:
   ingress:
     - from: # DNS queries from other pods
         - namespaceSelector: {}
-          podSelector: {}
+        - podSelector: {}
       ports:
         - protocol: TCP
           port: 53
         - protocol: UDP
           port: 53
+        - protocol: TCP
+          port: 5353
+        - protocol: UDP
+          port: 5353
   egress:
     - to: # Forwarding external DNS queries
 {% for forwarder in k3s_cluster_coredns_forwarders %}
         - ipBlock:
             cidr: {{ forwarder }}/32
+{% endfor %}
       ports:
+        - protocol: TCP
+          port: 853 # DNS over TLS
         - protocol: TCP
           port: 53
         - protocol: UDP
           port: 53
-{% endfor %}
     - to: # Kubernetes API
 {% for node in groups['k8s_nodes'] %}
       - ipBlock:

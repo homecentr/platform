@@ -1,0 +1,18 @@
+metallb_chart_version: 0.13.5
+metallb_controller_memory_request: 256Mi
+metallb_controller_memory_limit: 512Mi
+metallb_controller_cpu_request: 250m
+metallb_controller_cpu_limit: 750m
+
+metallb_speaker_memory_request: 256Mi
+metallb_speaker_memory_limit: 512Mi
+metallb_speaker_cpu_request: 250m
+metallb_speaker_cpu_limit: 750m
+
+metallb_address_pools:
+  - name: well-known
+    range: 10.1.2.128-10.1.2.140
+    auto_assign: false
+  - name: ad-hoc
+    range: 10.1.2.141-10.1.2.191
+    auto_assign: true

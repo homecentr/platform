@@ -1,0 +1,30 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ name }}
+  namespace: cert-manager
+spec:
+  secretName: {{ name }}
+  secretTemplate:
+    annotations:
+      reflector.v1.k8s.emberstack.com/reflection-allowed: "true"
+      reflector.v1.k8s.emberstack.com/reflection-allowed-namespaces: "{{ namespaces | join(',') }}"
+      reflector.v1.k8s.emberstack.com/reflection-auto-enabled: "true"
+      reflector.v1.k8s.emberstack.com/reflection-auto-namespaces: "{{ namespaces | join(',') }}"
+  duration: {{ duration }}
+  renewBefore: {{ renewBefore }}
+  isCA: false
+  privateKey:
+    algorithm: RSA
+    encoding: PKCS1
+    size: 2048
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+{% for domain in domains%}
+    - "{{ domain }}"
+{% endfor %}
+  issuerRef:
+    name: cloudflare
+    kind: Issuer

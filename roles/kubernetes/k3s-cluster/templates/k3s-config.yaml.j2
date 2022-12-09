@@ -2,7 +2,7 @@ disable:
 - servicelb
 - coredns
 - metrics-server
-- traefik
+# - traefik
 - local-storage
 disable-helm-controller: true
 bind-address: {{ k3s_cluster_node_ip | default(ansible_host) }}

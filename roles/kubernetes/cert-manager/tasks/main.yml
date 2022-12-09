@@ -1,0 +1,15 @@
+- name: Install Cert Manager
+  ansible.builtin.include_tasks:
+    file: install.yml
+
+- name: Set up network policies
+  ansible.builtin.include_tasks:
+    file: network-policies.yml
+
+- name: Set up Cloudflare issuer
+  ansible.builtin.include_tasks:
+    file: cloudflare.yml
+
+- name: Set up certificates
+  ansible.builtin.include_tasks:
+    file: certificates.yml

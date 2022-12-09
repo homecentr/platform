@@ -1,0 +1,14 @@
+- name: Set up MetalLB address pool
+  run_once: true
+  k8s:
+    kubeconfig: "{{ metallb_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'ip-address-pool.yml.j2', template_vars=item) }}"
+    state: present
+  with_items: "{{ metallb_address_pools }}"
+
+- name: Set up MetalLB L2 advertisement
+  run_once: true
+  k8s:
+    kubeconfig: "{{ metallb_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'l2-advertisement.yml.j2') }}"
+    state: present

@@ -1,0 +1,10 @@
+certmanager_acme_use_staging: true
+certmanager_certificates:
+  - name: "wildcard-homecentr-one"
+    namespaces:
+      - apps
+      - monitoring
+    duration: 2160h # 90d
+    renewBefore: 360h # 15d
+    domains:
+      - "*.lab.homecentr.one"

@@ -9,7 +9,9 @@
   ansible.builtin.command:
     cmd: pveum realm modify pam --default 0
 
+# Note: The empty line in the template below must remain, otherwise jinja puts the last two lines on one which creates an invalid file
 - name: Define PVE realm
+  run_once: true
   ansible.builtin.blockinfile:
     create: false
     path: /etc/pve/domains.cfg
@@ -23,5 +25,6 @@
           autocreate {{ '1' if item.autocreate_users else '0' }}
           default {{ '1' if pve_default_realm_name == item.name else '0' }}
           {% if 'username_claim' in item %}username-claim {{ item.username_claim }}{% endif %}
+
           {% if 'scopes' in item %}scopes {{ item.scopes }}{% endif %}
   with_items: "{{ pve_openid_realms }}"

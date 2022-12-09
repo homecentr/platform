@@ -1,0 +1,6 @@
+local_storage_image_version: v0.0.23
+local_storage_volumes:
+  - name: services
+    path: "/mnt/gfs/k3s-services"
+    binding_mode: Immediate
+    reclaim_policy: Delete

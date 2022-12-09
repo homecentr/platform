@@ -4,6 +4,4 @@
     kubeconfig: "/etc/rancher/k3s/k3s.yaml"
     definition: "{{ lookup('template', 'network-policy-default.yml.j2', template_vars={ 'namespace': item }) }}"
     state: present
-  with_items:
-    - kube-system
-    - kube-public
+  with_items: "{{ ['kube-system', 'kube-public'] + k3s_cluster_namespaces }}"

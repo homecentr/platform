@@ -10,6 +10,30 @@
     tags:
       - k3s
 
+  - name: Install and configure Local Storage
+    ansible.builtin.import_role:
+      name: ../roles/kubernetes/local-storage
+    tags:
+      - local-storage
+
+  - name: Install and configure Metal Load Balancer
+    ansible.builtin.import_role:
+      name: ../roles/kubernetes/metal-lb
+    tags:
+      - metallb
+
+  - name: Install and configure Cert Manager
+    ansible.builtin.import_role:
+      name: ../roles/kubernetes/cert-manager
+    tags:
+      - cert-manager
+
+  - name: Install and configure Reflector
+    ansible.builtin.import_role:
+      name: ../roles/kubernetes/reflector
+    tags:
+      - reflector
+
   - name: Install and configure Sealed secrets
     ansible.builtin.import_role:
       name: ../roles/kubernetes/sealed-secrets

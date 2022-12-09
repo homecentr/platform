@@ -1,0 +1,43 @@
+- name: Create metallb namespace
+  run_once: true
+  k8s:
+    kubeconfig: "{{ metallb_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'namespace.yml.j2') }}"
+    state: present
+
+- name: Add MetalLB helm repo
+  kubernetes.core.helm_repository:
+    name: metallb
+    repo_url: "https://metallb.github.io/metallb"
+    state: present
+
+- name: Install MetalLB
+  run_once: true
+  kubernetes.core.helm:
+    state: present
+    release_name: metallb
+    release_namespace: metallb-system
+    create_namespace: no
+    chart_version: "{{ metallb_chart_version }}"
+    chart_ref: metallb/metallb
+    kubeconfig_path: "{{ metallb_kubeconfig_path }}"
+    wait: true
+    values:
+      prometheus:
+        scrapeAnnotations: true
+      controller:
+        resources:
+          requests:
+            cpu: "{{ metallb_controller_cpu_request }}"
+            memory: "{{ metallb_controller_memory_request }}"
+          limits:
+            cpu: "{{ metallb_controller_cpu_request }}"
+            memory: "{{ metallb_controller_memory_limit }}"
+      speaker:
+        resources:
+          requests:
+            cpu: "{{ metallb_speaker_cpu_request }}"
+            memory: "{{ metallb_speaker_memory_request }}"
+          limits:
+            cpu: "{{ metallb_speaker_cpu_request }}"
+            memory: "{{ metallb_speaker_memory_limit }}"

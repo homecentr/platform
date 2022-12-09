@@ -1,0 +1,7 @@
+- name: Create certificates
+  run_once: true
+  k8s:
+    kubeconfig: "{{ certmanager_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'certificate.yml.j2',template_vars=(item)) }}"
+    state: present
+  with_items: "{{ certmanager_certificates }}"
