@@ -18,15 +18,13 @@
       installCRDs: true
       webhook:
         securePort: "{{ certmanager_webhook_secure_port }}"
-        # podAnnotations:
-        #   container.apparmor.security.beta.kubernetes.io/cert-manager: runtime/default
-        #   seccomp.security.alpha.kubernetes.io/pod: runtime/default
         resources:
           limits:
-            cpu: 500m
-            memory: 256Mi
+            cpu: "{{ certmanager_webhook_cpu_limit }}"
+            memory: "{{ certmanager_webhook_memory_limit }}"
           requests:
-            memory: 128Mi
+            cpu: "{{ certmanager_webhook_cpu_request }}"
+            memory: "{{ certmanager_webhook_memory_request }}"
         containerSecurityContext:
           allowPrivilegeEscalation: false
           privileged: false
@@ -38,15 +36,13 @@
               drop:
               - all
       cainjector:
-        # podAnnotations:
-        #   container.apparmor.security.beta.kubernetes.io/cert-manager: runtime/default
-        #   seccomp.security.alpha.kubernetes.io/pod: runtime/default
         resources:
           limits:
-            cpu: 500m
-            memory: 256Mi
+            cpu: "{{ certmanager_cainjector_cpu_limit }}"
+            memory: "{{ certmanager_cainjector_memory_limit }}"
           requests:
-            memory: 128Mi
+            cpu: "{{ certmanager_cainjector_cpu_request }}"
+            memory: "{{ certmanager_cainjector_memory_request }}"
         containerSecurityContext:
           allowPrivilegeEscalation: false
           privileged: false
@@ -57,15 +53,13 @@
           capabilities:
               drop:
               - all
-      # podAnnotations:
-      #   container.apparmor.security.beta.kubernetes.io/cert-manager: runtime/default
-      #   seccomp.security.alpha.kubernetes.io/pod: runtime/default
       resources:
         limits:
-          cpu: 500m
-          memory: 256Mi
+          cpu: "{{ certmanager_cpu_limit }}"
+          memory: "{{ certmanager_memory_limit }}"
         requests:
-          memory: 128Mi
+          cpu: "{{ certmanager_cpu_request }}"
+          memory: "{{ certmanager_memory_request }}"
       containerSecurityContext:
         allowPrivilegeEscalation: false
         privileged: false

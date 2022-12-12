@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: local-path-provisioner
+  namespace: kube-system
+spec:
+  podSelector:
+    app.kubernetes.io/name: local-path-provisioner
+  egress:
+    - to: # Kubernetes API
+{% for node in groups['k8s_nodes'] %}
+        - ipBlock:
+            cidr: {{ hostvars[node]['ansible_host'] }}/32
+{% endfor %}
+      ports:
+        - protocol: TCP
+          port: 6443
+  ingress:
+    - from: # Allow webhook calls from Kube API
+{% for node in groups['k8s_nodes'] %}
+        - ipBlock:
+            cidr: {{ hostvars[node].ansible_host }}/32
+{% endfor %}
+  policyTypes:
+  - Ingress
+  - Egress

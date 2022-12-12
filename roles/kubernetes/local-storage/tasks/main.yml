@@ -10,6 +10,7 @@
     - cluster-role-binding.yml.j2
     - role.yml.j2
     - role-binding.yml.j2
+    - network-policy.yml.j2
   
 - name: Deploy volume resources
   ansible.builtin.include_tasks:

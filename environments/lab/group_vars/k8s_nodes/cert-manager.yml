@@ -8,3 +8,18 @@ certmanager_certificates:
     renewBefore: 360h # 15d
     domains:
       - "*.lab.homecentr.one"
+
+certmanager_webhook_cpu_limit: 1000m
+certmanager_webhook_memory_limit: 512Mi
+certmanager_webhook_cpu_request: 10m
+certmanager_webhook_memory_request: 10Mi
+
+certmanager_cainjector_cpu_limit: 1000m
+certmanager_cainjector_memory_limit: 512Mi
+certmanager_cainjector_cpu_request: 10m
+certmanager_cainjector_memory_request: 10Mi
+
+certmanager_cpu_limit: 1000m
+certmanager_memory_limit: 512Mi
+certmanager_cpu_request: 10m
+certmanager_memory_request: 10Mi

@@ -34,6 +34,13 @@
     tags:
       - reflector
 
+  - name: Install and configure Prometheus operator
+    ansible.builtin.import_role:
+      name: ../roles/kubernetes/prometheus-operator
+    tags:
+      - prometheus-operator
+      - prometheus
+
   - name: Install and configure Sealed secrets
     ansible.builtin.import_role:
       name: ../roles/kubernetes/sealed-secrets

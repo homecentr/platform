@@ -9,17 +9,15 @@ data:
     {
       "sharedFileSystemPath": "{{ volume.path }}"
     }
-  # The directories are assumed to already exist
   setup: |-
     #!/bin/sh
     set -eu
-    echo "Hello"
-  # mkdir -m 0777 -p "$VOL_DIR"
+    mkdir -m 0777 -p "$VOL_DIR"
   teardown: |-
     #!/bin/sh
     set -eu
     echo "Exit"
-  # rm -rf "$VOL_DIR"
+    rm -rf "$VOL_DIR"
   helperPod.yaml: |-
     apiVersion: v1
     kind: Pod

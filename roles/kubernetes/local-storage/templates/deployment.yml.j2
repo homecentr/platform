@@ -8,10 +8,14 @@ spec:
   selector:
     matchLabels:
       app: local-path-provisioner-{{ volume.name }}
+      app.kubernetes.io/name: local-path-provisioner
+      app.kubernetes.io/instance: local-path-provisioner-{{ volume.name }}
   template:
     metadata:
       labels:
         app: local-path-provisioner-{{ volume.name }}
+        app.kubernetes.io/name: local-path-provisioner
+        app.kubernetes.io/instance: local-path-provisioner-{{ volume.name }}
     spec:
       serviceAccountName: local-path-provisioner
       containers:
