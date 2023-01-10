@@ -36,8 +36,12 @@
           policy.default: role:readonly
           policy.csv: |
             g, "{{ argocd_admin_group_id }}", role:admin
+        styles: |
+          .sidebar__version {
+            display: none;
+          }
         cm:
-          admin.enable: "false"
+          admin.enabled: false
           url: "{{ argocd_url }}"
           oidc.config: |
              name: Azure
