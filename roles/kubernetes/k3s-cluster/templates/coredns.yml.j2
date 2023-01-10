@@ -96,8 +96,8 @@ metadata:
   name: coredns
   namespace: kube-system
   labels:
-    k8s-app: kube-dns
-    kubernetes.io/name: "CoreDNS"
+    app.kubernetes.io/name: coredns
+    app.kubernetes.io/instance: kube-dns
 spec:
   strategy:
     type: RollingUpdate
@@ -105,11 +105,13 @@ spec:
       maxUnavailable: 1
   selector:
     matchLabels:
-      k8s-app: kube-dns
+      app.kubernetes.io/name: coredns
+      app.kubernetes.io/instance: kube-dns
   template:
     metadata:
       labels:
-        k8s-app: kube-dns
+        app.kubernetes.io/name: coredns
+        app.kubernetes.io/instance: kube-dns
     spec:
       securityContext:
         runAsNonRoot: true
@@ -126,7 +128,10 @@ spec:
            requiredDuringSchedulingIgnoredDuringExecution:
            - labelSelector:
                matchExpressions:
-               - key: k8s-app
+               - key: app.kubernetes.io/name
+                 operator: In
+                 values: ["coredns"]
+               - key: app.kubernetes.io/instance
                  operator: In
                  values: ["kube-dns"]
              topologyKey: kubernetes.io/hostname
@@ -198,12 +203,12 @@ metadata:
     prometheus.io/port: "9153"
     prometheus.io/scrape: "true"
   labels:
-    k8s-app: kube-dns
-    kubernetes.io/cluster-service: "true"
-    kubernetes.io/name: "CoreDNS"
+    app.kubernetes.io/name: coredns
+    app.kubernetes.io/instance: kube-dns
 spec:
   selector:
-    k8s-app: kube-dns
+    app.kubernetes.io/name: coredns
+    app.kubernetes.io/instance: kube-dns
   clusterIP: {{ k3s_cluster_dns_internal_ip | mandatory }}
   ports:
   - name: dns
@@ -226,7 +231,8 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      k8s-app: kube-dns
+      app.kubernetes.io/name: coredns
+      app.kubernetes.io/instance: kube-dns
   policyTypes:
     - Ingress
     - Egress

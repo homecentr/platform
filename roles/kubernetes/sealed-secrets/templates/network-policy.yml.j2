@@ -12,10 +12,8 @@ spec:
     - Egress
   egress:
     - to: # Kubernetes API
-{% for node in groups['k8s_nodes'] %}
-      - ipBlock:
-          cidr: {{ hostvars[node]['ansible_host'] }}/32
-{% endfor %}
+        - ipBlock:
+            cidr: {{ sealed_secrets_kubelet_cluster_ip }}/32
       ports:
         - protocol: TCP
           port: 6443

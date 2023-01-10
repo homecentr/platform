@@ -5,7 +5,8 @@ metadata:
   namespace: kube-system
 spec:
   podSelector:
-    app.kubernetes.io/name: reflector
+    matchLabels:
+      app.kubernetes.io/name: reflector
   egress:
     - to: # Kubernetes API
 {% for node in groups['k8s_nodes'] %}

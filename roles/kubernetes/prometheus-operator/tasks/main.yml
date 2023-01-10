@@ -1,9 +1,3 @@
-- name: Add prometheus-community helm repo
-  kubernetes.core.helm_repository:
-    name: prometheus-community
-    repo_url: https://prometheus-community.github.io/helm-charts
-    state: present
-
 - name: Create network policies
   run_once: true
   k8s:
@@ -30,7 +24,8 @@
     release_namespace: "monitoring"
     create_namespace: no
     chart_version: "{{ prometheus_operator_chart_version }}"
-    chart_ref: prometheus-community/kube-prometheus-stack
+    chart_ref: kube-prometheus-stack
+    chart_repo_url: https://prometheus-community.github.io/helm-charts
     kubeconfig_path: "{{ prometheus_operator_kubeconfig_path }}"
     wait: true
     values:

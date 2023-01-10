@@ -5,12 +5,6 @@
     definition: "{{ lookup('template', 'namespace.yml.j2') }}"
     state: present
 
-- name: Add MetalLB helm repo
-  kubernetes.core.helm_repository:
-    name: metallb
-    repo_url: "https://metallb.github.io/metallb"
-    state: present
-
 - name: Install MetalLB
   run_once: true
   kubernetes.core.helm:
@@ -19,7 +13,8 @@
     release_namespace: metallb-system
     create_namespace: no
     chart_version: "{{ metallb_chart_version }}"
-    chart_ref: metallb/metallb
+    chart_ref: metallb
+    chart_repo_url: https://metallb.github.io/metallb
     kubeconfig_path: "{{ metallb_kubeconfig_path }}"
     wait: true
     values:

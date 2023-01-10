@@ -10,36 +10,42 @@
     tags:
       - k3s
 
-  - name: Install and configure Local Storage
-    ansible.builtin.import_role:
-      name: ../roles/kubernetes/local-storage
-    tags:
-      - local-storage
+  # - name: Install and configure Local Storage
+  #   ansible.builtin.import_role:
+  #     name: ../roles/kubernetes/local-storage
+  #   tags:
+  #     - local-storage
 
-  - name: Install and configure Metal Load Balancer
-    ansible.builtin.import_role:
-      name: ../roles/kubernetes/metal-lb
-    tags:
-      - metallb
+  # - name: Install and configure Metal Load Balancer
+  #   ansible.builtin.import_role:
+  #     name: ../roles/kubernetes/metal-lb
+  #   tags:
+  #     - metallb
 
-  - name: Install and configure Cert Manager
-    ansible.builtin.import_role:
-      name: ../roles/kubernetes/cert-manager
-    tags:
-      - cert-manager
+  # - name: Install and configure Traefik ingress
+  #   ansible.builtin.import_role:
+  #     name: ../roles/kubernetes/ingress
+  #   tags:
+  #     - ingress
 
-  - name: Install and configure Reflector
-    ansible.builtin.import_role:
-      name: ../roles/kubernetes/reflector
-    tags:
-      - reflector
+  # - name: Install and configure Cert Manager
+  #   ansible.builtin.import_role:
+  #     name: ../roles/kubernetes/cert-manager
+  #   tags:
+  #     - cert-manager
 
-  - name: Install and configure Prometheus operator
-    ansible.builtin.import_role:
-      name: ../roles/kubernetes/prometheus-operator
-    tags:
-      - prometheus-operator
-      - prometheus
+  # - name: Install and configure Reflector
+  #   ansible.builtin.import_role:
+  #     name: ../roles/kubernetes/reflector
+  #   tags:
+  #     - reflector
+
+  # - name: Install and configure Prometheus operator
+  #   ansible.builtin.import_role:
+  #     name: ../roles/kubernetes/prometheus-operator
+  #   tags:
+  #     - prometheus-operator
+  #     - prometheus
 
   - name: Install and configure Sealed secrets
     ansible.builtin.import_role:
@@ -47,8 +53,14 @@
     tags:
       - sealed-secrets
 
-  - name: Install and configure fleet
+  # - name: Install and configure fleet
+  #   ansible.builtin.import_role:
+  #     name: ../roles/kubernetes/fleet
+  #   tags:
+  #     - fleet
+
+  - name: Install and configure argo cd
     ansible.builtin.import_role:
-      name: ../roles/kubernetes/fleet
+      name: ../roles/kubernetes/argocd
     tags:
-      - fleet
+      - argocd

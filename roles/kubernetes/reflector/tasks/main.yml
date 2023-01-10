@@ -1,9 +1,3 @@
-- name: Add emberstack helm repo
-  kubernetes.core.helm_repository:
-    name: emberstack
-    repo_url: https://emberstack.github.io/helm-charts
-    state: present
-
 - name: Deploy reflector
   run_once: true
   kubernetes.core.helm:
@@ -12,7 +6,8 @@
     release_namespace: kube-system
     create_namespace: no
     chart_version: "{{ reflector_chart_version }}"
-    chart_ref: emberstack/reflector
+    chart_ref: reflector
+    chart_repo_url: https://emberstack.github.io/helm-charts
     kubeconfig_path: "{{ reflector_kubeconfig_path }}"
 
 - name: Create network policy

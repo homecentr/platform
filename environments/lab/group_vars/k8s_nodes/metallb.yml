@@ -11,8 +11,8 @@ metallb_speaker_cpu_limit: 750m
 
 metallb_address_pools:
   - name: well-known
-    range: 10.1.2.128-10.1.2.140
+    range: 10.1.8.128-10.1.8.140
     auto_assign: false
   - name: ad-hoc
-    range: 10.1.2.141-10.1.2.191
+    range: 10.1.8.141-10.1.8.191
     auto_assign: true

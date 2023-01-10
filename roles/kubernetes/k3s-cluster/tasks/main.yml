@@ -14,17 +14,17 @@
   ansible.builtin.include_tasks:
     file: setup-k3s.yml
 
-- name: Set up priority classes
-  ansible.builtin.include_tasks:
-    file: setup-priority-classes.yml
+# - name: Set up priority classes
+#   ansible.builtin.include_tasks:
+#     file: setup-priority-classes.yml
 
-- name: Set up namespaces
-  ansible.builtin.include_tasks:
-    file: setup-namespaces.yml
+# - name: Set up namespaces
+#   ansible.builtin.include_tasks:
+#     file: setup-namespaces.yml
 
-- name: Set up network policies for pre-created namespaces
-  ansible.builtin.include_tasks:
-    file: setup-network-policies.yml
+# - name: Set up network policies for pre-created namespaces
+#   ansible.builtin.include_tasks:
+#     file: setup-network-policies.yml
 
 - name: Set up Core DNS (required for Fleet to clone the git repository)
   ansible.builtin.include_tasks:
