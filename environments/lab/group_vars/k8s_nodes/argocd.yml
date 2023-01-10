@@ -1,0 +1,2 @@
+argocd_url: https://localhost:58000 # https://argocd.lab.homecentr.one
+argocd_admin_group_id: b77c210d-8ae3-4292-9e95-c7d42a2f254f

@@ -100,7 +100,6 @@
     delay: 5
     state: started
 
-
 - name: Wait kube api starts responding
   retries: 20
   kubernetes.core.k8s_info:
@@ -108,3 +107,10 @@
     api_version: v1
     kind: Pod
     namespace: kube-system
+
+- name: Tighten /etc/rancher/k3s/k3s.yaml security
+  ansible.builtin.file:
+    path: /etc/rancher/k3s/k3s.yaml
+    mode: 0600
+    owner: root
+    group: root

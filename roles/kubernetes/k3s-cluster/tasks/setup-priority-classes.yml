@@ -1,7 +1,0 @@
-- name: Set up priorities
-  run_once: true
-  k8s:
-    apply: true
-    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
-    definition: "{{ lookup('file', 'priority-classes.yml') }}"
-    state: present

@@ -1,4 +1,0 @@
-certmanager_kubeconfig_path: /etc/rancher/k3s/k3s.yaml
-certmanager_acme_use_staging: false
-certmanager_chart_version: "1.10.0"
-certmanager_webhook_secure_port: 10222

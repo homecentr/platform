@@ -99,6 +99,7 @@ metadata:
     app.kubernetes.io/name: coredns
     app.kubernetes.io/instance: kube-dns
 spec:
+  replicas: {{ k3s_cluster_coredns_replicas }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -135,6 +136,14 @@ spec:
                  operator: In
                  values: ["kube-dns"]
              topologyKey: kubernetes.io/hostname
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: coredns
+            app.kubernetes.io/instance: kube-dns
       containers:
       - name: coredns
         image: coredns/coredns:{{ k3s_cluster_coredns_version }}

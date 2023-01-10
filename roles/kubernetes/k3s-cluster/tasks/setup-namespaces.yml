@@ -1,7 +1,0 @@
-- name: Create namespaces
-  run_once: true
-  kubernetes.core.k8s:
-    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
-    definition: "{{ lookup('template', 'namespace.yml.j2', template_vars={ 'name': item }) }}"
-    state: present
-  with_items: "{{ k3s_cluster_namespaces }}"

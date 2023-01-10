@@ -1,0 +1,57 @@
+- name: Install Argo CD helm chart
+  run_once: true
+  kubernetes.core.helm:
+    state: present
+    create_namespace: true
+    release_name: argo-cd
+    release_namespace: argo-cd
+    chart_ref: argo-cd
+    chart_repo_url: https://argoproj.github.io/argo-helm
+    chart_version: 5.13.0
+    kubeconfig_path: "{{ argocd_kubeconfig_path }}"
+    wait: true
+    timeout: 5m0s
+    values:
+      global:
+        networkPolicy:
+          create: true
+          defaultDenyIngress: false
+      redis-ha:
+        enabled: false
+      controller:
+        replicas: 1
+      server:
+        replicas: 1
+      repoServer:
+        replicas: 1
+      applicationSet:
+        replicaCount: 1
+      dex:
+        enabled: false
+      configs:
+        secret:
+          extra:
+            "oidc.azure.clientSecret": "{{ argocd_oauth_client_secret }}"
+        rbac:
+          policy.default: role:readonly
+          policy.csv: |
+            g, "{{ argocd_admin_group_id }}", role:admin
+        cm:
+          admin.enable: "false"
+          url: "{{ argocd_url }}"
+          oidc.config: |
+             name: Azure
+             issuer: "{{ argocd_oauth_url }}"
+             clientID: "{{ argocd_oauth_client_id }}"
+             clientSecret: $oidc.azure.clientSecret
+             requestedIDTokenClaims:
+                groups:
+                   essential: true
+             requestedScopes:
+                - openid
+                - profile
+                - email
+
+# TODO: Ingress (helm chart can probably create this as well) - add this when traefik and cert manager are deployed
+# TODO: Sealed secrets encryption key
+# TODO: Create root application repo details to be passed via variables

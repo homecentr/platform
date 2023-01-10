@@ -1,7 +1,0 @@
-- name: Create default network policy
-  run_once: true
-  kubernetes.core.k8s:
-    kubeconfig: "/etc/rancher/k3s/k3s.yaml"
-    definition: "{{ lookup('template', 'network-policy-default.yml.j2', template_vars={ 'namespace': item }) }}"
-    state: present
-  with_items: "{{ ['kube-system', 'kube-public'] + k3s_cluster_namespaces }}"

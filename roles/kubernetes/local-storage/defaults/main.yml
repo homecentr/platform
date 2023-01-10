@@ -1,2 +1,0 @@
-local_storage_kubeconfig_path: /etc/rancher/k3s/k3s.yaml
-local_storage_namespace: kube-system

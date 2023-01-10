@@ -1,7 +1,0 @@
-- name: Create git repository CRD
-  run_once: true
-  kubernetes.core.k8s:
-    kubeconfig: "{{ fleet_kubeconfig_path }}"
-    definition: "{{ lookup('template', 'git-repository.yml.j2') }}"
-    state: present
-    apply: true
