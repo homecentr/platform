@@ -1,0 +1,182 @@
+- name: Install Argo CD helm chart
+  run_once: true
+  kubernetes.core.helm:
+    state: present
+    create_namespace: true
+    release_name: argo-cd
+    release_namespace: argo-cd
+    chart_ref: argo-cd
+    chart_repo_url: https://argoproj.github.io/argo-helm
+    chart_version: 5.13.0
+    kubeconfig_path: "{{ argocd_kubeconfig_path }}"
+    wait: true
+    timeout: 5m0s
+    values:
+      global:
+        networkPolicy:
+          create: true
+          defaultDenyIngress: false
+      redis-ha:
+        enabled: false
+      controller:
+        replicas: 1
+      server:
+        replicas: 1
+      repoServer:
+        replicas: 1
+        rbac:
+          - verbs:
+              - get
+              - list
+              - watch
+            apiGroups:
+              - ''
+            resources:
+              - secrets
+              - configmaps
+        initContainers:
+          - name: download-tools
+            image: registry.access.redhat.com/ubi8
+            env:
+              - name: AVP_VERSION
+                value: 1.11.0
+            command: [sh, -c]
+            args:
+              - >-
+                curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_amd64 -o argocd-vault-plugin &&
+                chmod +x argocd-vault-plugin &&
+                mv argocd-vault-plugin /custom-tools/
+            volumeMounts:
+              - mountPath: /custom-tools
+                name: custom-tools
+        extraContainers:
+          - name: avp-helm
+            command: [/var/run/argocd/argocd-cmp-server]
+            image: quay.io/argoproj/argocd:v2.4.8
+            securityContext:
+              runAsNonRoot: true
+              runAsUser: 999
+            env:
+              - name: AVP_TYPE
+                value: SOPS
+              - name: SOPS_AGE_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: argocd-sops
+                    key: private_key
+                    optional: false
+            volumeMounts:
+              - mountPath: /var/run/argocd
+                name: var-files
+              - mountPath: /home/argocd/cmp-server/plugins
+                name: plugins
+              - mountPath: /tmp
+                name: tmp-dir
+              - mountPath: /home/argocd/cmp-server/config
+                name: cmp-plugin
+              - name: custom-tools
+                subPath: argocd-vault-plugin
+                mountPath: /usr/local/bin/argocd-vault-plugin
+        volumes:
+          - configMap:
+              name: cmp-plugin
+            name: cmp-plugin
+          - name: custom-tools
+            emptyDir: {}
+          - name: tmp-dir
+            emptyDir: {}
+      applicationSet:
+        replicaCount: 1
+      dex:
+        enabled: false
+      configs:
+        secret:
+          extra:
+            "oidc.azure.clientSecret": "{{ argocd_oauth_client_secret }}"
+        rbac:
+          policy.default: role:readonly
+          policy.csv: |
+            g, "{{ argocd_admin_group_id }}", role:admin
+        styles: |
+          .sidebar__version {
+            display: none;
+          }
+        cm:
+          admin.enabled: false
+          url: "{{ argocd_url }}"
+          oidc.config: |
+             name: Azure
+             issuer: "{{ argocd_oauth_url }}"
+             clientID: "{{ argocd_oauth_client_id }}"
+             clientSecret: $oidc.azure.clientSecret
+             requestedIDTokenClaims:
+                groups:
+                   essential: true
+             requestedScopes:
+                - openid
+                - profile
+                - email
+      extraObjects:
+        - apiVersion: v1
+          kind: Secret
+          metadata:
+            name: argocd-sops
+            namespace: argo-cd
+          data:
+            keys.txt: "{{ lookup('template', 'keys.txt.j2') | b64encode }}"
+            private_key: "{{ argocd_sops.private_key | b64encode }}"
+        - apiVersion: v1
+          kind: ConfigMap
+          metadata:
+            name: cmp-plugin
+          data:
+            # plugin.yaml: |
+            #   apiVersion: argoproj.io/v1alpha1
+            #   kind: ConfigManagementPlugin
+            #   metadata:
+            #     name: argocd-vault-plugin-helm
+            #   spec:
+            #     allowConcurrency: true
+            #     discover:
+            #       find:
+            #         command:
+            #           - sh
+            #           - "-c"
+            #           - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
+            #     init:
+            #     command:
+            #         - bash
+            #         - "-c"
+            #         - |
+            #           helm repo add bitnami https://charts.bitnami.com/bitnami
+            #           helm dependency build
+            #     generate:
+            #       command:
+            #         - bash
+            #         - "-c"
+            #         - |
+            #           helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE -f <(echo "$ARGOCD_ENV_HELM_VALUES") . |
+            #           argocd-vault-plugin generate -s toolbox:argocd-vault-plugin-credentials -
+            #     lockRepo: false
+            # avp-helm.yaml: |
+            plugin.yaml: |
+              apiVersion: argoproj.io/v1alpha1
+              kind: ConfigManagementPlugin
+              metadata:
+                name: argocd-vault-plugin-helm
+              spec:
+                allowConcurrency: true
+                discover:
+                  find:
+                    command:
+                      - sh
+                      - "-c"
+                      - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
+                generate:
+                  command:
+                    - bash
+                    - "-c"
+                    - |
+                      helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE -f <(echo "$ARGOCD_ENV_HELM_VALUES") . |
+                      argocd-vault-plugin generate -
+                lockRepo: false

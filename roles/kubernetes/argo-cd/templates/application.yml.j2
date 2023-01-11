@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: root
+  namespace: argo-cd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: argo-cd
+
+  source:
+    repoURL: https://github.com/homecentr/kubernetes.git  # Can point to either a Helm chart repo or a git repo.
+    targetRevision: feat/argo-init
+    path: environments/lab
+
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
