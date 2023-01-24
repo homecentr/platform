@@ -9,12 +9,14 @@
     "lint": "ansible-lint --strict",
     "lint:install": "pip3 install ansible-lint",
     "install": "pip3 install ansible-lint && ansible-galaxy install -r ./requirements.yml",
+
+    "local:apply": "./scripts/apply.sh lab local",
     
     "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-create.ps1",
     "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-destroy.ps1",
     "lab:clear-keys": "./scripts/clearkeys.sh",
-    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./scripts/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
-    "lab:apply": "./scripts/apply.sh lab",
+    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./scripts/apply.sh lab site proxmox -u root -e ansible_user=root --tags init -k",
+    "lab:apply": "./scripts/apply.sh lab site",
     "lab:secrets": "./scripts/vault.sh edit 'lab/group_vars/all/secrets.yml'",
     
     "lab:gluster-ca:view": "./scripts/vault.sh view 'lab/group_vars/gluster_nodes/ca.yml'",
@@ -23,8 +25,8 @@
     "lab:sealed-secrets-key:view": "./scripts/vault.sh view 'lab/group_vars/k8s_nodes/sealed-secrets-key.yml'",
     "lab:sealed-secrets-key:rotate": "./scripts/rsa-key-rotate.sh 'lab/group_vars/k8s_nodes/sealed-secrets-key.yml' 'sealed_secrets' 'k8s-secrets.lab.homecentr.one'",
  
-    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./scripts/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
-    "prod:apply": "./scripts/apply.sh prod",
+    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./scripts/apply.sh prod site proxmox -u root -e ansible_user=root --tags init -k",
+    "prod:apply": "./scripts/apply.sh prod site",
     "prod:secrets": "./scripts/vault.sh edit 'prod/group_vars/all/secrets.yml'",
     
     "prod:gluster-ca:view": "./scripts/vault.sh view 'prod/group_vars/gluster_nodes/ca.yml'",

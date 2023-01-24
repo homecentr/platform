@@ -1,0 +1,16 @@
+- name: "Configure ssh client"
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Make sure StormSSH module is installed (required for the ssh_config module below)
+      ansible.builtin.pip:
+        name: stormssh
+
+    - name: Add a host into the configuration
+      community.general.ssh_config:
+        user: "{{ ansible_user_id }}"
+        host: "{{ item }}"
+        hostname: "{{ hostvars[item].fqdn }}"
+        forward_agent: true # To enable YubiKey forwarding
+        state: present
+      with_items: "{{ groups['all'] }}"

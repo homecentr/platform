@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 set -e
 
 printHelp() {
@@ -23,4 +25,5 @@ cat /tmp/$2.key | ( TAB='  ' ; sed "s/^/$TAB/" ) >> "./environments/$1"
 # Encrypt the variables file
 ansible-vault encrypt --vault-password-file "./scripts/vault.sh" "./environments/$1"
 
-# TODO: Delete key files
+rm /tmp/$2.crt
+rm /tmp/$2.key

@@ -1,6 +1,4 @@
-# 1 = CN
-# 2 = Variable file path
-# 3 = Variable name -> sub props
+#!/usr/bin/env bash
 
 set -e
 

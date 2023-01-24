@@ -18,7 +18,7 @@
     ansible.builtin.service:
       name: k3s
       state: stopped
-    when: "'k3s' in ansible_facts.services"
+    # when: "'k3s' in ansible_facts.services"
 
   - name: Remove directories
     ansible.builtin.file:
@@ -27,3 +27,4 @@
     with_items:
       - /etc/rancher
       - /var/lib/rancher
+      - /var/lib/kubelet

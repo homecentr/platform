@@ -7,8 +7,6 @@ printHelp() {
   echo "\t./secrets edit (lab|prod)"
 }
 
-echo "CALLED" > /tmp/vault-log.txt
-
 case "$1" in
  '') # Used by ansible
   gpg --batch --use-agent --decrypt ./.vault-pass.gpg

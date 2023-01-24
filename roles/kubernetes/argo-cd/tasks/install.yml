@@ -1,3 +1,20 @@
+- name: Download CRD manifests
+  register: argocd_crd_manifests
+  ansible.builtin.uri:
+    url: "https://raw.githubusercontent.com/argoproj/argo-cd/v{{ argocd_app_version }}/manifests/crds/{{ item }}"
+    return_content: true
+  loop:
+    - application-crd.yaml
+    - applicationset-crd.yaml
+    - appproject-crd.yaml
+
+- name: Install Argo CD CRDs
+  kubernetes.core.k8s:
+    kubeconfig: "{{ argocd_kubeconfig_path }}"
+    definition: "{{ item.content }}"
+    state: present
+  loop: "{{ argocd_crd_manifests.results }}"
+
 - name: Install Argo CD helm chart
   run_once: true
   kubernetes.core.helm:
@@ -7,11 +24,14 @@
     release_namespace: argo-cd
     chart_ref: argo-cd
     chart_repo_url: https://argoproj.github.io/argo-helm
-    chart_version: 5.13.0
+    chart_version: "{{ argocd_chart_version }}"
     kubeconfig_path: "{{ argocd_kubeconfig_path }}"
     wait: true
     timeout: 5m0s
+    skip_crds: true # CRDs installed separately outside of helm chart scope
     values:
+      crds:
+        install: false
       global:
         networkPolicy:
           create: true
@@ -24,67 +44,72 @@
         replicas: 1
       repoServer:
         replicas: 1
-        rbac:
-          - verbs:
-              - get
-              - list
-              - watch
-            apiGroups:
-              - ''
-            resources:
-              - secrets
-              - configmaps
+        env:
+          - name: HELM_PLUGINS
+            value: /custom-tools/helm-plugins/
+          - name: HELM_SECRETS_SOPS_PATH
+            value: /custom-tools/sops
+          - name: HELM_SECRETS_VALS_PATH
+            value: /custom-tools/vals
+          - name: HELM_SECRETS_KUBECTL_PATH
+            value: /custom-tools/kubectl
+          - name: HELM_SECRETS_CURL_PATH
+            value: /custom-tools/curl
+          - name: HELM_SECRETS_VALUES_ALLOW_SYMLINKS
+            value: "false"
+          - name: HELM_SECRETS_VALUES_ALLOW_ABSOLUTE_PATH
+            value: "false"
+          - name: HELM_SECRETS_VALUES_ALLOW_PATH_TRAVERSAL
+            value: "false"
+          - name: SOPS_AGE_RECIPIENTS
+            valueFrom:
+              secretKeyRef:
+                name: argocd-sops
+                key: public_key
+                optional: false
+          - name: SOPS_AGE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: argocd-sops
+                key: private_key
+                optional: false
+        volumes:
+          - name: custom-tools
+            emptyDir: {}
+        volumeMounts:
+          - mountPath: /custom-tools
+            name: custom-tools
+
         initContainers:
           - name: download-tools
-            image: registry.access.redhat.com/ubi8
+            image: alpine:latest
+            command: [sh, -ec]
             env:
-              - name: AVP_VERSION
-                value: 1.11.0
-            command: [sh, -c]
+              - name: HELM_SECRETS_VERSION
+                value: "3.12.0"
+              - name: KUBECTL_VERSION
+                value: "1.24.3"
+              - name: VALS_VERSION
+                value: "0.18.0"
+              - name: SOPS_VERSION
+                value: "3.7.3"
             args:
-              - >-
-                curl -L https://github.com/argoproj-labs/argocd-vault-plugin/releases/download/v$(AVP_VERSION)/argocd-vault-plugin_$(AVP_VERSION)_linux_amd64 -o argocd-vault-plugin &&
-                chmod +x argocd-vault-plugin &&
-                mv argocd-vault-plugin /custom-tools/
+              - |
+                mkdir -p /custom-tools/helm-plugins
+                wget -qO- https://github.com/jkroepke/helm-secrets/releases/download/v${HELM_SECRETS_VERSION}/helm-secrets.tar.gz | tar -C /custom-tools/helm-plugins -xzf-;
+
+                wget -qO /custom-tools/sops https://github.com/mozilla/sops/releases/download/v${SOPS_VERSION}/sops-v${SOPS_VERSION}.linux
+                wget -qO /custom-tools/kubectl https://dl.k8s.io/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+
+                wget -qO- https://github.com/variantdev/vals/releases/download/v${VALS_VERSION}/vals_${VALS_VERSION}_linux_amd64.tar.gz | tar -xzf- -C /custom-tools/ vals;
+                
+                # helm secrets wrapper mode installation (optional)
+                # RUN printf '#!/usr/bin/env sh\nexec %s secrets "$@"' "${HELM_SECRETS_HELM_PATH}" >"/usr/local/sbin/helm" && chmod +x "/custom-tools/helm"
+                
+                chmod +x /custom-tools/*
             volumeMounts:
               - mountPath: /custom-tools
                 name: custom-tools
-        extraContainers:
-          - name: avp-helm
-            command: [/var/run/argocd/argocd-cmp-server]
-            image: quay.io/argoproj/argocd:v2.4.8
-            securityContext:
-              runAsNonRoot: true
-              runAsUser: 999
-            env:
-              - name: AVP_TYPE
-                value: SOPS
-              - name: SOPS_AGE_KEY
-                valueFrom:
-                  secretKeyRef:
-                    name: argocd-sops
-                    key: private_key
-                    optional: false
-            volumeMounts:
-              - mountPath: /var/run/argocd
-                name: var-files
-              - mountPath: /home/argocd/cmp-server/plugins
-                name: plugins
-              - mountPath: /tmp
-                name: tmp-dir
-              - mountPath: /home/argocd/cmp-server/config
-                name: cmp-plugin
-              - name: custom-tools
-                subPath: argocd-vault-plugin
-                mountPath: /usr/local/bin/argocd-vault-plugin
-        volumes:
-          - configMap:
-              name: cmp-plugin
-            name: cmp-plugin
-          - name: custom-tools
-            emptyDir: {}
-          - name: tmp-dir
-            emptyDir: {}
       applicationSet:
         replicaCount: 1
       dex:
@@ -116,6 +141,11 @@
                 - openid
                 - profile
                 - email
+          helm.valuesFileSchemes: >-
+            secrets+gpg-import, secrets+gpg-import-kubernetes,
+            secrets+age-import, secrets+age-import-kubernetes,
+            secrets,secrets+literal,
+            https
       extraObjects:
         - apiVersion: v1
           kind: Secret
@@ -123,60 +153,5 @@
             name: argocd-sops
             namespace: argo-cd
           data:
-            keys.txt: "{{ lookup('template', 'keys.txt.j2') | b64encode }}"
+            public_key: "{{ argocd_sops.public_key | b64encode }}"
             private_key: "{{ argocd_sops.private_key | b64encode }}"
-        - apiVersion: v1
-          kind: ConfigMap
-          metadata:
-            name: cmp-plugin
-          data:
-            # plugin.yaml: |
-            #   apiVersion: argoproj.io/v1alpha1
-            #   kind: ConfigManagementPlugin
-            #   metadata:
-            #     name: argocd-vault-plugin-helm
-            #   spec:
-            #     allowConcurrency: true
-            #     discover:
-            #       find:
-            #         command:
-            #           - sh
-            #           - "-c"
-            #           - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
-            #     init:
-            #     command:
-            #         - bash
-            #         - "-c"
-            #         - |
-            #           helm repo add bitnami https://charts.bitnami.com/bitnami
-            #           helm dependency build
-            #     generate:
-            #       command:
-            #         - bash
-            #         - "-c"
-            #         - |
-            #           helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE -f <(echo "$ARGOCD_ENV_HELM_VALUES") . |
-            #           argocd-vault-plugin generate -s toolbox:argocd-vault-plugin-credentials -
-            #     lockRepo: false
-            # avp-helm.yaml: |
-            plugin.yaml: |
-              apiVersion: argoproj.io/v1alpha1
-              kind: ConfigManagementPlugin
-              metadata:
-                name: argocd-vault-plugin-helm
-              spec:
-                allowConcurrency: true
-                discover:
-                  find:
-                    command:
-                      - sh
-                      - "-c"
-                      - "find . -name 'Chart.yaml' && find . -name 'values.yaml'"
-                generate:
-                  command:
-                    - bash
-                    - "-c"
-                    - |
-                      helm template $ARGOCD_APP_NAME -n $ARGOCD_APP_NAMESPACE -f <(echo "$ARGOCD_ENV_HELM_VALUES") . |
-                      argocd-vault-plugin generate -
-                lockRepo: false

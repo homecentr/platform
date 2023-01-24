@@ -5,57 +5,57 @@
   tasks:
   - name: Create users
     ansible.builtin.import_role:
-      name: ../roles/common/users
+      name: ../../roles/common/users
     tags:
       - users
 
   - name: Create host records for servers
     ansible.builtin.import_role:
-      name: ../roles/common/hosts
+      name: ../../roles/common/hosts
     tags:
       - hosts
 
   - name: Setup Chrony (NTP client)
     ansible.builtin.import_role:
-      name: ../roles/common/chrony
+      name: ../../roles/common/chrony
     tags:
       - chrony
       - ntp
 
   - name: Install benchmarks
     ansible.builtin.import_role:
-      name: ../roles/common/benchmarks
+      name: ../../roles/common/benchmarks
     tags:
       - benchmarks
 
   - name: Harden the system according to lynis recommendations
     ansible.builtin.import_role:
-      name: ../roles/common/lynis-hardening
+      name: ../../roles/common/lynis-hardening
     tags:
       - lynis
 
   - name: Install ClamAV antivirus
     ansible.builtin.import_role:
-      name: ../roles/common/clamav
+      name: ../../roles/common/clamav
     tags:
       - clamav
 
   - name: Configure and secure SSH
     ansible.builtin.import_role:
-      name: ../roles/common/ssh
+      name: ../../roles/common/ssh
     tags:
       - ssh
 
   - name: Install and configure Network UPS tools
     ansible.builtin.import_role:
-      name: ../roles/common/ups
+      name: ../../roles/common/ups
     when: "'bare_metal_nodes' in group_names"
     tags:
       - ups
 
   - name: Set up Message-of-the-day
     ansible.builtin.import_role:
-      name: ../roles/common/motd
+      name: ../../roles/common/motd
     vars:
       motd_enable_ups_status: "{{ 'bare_metal_nodes' in group_names }}"
     tags:
@@ -63,6 +63,7 @@
 
   - name: Install node-exporter
     ansible.builtin.import_role:
-      name: cloudalchemy.node_exporter
+      name: geerlingguy.node_exporter
     tags:
       - node_exporter
+      - node-exporter

@@ -1,19 +1,5 @@
-# - name: Create SOPS key secret
-#   ansible.builtin.include_tasks: ./sops-secret.yml
-
 - name: Install Argo CD
   ansible.builtin.include_tasks: ./install.yml
 
 - name: Configure Argo CD
   ansible.builtin.include_tasks: ./configure.yml
-
-# New secrets approach
-  # SOPS secret must have a structure which is mountable as .../keys.txt
-  # AVP container needs an env var telling it to use SOPS as the provider
-  # Try to deploy a sample helm chart (simple with one resource) depending on a secret
-
-
-# TODO: Prepare argo cd for global secrets usable in helm
-# TODO: Create root application repo details to be passed via variables
-# TODO: Sealed secrets encryption key
-# TODO: Ingress (helm chart can probably create this as well) - add this when traefik and cert manager are deployed

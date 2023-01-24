@@ -1,14 +1,13 @@
 - name: Fetch kubeaudit checksums
   ansible.builtin.uri:
-    url: https://github.com/Shopify/kubeaudit/releases/latest/download/kubeaudit_0.20.0_checksums.txt
+    url: "https://github.com/Shopify/kubeaudit/releases/download/v{{ kubeaudit_version }}/kubeaudit_{{ kubeaudit_version }}_checksums.txt"
     return_content: true
   register: kubeaudit_checksums
 
 - name: Download kubeaudit
   ansible.builtin.get_url:
-    url: https://github.com/Shopify/kubeaudit/releases/latest/download/kubeaudit_0.20.0_linux_amd64.tar.gz
-    checksum: >
-      "sha256:{{ (kubeaudit_checksums.content | regex_search('(?P<checksum>[a-z0-9]+)\\W*kubeaudit_.*_linux_amd64', '\\g<checksum>', multiline=True)) }}"
+    url: "https://github.com/Shopify/kubeaudit/releases/download/v{{ kubeaudit_version }}/kubeaudit_{{ kubeaudit_version }}_linux_amd64.tar.gz"
+    checksum: "sha256:{{ (kubeaudit_checksums.content | regex_search('([a-z0-9]+)\\W*kubeaudit_.*_linux_amd64', '\\1', multiline=True) | first) }}"
     dest: /tmp/kubeaudit.tar.gz
     mode: 0755
     owner: root
