@@ -2,8 +2,11 @@
   hosts: localhost
   connection: local
   tasks:
-    - name: Install netaddr module
-      ansible.builtin.pip:
-        name:
+    - ansible.builtin.pip:
+        name: geerlingguy.pip
+      vars:
+        pip_package: python3-pip
+        pip_install_packages:
           - netaddr
           - stormssh
+    
