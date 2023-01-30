@@ -1,4 +1,6 @@
+- import_playbook: local-pip-modules.yml
 - import_playbook: proxmox.yml
 - import_playbook: common.yml
 - import_playbook: gluster.yml
 - import_playbook: kubernetes.yml
+- import_playbook: local-ssh-client.yml

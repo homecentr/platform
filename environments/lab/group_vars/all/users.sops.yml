@@ -1,0 +1,22 @@
+users_root_password: ENC[AES256_GCM,data:WqfgANAG09A=,iv:Z1MYPc/rSo3/IiXgga6GFJVN2Z88p3vyPMvggezMTx4=,tag:KUyrZZVP22xGgAMIQuw9ZQ==,type:str]
+users_root_password_salt: ENC[AES256_GCM,data:dij7KwvSFi4zmPZ76g63gg==,iv:b6Qs6l6jCTpS/NY/J5jnsx9rKHqv0cN23hst8hQF+WM=,tag:g8ttOfq3fbeIA2niJVI8kw==,type:str]
+users_admin_username: ENC[AES256_GCM,data:JJ0u6528jg==,iv:Ay8sZhVdHsuIV1XceBxn+PPaetAo4db1SDKiPeaXxbg=,tag:EUtuk6k3h8aMhhDgoNI6bw==,type:str]
+users_admin_public_keys:
+    - ENC[AES256_GCM,data:QEZVEPZivzT8bhOBsNriY8nHKUB7M37w1OepNG4ktwNrCebpurt+pGgv3zBp4O4jR13BBlzbHER2qbJkXsjsShQPGuVUMXMIVk8M/BrnI3N+kBxSCi7VO+48IEIZuS6VDHcNL9idfUQyYeJTWTcJ/E7y9PiFX3FHHC2oBetEBQAWDXOJO/GepjQjMYtGhE5PPLDSbd6iGldLqikJJJK/8k4ZTmtzJw1/M7PtROG+QGVPh1Co4SXX5JckJzWMWlmLoyJK60QrTRcY5pjy8eFlA/pH8ooCOhL++61YXLIEl0sxqO9ew4SqL7S8RwcrU9lg209RFMNsD7myZ5kjL3FuCjgxqu6KJgBXLtbcqiwKUfpmjW9sst5PTqKr6R7dNfofV5uPgrUmrXEPMrUPBD08Z942DUuSAsTm6BUaFMnW6bPiwka/5pxt+GNmzHL/JlRQkme2gny3TDkD6yy/AuU8z24Lcv4x3BaADcaps/oUOYGTmnCp5pBb3meJjBrGG8YV9WBQ0SS/KOjO7txmsxVjJiFwbo8my0BhHpIAQ8whWoMfYWRp0qHAOK/kBFI/4Nzn7eCAkolmxoXkUlODi7vLhG/FuwcrTdO2rcHdrXOYFmKYEy89go1YZTfXDJbzE02jeg1AWgJb60UmDPW3JH552n/shIwZWxO8XFetGU2LevRHu9kScizw1yA/yeNXPb6xaNIDu7Uzo6dY/HR7FS3PFQqdP2D7rihjKG8riPczRhAnY0Ozun/W1RYbLX8YtE/YLY+571R7F8CuCQBW+KLGYnkObv7ZdZ+qf6zaVDeykRZqz7TVlczvwtj9sziRnTOKr31O8es8MDDrnpIT+U4drZDneRcVolce4oEw9K2lUPn2Jjd0hcsCXubhC1p4v7uqJXq6lQKzWDggJRbySdMgkvXZJ8NdhTkhQ0jh+vcZAUOPobAifnJ+aHMUINFOdYAK+JZl7g==,iv:0Vc6Aqqek06r6QA8HM5ZbryqGsJgBJ6DNPV7LiMayss=,tag:vH6sp6JxcTNdRVydie0yDQ==,type:str]
+    - ENC[AES256_GCM,data:u9bZk20LHDWuhvwwiN6ZNutrf6mcVABBGpd4Va+aZodttxWmgs1jXJfPepWSm/SlcfxDd+9In0jACzq6f5phnyzMYHn8Cpzr+WqDg39ACCZVVrIB8WbJnLmPxH4LdUEjrB15yguRuS1USMPp/7ERQvZzLpDvkHxv6q77LHSW9bxsRjgaziUQzAZHfkpfMxec+kajj12x5X+N4RcP46tBb6UEhgBJ8lBo1cKWdh5sYnJc1/Tii43EgAFAf+VqIll+iDeHY6DlXE+zdzXJa7qIO1YVurbXLTirPykE8iAa/+Fk+ltW4BU4qcjEzfJf02QyY4CGy12bT/WB3hGlG59rmxMgJ300DvKHRffdqeQez8/BWU0xi7MYk6FKzqw9D1TyHzxnk/kMPhRDE7r5sSw4XcLjCAq3gdvLZT9IUy8ZeyEFNsViLQxG5EZvU5jQkPwWUpkG8hS1y1Cg0LPoeYNnOCuoVepik8SmQqcws3Tjbsb5vUmluSRGhhCBA6cM2EPyDBIEHXoHCeKbTR+SmP2U7s3CPx6tSbd/CcrK5r1q6snR15br2mq0Kkkk1LrlOghoYwQu45zndJJAP6lSvq/wr0AZ+Zjkb3ibAUff49W71g0/WntHq+ZbPlnFOt+SKQkfh7uclb8eLsHe+mwQNhaO39l0cQNK4huvYKDIyqEMWwCzIx9GexetCfAuZJpqU1c87rwfL/OVqMTR7u2vtk25G8a21Qa1cgIR7MgRFTlE0Sub4thrJqyNWhnMMQaZosVtJ5qjx9fOwGuCXF2ly9gAwHI6IsNlOE8FATmLt+URgC2ZD8nDrZZIJamn4uFOfaHwBEID04MXn7Prr8eEsgxl1BHoCGyxZzKwrtC6sFwJqOizP5GJ9IpezphYteHBs3IDC3bCOMxJM5VrGE8rly0CF229eNK6+Z4eAKUrLUe1Uy224zJ+bBUAKd7dO8IRd3AI/kNr5mRf56cbqEFUyP3x07hQIA==,iv:lOLTMb14YolgnX5F8geKxQ/2sq7U8usqZmh5hVak2U4=,tag:aoD518OVDQYL+ewC0RJU6A==,type:str]
+ssh_allowed_users:
+    - ENC[AES256_GCM,data:R86lgGuYkA==,iv:noWOgzYjG0HIt7sA5WXHpC7DvrVpzyjXwnIPqYn//Fk=,tag:Dvk4AGE8GLDfdDmHiONkCA==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age: []
+    lastmodified: "2023-01-30T11:26:13Z"
+    mac: ENC[AES256_GCM,data:SFmMBEq+xCaQs2JeRq5dFhFvncSz8JDAdD0O5sbUtfljxLFcPATT7TyfXe7cOhTTHjt/z4nQFeGRqw/OxsHiOK0orDaCg6J1m1FqXnZffV9x6Y0AhsMsDakEB4F5dloISMKRXpJac9Ju/YRszjYUC3W3Arwa+Kvx+ZK0S8q5Z2k=,iv:i3p54E3AArkidoh1txvyQoetZaOD8dkTU41kl2aEoR4=,tag:NY3vuUSI4I8870LwE2TleQ==,type:str]
+    pgp:
+        - created_at: "2023-01-30T11:26:03Z"
+          enc: "-----BEGIN PGP MESSAGE-----\r\n\r\nhQIMA7Pg+ndCcR5CARAAggpQbS2oG/VTIDRMqFdI5aPEEd/aBJL1NTdns9G/abP5\r\n6+6D/9N7DwmBmFF7w16xF8GpcpkGYGegWui8gv9qSYianKOEuJyegPJO9WgqNsNf\r\nAmapydy2jPYzQTqzmtgzClBRac78OTXchwSoNimIe4hRUaOIj/0HV8E1BSu5dngi\r\n1Gfw32T9QRQA9FmnJDdezp9NHbTQE6OGou+jDGs026N3x1ygevBH3Nqmj93Lzcsy\r\nN07xQnNGX/8b7t3NBaFWdAenZnDjIMDSGIx0tJFyf912lei+8p4/atSIFrXTUHE3\r\nBK1Zc7sSDimFrAmiUNBLoW3dX58w9XFEgxQkUpXlxZTUWYiIISUgvd50Vcq5tvve\r\n3sfndVkj5Apkk1gP6QdSTi70YT0HZHH4Cl6kC2ZcccZHV0TyfyZOiz9I6Z8vu0sD\r\n8lbarAOeYDVpeKC/bKtJM2DJgRpLkG2y+kfeb0bd6P8bytTM5dCuosO2XM9/7SpB\r\nP2kpU/ZZxfTHoUTI7jxKH//K+9Qane95WXo+JfBNkW9+u4w/Uluppn2NhmCeasQN\r\njaoreyJSQoGgNgyQGPp5VUz1KgRnHulCPVzRcEwuxX/uRBAMXAWBKulQxmh3+aJm\r\ntcokC1YEqTFUY/hqKZ0jGoqTxTRlKa98UcE0xPI2ku85T9yRfjWk0gZSvK4BpO/S\r\nXgFrx3y5LJWKa7j6qkRaSmwESlxg2ooaRl0Dte0h8Bg7dAujS/slmOc6Krc7wEP8\r\ndsX7hNGeN7wvQM58PCz+tGFNzyarhUZ4qAefjqknnaUnuWXSJpTKWAISo6VfUhE=\r\n=hvTH\r\n-----END PGP MESSAGE-----\r\n"
+          fp: 2D1D9C803F35BBC24014C3906601E1EB2454827F
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3

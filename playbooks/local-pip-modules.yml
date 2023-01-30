@@ -1,0 +1,9 @@
+- name: Install python modules
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Install netaddr module
+      ansible.builtin.pip:
+        name:
+          - netaddr
+          - stormssh

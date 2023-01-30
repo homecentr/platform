@@ -1,4 +1,4 @@
-- name: "Configure ssh client"
+- name: Configure ssh client
   hosts: localhost
   connection: local
   tasks:

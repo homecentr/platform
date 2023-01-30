@@ -6,17 +6,17 @@ collections:
     version: 2.7.0
   - name: oasis_roles.system
   - name: community.general
-    version: 5.7.0
+    version: 6.2.0
   - name: gluster.gluster
     version: 1.0.2
   - name: kubernetes.core
     version: 2.3.2
   - name: community.crypto
     version: 2.5.0
+  - name: community.sops
+    version: 1.6.0
 
 roles:
-  - name: geerlingguy.docker
-    version: 3.0.0
   - name: geerlingguy.pip
   - name: geerlingguy.security
   - name: geerlingguy.clamav

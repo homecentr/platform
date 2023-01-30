@@ -16,8 +16,13 @@ playbooks/
 roles/
 |   └── <group>
 |       └── <role>            
-.vault-pass.gpg               # Vault password encrypted by a hardware token
+ansible.cfg
 ```
+
+## Local set up
+Working with this repository requires installation of several command line tools, please use the [dev-setup](https://github.com/lholota/dev-setup) repo and apply the playbook with following tags:
+- sops
+- yubikey (optional)
 
 ## Release process
 - Create a Lab environment
@@ -70,8 +75,3 @@ for example `yarn lab:apply common.yml`
 The script automatically installs dependencies from Ansible Galaxy and runs the playbook.
 
 > Note that the first time applying playbooks on a clean server, you need to use whatever authentication is available (most likely a password based one). During the first run the roles configure the SSH daemon to only allow non-root user with an RSA key and/or hardware device like YubiKey you need to use for subsequent logins.
-
-## Ansible Vault
-The playbooks use several sensitive variables which are therefore encrypted using Ansible Vault. The vault passphrase is committed into the repository because it is encrypted using gpg with YubiKey. To set from scratch, follow [this guide](https://disjoint.ca/til/2016/12/14/encrypting-the-ansible-vault-passphrase-using-gpg/). This does not give you access to the original passphrase, just the tooling to set up your own. Each user must have their own encrypted version of the password.
-
-To change the encrypted variables, use the `yarn <lab>:secrets <path>` command (e.g. `yarn lab:secrets`).
