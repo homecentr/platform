@@ -1,24 +1,32 @@
 gluster_volumes:
-  - name: k3s-services
-    mount_path: /mnt/gfs/k3s-services
+  - name: k3s-services2
+    mount_path: /mnt/gfs/k3s-services2
     storage_bricks:
-      - host: lab-pve1
-        path: /usr/local/gfs/k3s-services/brick0
-      - host: lab-pve2
-        path: /usr/local/gfs/k3s-services/brick0
+      # Replica set
+      - host: pve1
+        path: /usr/local/gfs/k3s-services2/brick0
+      - host: pve2
+        path: /usr/local/gfs/k3s-services2/brick0
+
+      # Replica set
+      - host: pve1
+        path: /usr/local/gfs/k3s-services2/brick1
+      - host: pve2
+        path: /usr/local/gfs/k3s-services2/brick1
     arbiter_bricks:
-      - host: lab-pve3
-        path: /usr/local/gfs/k3s-services/brick0
+      - host: pve3
+        path: /usr/local/gfs/k3s-services2/brick0
+      - host: pve3
+        path: /usr/local/gfs/k3s-services2/brick1
     replicas: 2
     arbiters: 1
-    quotas: true
+    quota: 10.0GB
+    force: true
     allowed_clients:
-      - lab-kube1
-      - lab-kube2
-      - lab-kube3
-      - lab-pve1
-      - lab-pve2
-      - lab-pve3
+      - kube1
+      - kube2
+      - kube3
+      - pve1
+      - pve2
+      - pve3
 
-# TODO: k3s-user-data
-# TODO: k3s-nvr

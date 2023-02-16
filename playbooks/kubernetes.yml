@@ -4,14 +4,14 @@
   become_method: sudo
   any_errors_fatal: true
   tasks:
-  - name: Install and configure k3s
-    ansible.builtin.import_role:
-      name: ../../roles/kubernetes/k3s-cluster
-    tags:
-      - k3s
+    - name: Install and configure k3s
+      ansible.builtin.import_role:
+        name: ../../roles/kubernetes/k3s-cluster
+      tags:
+        - k3s
 
-  - name: Install and configure Argo CD
-    ansible.builtin.import_role:
-      name: ../../roles/kubernetes/argo-cd
-    tags:
-      - argocd
+    - name: Install and configure Argo CD
+      ansible.builtin.import_role:
+        name: ../../roles/kubernetes/argo-cd
+      tags:
+        - argocd

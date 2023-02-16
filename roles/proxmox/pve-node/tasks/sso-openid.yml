@@ -12,6 +12,7 @@
 # Note: The empty line in the template below must remain, otherwise jinja puts the last two lines on one which creates an invalid file
 - name: Define PVE realm
   run_once: true
+  no_log: true
   ansible.builtin.blockinfile:
     create: false
     path: /etc/pve/domains.cfg

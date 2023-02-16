@@ -4,6 +4,8 @@ exclude_paths:
   - "**/secrets.yml"
   - "**/gluster_nodes/ca.yml"
   - "**/k8s_nodes/sealed-secrets-key.yml"
+  - "**/*.sops.yml"
+  - ".sops.yml"
 
 use_default_rules: true
 

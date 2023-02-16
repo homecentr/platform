@@ -27,7 +27,3 @@
   ansible.builtin.reboot:
     reboot_timeout: 500
   throttle: 1
-
-- name: Order ACME certificates
-  ansible.builtin.command:
-    cmd: pvenode acme cert order

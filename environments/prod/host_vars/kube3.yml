@@ -1,0 +1,14 @@
+# Common
+ansible_host: 10.1.2.50
+fqdn: kube3.homecentr.one
+
+# Gluster
+gluster_mount_host: pve3
+
+# Kubernetes
+k3s_cluster_join: https://kube1.homecentr.one:6443
+
+k3s_cluster_node_taints:
+  - name: homecentr.one/critical-only
+    value: true
+    effect: NoSchedule

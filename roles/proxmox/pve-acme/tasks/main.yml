@@ -1,9 +1,11 @@
-
 # Inspired by https://github.com/simoncaron/ansible-role-pve_acme/blob/master/tasks/pve-acme.yml
-- name: Install required pip modules
-  ansible.builtin.pip:
-    name: pexpect
-    state: present
+- name: Install required python modules
+  ansible.builtin.include_role:
+    name: geerlingguy.pip
+  vars:
+    pip_package: python3-pip
+    pip_install_packages:
+      - pexpect
 
 - name: Check if default ACME account is registered
   ansible.builtin.command:
@@ -38,7 +40,9 @@
 - name: Add ACME account configuration
   run_once: true
   ansible.builtin.expect:
-    command: pvenode acme account register {{ pve_acme_account_name }} {{ pve_acme_account_email }} --directory {{ 'https://acme-staging-v02.api.letsencrypt.org/directory' if (pve_acme_use_staging | default(true)) else 'https://acme-v02.api.letsencrypt.org/directory' }}
+    # yamllint disable rule:line-length
+    command: "pvenode acme account register {{ pve_acme_account_name }} {{ pve_acme_account_email }} --directory {{ 'https://acme-staging-v02.api.letsencrypt.org/directory' if (pve_acme_use_staging | default(true)) else 'https://acme-v02.api.letsencrypt.org/directory' }}"
+    # yamllint enable rule:line-length
     responses:
       Do you agree to the above terms.*: y
   when: acme_account_list.stdout | length == 0

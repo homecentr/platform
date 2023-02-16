@@ -6,10 +6,9 @@
   "license": "GPL",
   "private": true,
   "scripts": {
-    "lint": "ansible-lint --strict",
-    "lint:install": "pip3 install ansible-lint",
+    "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint --strict",
     
-    "install": "pip3 install ansible-lint && ansible-galaxy install -r ./requirements.yml",
+    "install": "ansible-galaxy install -r ./requirements.yml && ansible-playbook ./playbooks/local.yml",
     
     "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-create.ps1",
     "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-destroy.ps1",

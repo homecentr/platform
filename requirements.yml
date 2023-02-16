@@ -6,7 +6,7 @@ collections:
     version: 2.7.0
   - name: oasis_roles.system
   - name: community.general
-    version: 6.2.0
+    version: 6.3.0
   - name: gluster.gluster
     version: 1.0.2
   - name: kubernetes.core

@@ -1,0 +1,4 @@
+creation_rules:
+  - path_regex: ".*environments.*\\.sops\\.ya?ml$"
+    # Workaround for https://github.com/mozilla/sops/issues/1103 where sops does not currently work correctly with age via YubiKey
+    pgp: 2D1D9C803F35BBC24014C3906601E1EB2454827F # lholota

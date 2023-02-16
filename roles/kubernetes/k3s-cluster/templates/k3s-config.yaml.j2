@@ -4,6 +4,7 @@ disable:
 - metrics-server
 # - traefik
 - local-storage
+
 disable-helm-controller: true
 bind-address: {{ k3s_cluster_node_ip | default(ansible_host) }}
 node-ip: {{ k3s_cluster_node_ip | default(ansible_host) }}
@@ -16,10 +17,19 @@ server: {{ k3s_cluster_join | mandatory }}
 {% endif %}
 token: "{{ k3s_cluster_secret | mandatory }}"
 
+{% if k3s_cluster_node_labels is defined %}
 node-label:
-{% for key, value in k3s_cluster_node_labels.items() %}
-    - {{ key }}={{ value }}
+{% for label in k3s_cluster_node_labels %}
+    - {{ label.name }}={{ label.value }}
 {% endfor %}
+{% endif %}
+
+{% if k3s_cluster_node_taints is defined %}
+node-taint:
+{% for taint in k3s_cluster_node_taints %}
+    - {{ taint.name }}={{ taint.value }}:{{ taint.effect }}
+{% endfor %}
+{% endif %}
 
 # etcd-expose-metrics: true
 write-kubeconfig-mode: 600

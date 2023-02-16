@@ -35,7 +35,7 @@
     file: create-volume.yml
   vars:
     gluster_volume_config: "{{ item }}"
-  with_items: "{{ gluster_volumes }}"
+  loop: "{{ gluster_volumes }}"
 
 - name: Mount Gluster volumes
   ansible.builtin.include_tasks:
@@ -43,4 +43,4 @@
   vars:
     gluster_volume: "{{ gluster_volumes | selectattr('name', 'equalto', item) | first }}"
   when: gluster_volume_mounts is defined
-  with_items: "{{ gluster_volume_mounts }}"
+  loop: "{{ gluster_volume_mounts }}"

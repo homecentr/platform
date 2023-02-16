@@ -1,0 +1,7 @@
+- name: Order ACME certificates
+  retries: 5
+  delay: 10
+  register: acme_order
+  until: acme_order.rc == 0
+  ansible.builtin.command:
+    cmd: pvenode acme cert order

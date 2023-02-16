@@ -1,0 +1,10 @@
+argocd_url: https://argocd.homecentr.one
+argocd_admin_group_id: b77c210d-8ae3-4292-9e95-c7d42a2f254f # TBA
+argocd_git_repository_url: https://github.com/homecentr/kubernetes.git
+argocd_git_ref: master
+argocd_environment: prod
+
+# Make sure the chart version contains the app version below
+# The app version drives the CRDs and should be bumped before upgrading the app itself
+argocd_chart_version: 5.19.5
+argocd_app_version: 2.5.7

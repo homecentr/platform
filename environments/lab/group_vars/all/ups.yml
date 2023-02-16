@@ -3,4 +3,4 @@ ups_devices:
     driver: dummy-ups
     description: Dummy UPS
     port: evolution500.seq
-    monitored_by: lab-pve1
+    monitored_by: pve1
