@@ -89,7 +89,8 @@
   delay: 5
   until: "'Another transaction is in progress' | string not in volume_quota_set.stdout"
   register: volume_quota_set
-  ansible.builtin.shell:
+  changed_when: false
+  ansible.builtin.command:
     cmd: "gluster volume quota {{ gluster_volume_config.name }} list /"
 
 - name: Set volume level quota

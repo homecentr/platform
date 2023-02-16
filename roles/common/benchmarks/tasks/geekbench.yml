@@ -18,7 +18,7 @@
     state: directory
     owner: root
     group: root
-    mode: 0770
+    mode: 0760
 
 - name: Unpack geekbench
   ansible.builtin.unarchive:
@@ -27,7 +27,7 @@
     remote_src: true
     owner: root
     group: root
-    mode: 0770
+    mode: 0760
     extra_opts: [--strip-components=1]
   when: not geekbench_dir.stat.exists
 

@@ -29,4 +29,3 @@ gluster_volumes:
       - pve1
       - pve2
       - pve3
-
