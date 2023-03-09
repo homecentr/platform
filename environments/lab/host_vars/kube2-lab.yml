@@ -1,0 +1,9 @@
+# Common
+ansible_host: 10.1.8.22
+fqdn: kube2-lab.homecentr.one
+
+# Gluster
+gluster_mount_host: pve2-lab
+
+# Kubernetes
+k3s_cluster_join: https://kube1-lab:6443

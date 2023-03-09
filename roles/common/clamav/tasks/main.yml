@@ -18,7 +18,7 @@
     clamav_freshclam_daemon_enabled: true
 
 - name: "Create scan script"
-  when: clamav_scanned_dirs is defined and clamav_scanned_dirs != null
+  when: clamav_scanned_dirs is defined
   ansible.builtin.copy:
     dest: /usr/bin/scan-clamav
     owner: root

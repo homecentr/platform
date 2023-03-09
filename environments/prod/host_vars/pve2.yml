@@ -32,3 +32,8 @@ pve_vm_machines:
     nameservers:
       - 1.1.1.1
       - 1.0.0.1
+
+# ClamAV
+# clamav_scanned_dirs:
+#   - /user-data0
+#   - /user-data1

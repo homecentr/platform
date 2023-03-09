@@ -1,9 +1,9 @@
 # Common
 ansible_host: 10.1.8.21
-fqdn: kube1.lab.homecentr.one
+fqdn: kube1-lab.homecentr.one
 
 # Gluster
-gluster_mount_host: pve1
+gluster_mount_host: pve1-lab
 
 # Kubernetes
 k3s_cluster_init: true

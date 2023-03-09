@@ -1,26 +1,26 @@
 # Common
-ansible_host: 10.1.8.11
-fqdn: pve1.lab.homecentr.one
+ansible_host: 10.1.8.13
+fqdn: pve3-lab.homecentr.one
 
 # UPS
 ups_name: dummy-ups1
 
 # Gluster
-gluster_ip: 192.168.1.11
-gluster_hostname: gfs-pve1
-gluster_fqdn: gfs-pve1.lab.homecentr.one
-gluster_mount_host: pve1
+gluster_ip: 192.168.1.13
+gluster_hostname: gfs-pve3-lab
+gluster_fqdn: gfs-pve3-lab.homecentr.one
+gluster_mount_host: pve3-lab
 
 # PVE
 pve_network_interfaces:
   eth1:
     method: static
-    address: 192.168.1.11/24
+    address: 192.168.1.13/24
     auto: true
 
 pve_vm_machines:
-  - vmid: 101
-    name: kube1
+  - vmid: 301
+    name: kube3-lab
     protection: false
     cloud_image_filename: debian-11.5.0.qcow2
     bios: efi
@@ -32,9 +32,13 @@ pve_vm_machines:
     cpu_cores_per_cpu: 4
     min_memory: 4096
     max_memory: 4096
-    nic_ipv4_address: 10.1.8.21
+    nic_ipv4_address: 10.1.8.23
     nic_ipv4_subnet: 255.255.255.0
     nic_ipv4_gateway: 10.1.8.1
     nameservers:
       - 1.1.1.1
       - 1.0.0.1
+
+# ClamAV
+# clamav_scanned_dirs:
+# - /usr/local/gfs

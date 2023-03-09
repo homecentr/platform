@@ -8,7 +8,7 @@ ups_name: ups1
 # Gluster
 gluster_ip: 10.1.7.17
 gluster_hostname: gfs-pve1
-gluster_fqdn: gfs-pve1.lab.homecentr.one
+gluster_fqdn: gfs-pve1.homecentr.one
 gluster_mount_host: pve1
 
 # PVE
@@ -32,3 +32,8 @@ pve_vm_machines:
     nameservers:
       - 1.1.1.1
       - 1.0.0.1
+
+# ClamAV
+# clamav_scanned_dirs:
+#   - /user-data0
+#   - /user-data1

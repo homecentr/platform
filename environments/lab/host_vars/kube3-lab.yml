@@ -1,12 +1,12 @@
 # Common
 ansible_host: 10.1.8.23
-fqdn: kube3.lab.homecentr.one
+fqdn: kube3-lab.homecentr.one
 
 # Gluster
-gluster_mount_host: pve3
+gluster_mount_host: pve3-lab
 
 # Kubernetes
-k3s_cluster_join: https://kube1:6443
+k3s_cluster_join: https://kube1-lab:6443
 
 k3s_cluster_node_taints:
   - name: homecentr.one/critical-only
