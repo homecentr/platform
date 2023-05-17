@@ -29,6 +29,7 @@
     wait: true
     timeout: 5m0s
     skip_crds: true # CRDs installed separately outside of helm chart scope
+    force: true
     values:
       crds:
         install: false
@@ -40,9 +41,16 @@
         enabled: false
       controller:
         replicas: 1
+        podLabels:
+          netpol.homecentr.one/kubeapi: initiator
       server:
         replicas: 1
+        podLabels:
+          netpol.homecentr.one/internet: initiator
+          netpol.homecentr.one/kubeapi: initiator
       repoServer:
+        podLabels:
+          netpol.homecentr.one/internet: initiator
         replicas: 1
         env:
           - name: HELM_PLUGINS
@@ -131,8 +139,10 @@
             display: none;
           }
         cm:
+          timeout.reconciliation: "{{ argocd_git_refresh_interval }}"
           admin.enabled: false
           url: "{{ argocd_url }}"
+          help.chatText: ""
           oidc.config: |
              name: Azure
              issuer: "{{ argocd_oauth_url }}"

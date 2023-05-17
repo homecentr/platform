@@ -1,14 +1,14 @@
 LISTEN 127.0.0.1
-LISTEN {{ inventory_hostname }}
+LISTEN {{ ansible_hostname }}
 LISTEN {{ fqdn }}
 
 ACL all 0.0.0.0/0
 ACL localhost 127.0.0.1/32
 {% for server in groups['all'] %}
-ACL {{ hostvars[server]['inventory_hostname'] }} {{ hostvars[server]['ansible_host'] }}/32
+ACL {{ hostvars[server]['ansible_hostname'] }} {{ hostvars[server]['ansible_host'] }}/32
 {% endfor %}
 ACCEPT localhost
 {% for server in groups['all'] %}
-ACCEPT {{ hostvars[server]['inventory_hostname'] }}
+ACCEPT {{ hostvars[server]['ansible_hostname'] }}
 {% endfor %}
 REJECT all

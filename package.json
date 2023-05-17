@@ -1,5 +1,5 @@
 {
-  "name": "homecentr-platform",
+  "name": "@homecentr/platform",
   "version": "1.0.0",
   "repository": "git@github.com:homecentr/platform.git",
   "author": "Lukas Holota",
@@ -7,17 +7,22 @@
   "private": true,
   "scripts": {
     "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint --strict",
-    
     "install": "ansible-galaxy install -r ./requirements.yml && ansible-playbook ./playbooks/local.yml",
-    
-    "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-create.ps1",
-    "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./scripts ./scripts/lab-destroy.ps1",
-    "lab:clear-keys": "./scripts/clearkeys.sh",
+    "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./tools ./tools/lab-create.ps1",
+    "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./tools ./tools/lab-destroy.ps1",
+    "lab:clear-keys": "./tools/clearkeys.sh",
+    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
+    "lab:apply": "./tools/apply.sh lab",
+    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh prod proxmox -u root -e ansible_user=root --tags init -k",
+    "prod:apply": "./tools/apply.sh prod",
 
-    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./scripts/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
-    "lab:apply": "./scripts/apply.sh lab",
 
-    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./scripts/apply.sh prod proxmox -u root -e ansible_user=root --tags init -k",
-    "prod:apply": "./scripts/apply.sh prod"
+    "github-runner:init": "",
+    "github-runner:apply": "",
+
+    "validate-values": "node ./tools/validations.js"
+  },
+  "devDependencies": {
+    "@homecentr/yaml-diff": "^1.1.3"
   }
 }

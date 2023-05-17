@@ -14,3 +14,6 @@ jobs:
 
       - name: Lint Ansible files
         run: yarn lint
+
+      - name: Compare values across environments
+        run: yarn validate-values

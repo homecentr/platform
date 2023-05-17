@@ -23,6 +23,8 @@
     - name: Configure ACME
       ansible.builtin.import_role:
         name: ../../roles/proxmox/pve-acme
+      tags:
+        - acme
 
     - name: Flush handlers before starting the VMs
       ansible.builtin.meta: flush_handlers
