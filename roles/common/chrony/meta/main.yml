@@ -1,1 +1,3 @@
 ---
+dependencies:
+  - oasis_roles.system.chrony

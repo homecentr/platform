@@ -15,11 +15,6 @@
     "lab:apply": "./tools/apply.sh lab",
     "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh prod proxmox -u root -e ansible_user=root --tags init -k",
     "prod:apply": "./tools/apply.sh prod",
-
-
-    "github-runner:init": "",
-    "github-runner:apply": "",
-
     "validate-values": "node ./tools/validations.js"
   },
   "devDependencies": {
