@@ -1,11 +1,8 @@
 exclude_paths:
   - .cache/
   - .github/
-  - "**/secrets.yml"
-  - "**/gluster_nodes/ca.yml"
-  - "**/k8s_nodes/sealed-secrets-key.yml"
-  - "**/*.sops.yml"
-  - ".sops.yml"
+  - "environments/*/gluster_nodes/ca.yml"
+  - "*.sops.yml"
 
 use_default_rules: true
 
