@@ -1,5 +1,0 @@
-- name: Delete services script if not needed
-  when: (not motd_services is defined) or (motd_services | length) == 0
-  ansible.builtin.file:
-    path: /etc/update-motd.d/40-services
-    state: absent

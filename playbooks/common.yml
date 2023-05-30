@@ -5,7 +5,7 @@
   tasks:
     - name: Create users
       ansible.builtin.import_role:
-        name: ../../roles/common/users
+        name: homecentr.system.users
       tags:
         - users
 
@@ -17,20 +17,26 @@
 
     - name: Setup Chrony (NTP client)
       ansible.builtin.import_role:
-        name: ../../roles/common/chrony
+        name: homecentr.system.chrony
       tags:
         - chrony
         - ntp
 
     - name: Install benchmarks
       ansible.builtin.import_role:
-        name: ../../roles/common/benchmarks
+        name: homecentr.system.benchmarks
       tags:
         - benchmarks
 
+    - name: Install lynis
+      ansible.builtin.import_role:
+        name: homecentr.system.lynis
+      tags:
+        - lynis
+
     - name: Harden the system according to lynis recommendations
       ansible.builtin.import_role:
-        name: ../../roles/common/lynis-hardening
+        name: homecentr.system.lynis_hardening
       tags:
         - lynis
 
@@ -42,20 +48,20 @@
 
     - name: Configure and secure SSH
       ansible.builtin.import_role:
-        name: ../../roles/common/ssh
+        name: homecentr.system.ssh
       tags:
         - ssh
 
     - name: Install and configure Network UPS tools
       ansible.builtin.import_role:
-        name: ../../roles/common/ups
+        name: homecentr.system.ups
       when: "'bare_metal_nodes' in group_names"
       tags:
         - ups
 
     - name: Set up Message-of-the-day
       ansible.builtin.import_role:
-        name: ../../roles/common/motd
+        name: homecentr.system.motd
       vars:
         motd_enable_ups_status: "{{ 'bare_metal_nodes' in group_names }}"
       tags:

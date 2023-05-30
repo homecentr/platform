@@ -1,7 +1,0 @@
-- name: Copy ups scripts
-  ansible.builtin.copy:
-    src: "motd/25-ups.sh"
-    dest: /etc/update-motd.d/25-ups
-    owner: root
-    group: root
-    mode: 0755

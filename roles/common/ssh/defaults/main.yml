@@ -1,4 +1,0 @@
-# ssh_allow_root_login_exception_hosts
-ssh_allow_root_login: "no"
-ssh_allow_password_login: "no"
-ssh_port: 22

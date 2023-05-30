@@ -4,7 +4,14 @@ const {
 
 const options = {
   fileNameGlob: "**/*.{yml,yaml}",
-  sopsFilesGlob: "**/*.sops.{yml,yaml}"
+  sopsFilesGlob: "**/*.sops.{yml,yaml}",
+  ignoreListFunc: (fileName) => {
+    if(fileName == "hosts.yml") {
+      return true
+    }
+    
+    return []
+  }
 }
 
 const differences = diffDirs(

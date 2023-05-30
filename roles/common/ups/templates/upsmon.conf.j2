@@ -1,4 +1,0 @@
-MONITOR {{ ups_name }}@{{ ups_server }} 1 {{ ansible_hostname }} {{ ups_slave_password | mandatory }} slave
-POWERDOWNFLAG /etc/killpower
-FINALDELAY {{ ups_shutdown_delay_seconds }}
-SHUTDOWNCMD "/sbin/shutdown -h now"

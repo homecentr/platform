@@ -1,1 +1,0 @@
-All credits for the motd scripts goes to https://github.com/yboetz/motd !

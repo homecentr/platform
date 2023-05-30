@@ -1,8 +1,0 @@
-- name: Copy services script
-  ansible.builtin.template:
-    src: 40-services.sh.j2
-    dest: /etc/update-motd.d/40-services
-    owner: root
-    group: root
-    mode: 0755
-    force: true

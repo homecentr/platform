@@ -1,4 +1,0 @@
-- name: "Set root user's password"
-  ansible.builtin.user:
-    name: root
-    password: "{{ users_root_password | mandatory | password_hash('sha512', users_root_password_salt) }}" # noqa jinja[invalid] Root's password defined in secrets

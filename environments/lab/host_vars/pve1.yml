@@ -1,26 +1,27 @@
 # Common
-ansible_host: 10.1.8.12
-fqdn: pve2-lab.homecentr.one
+ansible_host: 10.1.8.11
+ansible_hostname: pve1-lab
+fqdn: pve1-lab.homecentr.one
 
 # UPS
 ups_name: dummy-ups1
 
 # Gluster
-gluster_ip: 192.168.1.12
-gluster_hostname: gfs-pve2-lab
-gluster_fqdn: gfs-pve2-lab.homecentr.one
-gluster_mount_host: pve2-lab
+gluster_ip: 192.168.1.11
+gluster_hostname: gfs-pve1-lab
+gluster_fqdn: gfs-pve1-lab.homecentr.one
+gluster_mount_host: pve1
 
 # PVE
 pve_network_interfaces:
   eth1:
     method: static
-    address: 192.168.1.12/24
+    address: 192.168.1.11/24
     auto: true
 
 pve_vm_machines:
-  - vmid: 201
-    name: kube2-lab
+  - vmid: 101
+    name: kube1-lab
     protection: false
     cloud_image_filename: debian-11.5.0.qcow2
     bios: efi
@@ -32,7 +33,7 @@ pve_vm_machines:
     cpu_cores_per_cpu: 4
     min_memory: 4096
     max_memory: 4096
-    nic_ipv4_address: 10.1.8.22
+    nic_ipv4_address: 10.1.8.21
     nic_ipv4_subnet: 255.255.255.0
     nic_ipv4_gateway: 10.1.8.1
     nameservers:

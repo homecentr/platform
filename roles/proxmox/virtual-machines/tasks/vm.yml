@@ -9,16 +9,19 @@
       #cloud-config
       hostname: {{ vm.name }}
       manage_etc_hosts: false
-      user: {{ users_admin_username }}
+      user: "{{ (users_admin_users | first).username }}"
       password: Heslo123
-      ssh_authorized_keys:
-      {% for key in users_admin_public_keys %}
-        - {{ key }}
-      {% endfor %}
       chpasswd:
         expire: false
       users:
         - default
+      {% for user in users_admin_users %}
+        - name: {{ user.username }}
+          ssh_authorized_keys:
+      {% for key in user.public_keys %}
+          - {{ key }}
+      {% endfor %}
+      {% endfor %}
       package_upgrade: true
 
 - name: Create virtual machine
@@ -37,9 +40,9 @@
     onboot: "{{ vm.onboot | default(true) }}"
     ostype: "{{ vm.ostype | default('l26') }}"
     boot: "{{ vm.boot_order | default('cd') }}"
-    ciuser: "{{ users_admin_username }}"
+    ciuser: "{{ (users_admin_users | first).username }}"
     cipassword: "Heslo123"
-    sshkeys: "{{ users_admin_public_keys | join('\n') }}"
+    sshkeys: "{{ (users_admin_users | first).public_keys | join('\n') }}"
     cicustom: "user=local:snippets/{{ vm.vmid }}.yml"
     bios: "{{ 'seabios' if (vm.bios | default('bios')) != 'efi' else 'ovmf' }}"
     startup: "down={{ vm.shutdown_timeout_seconds }}"

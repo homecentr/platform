@@ -1,3 +1,0 @@
-motd_enable_zfs_status: false
-motd_enable_hw_status: false
-# motd_services - when not defined, script will not be used

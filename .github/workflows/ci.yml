@@ -1,19 +1,25 @@
 name: CI
 on:
-  push:
+  pull_request:
 
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@master
 
-      - name: Install dependencies
-        run: yarn
+      - name: Install pre-requisites
+        run: |
+          yarn
+          sudo wget -O /usr/bin/sops https://github.com/mozilla/sops/releases/download/v3.7.3/sops-v3.7.3.linux.amd64
+          sudo chmod a+x /usr/bin/sops
 
       - name: Lint Ansible files
         run: yarn lint
 
       - name: Compare values across environments
         run: yarn validate-values
+
+  # TODO: Deploy lab from self-hosted
+  # TODO: Run E2E tests from self-hosted (remote + local)

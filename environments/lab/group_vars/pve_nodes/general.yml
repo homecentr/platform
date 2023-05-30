@@ -1,8 +1,8 @@
 # This is required for VNC proxy between the nodes
 ssh_allow_root_login_trusted_clients:
-  - pve1-lab
-  - pve2-lab
-  - pve3-lab
+  - pve1
+  - pve2
+  - pve3
 
 pve_zfs_max_arc_size_gb: 0.5
 

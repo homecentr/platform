@@ -160,6 +160,177 @@
             secrets+age-import, secrets+age-import-kubernetes,
             secrets,secrets+literal,
             https
+      notifications:
+        enabled: true
+        argocdUrl: "{{ argocd_url }}"
+        cm:
+          create: true
+        subscriptions:
+          - recipients:
+              # - github
+              - gh
+            triggers:
+              - on-deployed
+              - on-sync-failed
+              - on-sync-status-unknown
+              - on-sync-running
+        templates:
+        #   template.app-deployed: |
+        #     {% raw %}
+        #     message: |
+        #       Application {{.app.metadata.name}} has been successfully deployed.
+        #     github:
+        #       status:
+        #         state: success
+        #         label: "continuous-delivery/{{.app.metadata.name}}"
+        #         targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+        #     {% endraw %}
+        #   template.app-sync-failed: |
+        #     {% raw %}
+        #     message: |
+        #       Application {{.app.metadata.name}} sync has failed.
+        #     github:
+        #       status:
+        #         state: failure
+        #         label: "continuous-delivery/{{.app.metadata.name}}"
+        #         targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+        #     {% endraw %}
+        #   template.app-sync-unknown: |
+        #     {% raw %}
+        #     message: |
+        #       Application {{.app.metadata.name}} has unknown sync status.
+        #     github:
+        #       status:
+        #         state: failure
+        #         label: "continuous-delivery/{{.app.metadata.name}}"
+        #         targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+        #     {% endraw %}
+        #   template.app-sync-running: |
+        #     {% raw %}
+        #     message: |
+        #       Application {{.app.metadata.name}} is now being deployed.
+        #     github:
+        #       status:
+        #         state: pending
+        #         label: "continuous-delivery/{{.app.metadata.name}}"
+        #         targetURL: "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}?operation=true"
+        #     {% endraw %}
+
+          template.github-commit-status: |
+            {% raw %}
+            webhook:
+              gh:
+                method: POST
+                path: /repos/{{call .repo.FullNameByRepoURL .app.spec.source.repoURL}}/statuses/{{.app.status.sync.revision}}
+                body: |
+                  {
+                    {{if eq .app.status.operationState.phase "Running"}} "state": "pending"{{end}}
+                    {{if eq .app.status.operationState.phase "Succeeded"}} "state": "success"{{end}}
+                    {{if eq .app.status.operationState.phase "Error"}} "state": "error"{{end}}
+                    {{if eq .app.status.operationState.phase "Failed"}} "state": "error"{{end}},
+                    "description": "ArgoCD",
+                    "target_url": "{{.context.argocdUrl}}/applications/{{.app.metadata.name}}",
+                    "context": "argocd/{{.app.metadata.name}}"
+                  }
+            {% endraw %}
+        triggers:
+          # TODO: Revert to time
+          # oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+          trigger.on-deployed: |
+            - description: Application is synced and healthy. Triggered once per commit.
+              oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+              send:
+              - github-commit-status
+              when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+          trigger.on-health-degraded: |
+            - description: Application has degraded
+              oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+              send:
+              - github-commit-status
+              when: app.status.health.status == 'Degraded'
+          trigger.on-sync-failed: |
+            - description: Application syncing has failed
+              oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+              send: 
+              - github-commit-status
+              when: app.status.operationState.phase in ['Error', 'Failed']
+          trigger.on-sync-running: |
+            - description: Application is being synced
+              oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+              send:
+              - github-commit-status
+              when: app.status.operationState.phase in ['Running']
+          trigger.on-sync-status-unknown: |
+            - description: Application status is 'Unknown'
+              oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+              send:
+              - github-commit-status
+              when: app.status.sync.status == 'Unknown'
+          trigger.on-sync-succeeded: |
+            - description: Application syncing has succeeded
+              oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+              send:
+              - github-commit-status
+              when: app.status.operationState.phase in ['Succeeded']
+
+
+        # triggers:
+        #   trigger.on-deployed: |
+        #     - description: Application is synced and healthy. Triggered once per commit.
+        #       oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+        #       send:
+        #       - app-deployed
+        #       when: app.status.operationState.phase in ['Succeeded'] and app.status.health.status == 'Healthy'
+        #   trigger.on-health-degraded: |
+        #     - description: Application has degraded
+        #       oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+        #       send:
+        #       - app-health-degraded
+        #       when: app.status.health.status == 'Degraded'
+        #   trigger.on-sync-failed: |
+        #     - description: Application syncing has failed
+        #       oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+        #       send:
+        #       - app-sync-failed
+        #       when: app.status.operationState.phase in ['Error', 'Failed']
+        #   trigger.on-sync-running: |
+        #     - description: Application is being synced
+        #       oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+        #       send:
+        #       - app-sync-running
+        #       when: app.status.operationState.phase in ['Running']
+        #   trigger.on-sync-status-unknown: |
+        #     - description: Application status is 'Unknown'
+        #       oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+        #       send:
+        #       - app-sync-unknown
+        #       when: app.status.sync.status == 'Unknown'
+        #   trigger.on-sync-succeeded: |
+        #     - description: Application syncing has succeeded
+        #       oncePer: app.status.operationState.operation.sync.revision + app.metadata.name + time.Now().String()
+        #       send:
+        #       - app-sync-succeeded
+        #       when: app.status.operationState.phase in ['Succeeded']
+        #   defaultTriggers: |
+        #     - on-deployed
+        #     - on-sync-failed
+        #     - on-sync-status-unknown
+        #     - on-sync-running
+        notifiers:
+          service.github: |
+            appID: {{ argocd_github.app_id }}
+            installationID: {{ argocd_github.installation_id }}
+            privateKey: $github-privateKey
+          service.webhook.gh: |
+            url: https://api.github.com
+            headers:
+            - name: Authorization
+              value: Bearer $github-token
+        secret:
+          create: true
+          items:
+            github-privateKey: "{{ argocd_github.private_key }}"
+            github-token: "{{ argocd_github.token }}"
       extraObjects:
         - apiVersion: v1
           kind: Secret

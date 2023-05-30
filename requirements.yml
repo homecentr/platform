@@ -15,6 +15,9 @@ collections:
     version: 2.5.0
   - name: community.sops
     version: 1.6.0
+  - name: https://github.com/homecentr/ansible-collection-system
+    type: git
+    version: origin/master
 
 roles:
   - name: geerlingguy.pip

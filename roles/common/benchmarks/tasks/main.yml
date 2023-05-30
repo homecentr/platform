@@ -1,8 +1,0 @@
-- name: Install Geekbench
-  ansible.builtin.include_tasks:
-    file: geekbench.yml
-
-- name: Install iperf
-  ansible.builtin.package:
-    name: iperf
-    state: present

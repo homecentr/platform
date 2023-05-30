@@ -15,7 +15,7 @@
     # Root's password must be set so that it can be used to communicate with Proxmox API
     - name: Create users
       ansible.builtin.import_role:
-        name: ../../roles/common/users
+        name: homecentr.system.users
       tags:
         - users
         - init
