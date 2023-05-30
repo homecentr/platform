@@ -1,9 +1,8 @@
 exclude_paths:
   - .cache/
-  - .github/
-  - environments/
-  - "environments/*/gluster_nodes/ca.yml"
-  - "*.sops.yml"
+  - ${PWD}/.github/
+  - "${PWD}/environments/*/gluster_nodes/ca.yml"
+  - "${PWD}/**/*.sops.yml"
 
 use_default_rules: true
 
