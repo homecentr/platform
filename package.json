@@ -6,7 +6,7 @@
   "license": "GPL",
   "private": true,
   "scripts": {
-    "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint --strict -c ./.ansible-lint --exclude=\"*.sops.yml\"",
+    "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint --strict -c ./.ansible-lint --exclude=\"**/*.sops.yml\"",
     "install": "ansible-galaxy install -r ./requirements.yml && ansible-playbook ./playbooks/local.yml",
     "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./tools ./tools/lab-create.ps1",
     "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./tools ./tools/lab-destroy.ps1",
