@@ -1,17 +1,19 @@
 # Common
-ansible_host: 10.1.2.22
+ansible_host: 10.1.2.12
+ansible_hostname: pve2
 fqdn: pve2.homecentr.one
 
 # UPS
 ups_name: ups2
 
 # Gluster
-gluster_ip: 10.1.7.22
+gluster_ip: 10.1.7.12
 gluster_hostname: gfs-pve2
 gluster_fqdn: gfs-pve2.homecentr.one
 gluster_mount_host: pve2
 
 # PVE
+pve_network_interfaces: [] # Managed manually because of bonded NICs
 pve_vm_machines:
   - vmid: 201
     name: kube2
@@ -21,12 +23,12 @@ pve_vm_machines:
     shutdown_timeout_seconds: 120
     nic_bridge: vmbr0
     os_storage: local-zfs
-    os_disk_size_gb: 100
+    os_disk_size_gb: 128
     cpu_count: 2
     cpu_cores_per_cpu: 12
     min_memory: 16384
     max_memory: 98304
-    nic_ipv4_address: 10.1.2.49
+    nic_ipv4_address: 10.1.2.22
     nic_ipv4_subnet: 255.255.255.0
     nic_ipv4_gateway: 10.1.2.1
     nameservers:

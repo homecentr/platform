@@ -28,7 +28,7 @@ pve_vm_machines:
     cpu_cores_per_cpu: 3
     min_memory: 4096
     max_memory: 4096
-    nic_ipv4_address: 10.1.2.23
+    nic_ipv4_address: 10.1.2.50
     nic_ipv4_subnet: 255.255.255.0
     nic_ipv4_gateway: 10.1.2.1
     nameservers:

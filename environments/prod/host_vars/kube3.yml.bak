@@ -11,5 +11,5 @@ k3s_cluster_join: https://kube1:6443
 
 k3s_cluster_node_taints:
   - name: homecentr.one/critical-only
-    value: "true"
+    value: true
     effect: NoSchedule

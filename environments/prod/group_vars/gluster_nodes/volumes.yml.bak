@@ -72,7 +72,6 @@ gluster_volumes:
         path: /usr/local/gfs/k8s-nvr/brick0
     replicas: 2
     arbiters: 1
-    quota: 2.8TB
     allowed_clients:
       - kube1
       - kube2

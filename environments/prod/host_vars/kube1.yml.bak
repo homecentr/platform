@@ -1,6 +1,5 @@
 # Common
 ansible_host: 10.1.2.21
-ansible_hostname: kube1
 fqdn: kube1.homecentr.one
 
 # Gluster

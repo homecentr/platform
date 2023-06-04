@@ -7,4 +7,4 @@ fqdn: kube2.homecentr.one
 gluster_mount_host: pve2
 
 # Kubernetes
-k3s_cluster_join: https://kube1:6443
+k3s_cluster_join: https://kube1.homecentr.one:6443

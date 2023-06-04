@@ -13,7 +13,6 @@ gluster_fqdn: gfs-pve1.homecentr.one
 gluster_mount_host: pve1
 
 # PVE
-pve_network_interfaces: [] # Managed manually because of bonded NICs
 pve_vm_machines:
   - vmid: 101
     name: kube1
