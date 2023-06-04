@@ -37,6 +37,7 @@
   run_once: true
   ansible.builtin.command:
     cmd: "{{ lookup('template', 'create-volume-command.j2') }}"
+  changed_when: volume_exists.rc != 0
   when: volume_exists.rc != 0
 
 - name: Enable server tls
@@ -59,7 +60,11 @@
 
 - name: Check volume status
   ansible.builtin.shell:
-    cmd: "gluster volume info {{ gluster_volume_config.name }} | grep 'Status:' | cut -d' ' -f2"
+    cmd: |
+      set -o pipefail
+      gluster volume info {{ gluster_volume_config.name }} | grep 'Status:' | cut -d' ' -f2
+  args:
+    executable: /bin/bash
   changed_when: false
   register: volume_status
 
@@ -67,12 +72,17 @@
   run_once: true
   ansible.builtin.command:
     cmd: "gluster volume start {{ gluster_volume_config.name }}"
+  changed_when: volume_status.stdout != "Started"
   when: volume_status.stdout != "Started"
 
 - name: Check if quota is enabled
   run_once: true
   ansible.builtin.shell:
-    cmd: gluster volume info {{ gluster_volume_config.name }} | grep 'features.quota:' | cut -d' ' -f2
+    cmd: |
+      set -o pipefail
+      gluster volume info {{ gluster_volume_config.name }} | grep 'features.quota:' | cut -d' ' -f2
+  args:
+    executable: /bin/bash
   register: volume_quota_enabled
   changed_when: false
 
@@ -82,6 +92,7 @@
   run_once: true
   ansible.builtin.command:
     cmd: "gluster volume quota {{ gluster_volume_config.name }} enable"
+  changed_when: "volume_quota_enabled.stdout != 'on'"
   when: "volume_quota_enabled.stdout != 'on'"
 
 - name: Check if volume level quota is set
@@ -98,4 +109,5 @@
   run_once: true
   ansible.builtin.command:
     cmd: "gluster volume quota {{ gluster_volume_config.name }} limit-usage / {{ gluster_volume_config.quota }}"
-  when: "'N/A' | string not in volume_quota_set.stdout"
+  changed_when: "'N/A' | string in volume_quota_set.stdout"
+  when: "'N/A' | string in volume_quota_set.stdout"

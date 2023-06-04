@@ -2,7 +2,7 @@
   hosts: localhost
   connection: local
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   tasks:
     - name: Install required python modules
       ansible.builtin.include_role:

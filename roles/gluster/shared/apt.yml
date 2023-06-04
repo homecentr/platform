@@ -1,19 +1,27 @@
 - name: Get Debian version ID
   ansible.builtin.shell:
-    cmd: grep 'VERSION_ID=' /etc/os-release | cut -d '=' -f 2 | tr -d '"'
-  register: debid
+    cmd: |
+      set -o pipefail
+      grep 'VERSION_ID=' /etc/os-release | cut -d '=' -f 2 | tr -d '"'
+  args:
+    executable: /bin/bash
+  register: gluster_debid
   changed_when: false
 
 - name: Get Debian version
   ansible.builtin.shell:
-    cmd: "grep 'VERSION=' /etc/os-release | grep -Eo '[a-z]+'"
-  register: debver
+    cmd: |
+      set -o pipefail
+      grep 'VERSION=' /etc/os-release | grep -Eo '[a-z]+'
+  args:
+    executable: /bin/bash
+  register: gluster_debver
   changed_when: false
 
 - name: Get architecture
   ansible.builtin.command:
     cmd: "dpkg --print-architecture"
-  register: debarch
+  register: gluster_debarch
   changed_when: false
 
 - name: Add GlusterFS apt repository key
@@ -23,5 +31,5 @@
 
 - name: Add Gluster repository into sources
   ansible.builtin.apt_repository:
-    repo: deb https://download.gluster.org/pub/gluster/glusterfs/{{ gluster_major_version }}/{{ gluster_major_version }}.{{ gluster_minor_version }}/Debian/{{ debid.stdout | trim }}/{{ debarch.stdout | trim }}/apt {{ debver.stdout | trim }} main # noqa yaml[line-length]
+    repo: deb https://download.gluster.org/pub/gluster/glusterfs/{{ gluster_major_version }}/{{ gluster_major_version }}.{{ gluster_minor_version }}/Debian/{{ gluster_debid.stdout | trim }}/{{ gluster_debarch.stdout | trim }}/apt {{ gluster_debver.stdout | trim }} main # noqa yaml[line-length]
     state: present

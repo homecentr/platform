@@ -6,7 +6,11 @@
 
 - name: Get Debian version
   ansible.builtin.shell:
-    cmd: "grep 'VERSION=' /etc/os-release | grep -Eo '[a-z]+'"
+    cmd: |
+      set -o pipefail
+      grep 'VERSION=' /etc/os-release | grep -Eo '[a-z]+'
+  args:
+    executable: /bin/bash
   register: debver
   changed_when: false
 

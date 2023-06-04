@@ -9,7 +9,11 @@
 
 - name: Get certificates default directory
   ansible.builtin.shell:
-    cmd: "openssl version -d | cut -d'\"' -f2"
+    cmd: |
+      set -o pipefail
+      openssl version -d | cut -d'"' -f2
+  args:
+    executable: /bin/bash
   register: gluster_openssl_dir
   changed_when: false
 

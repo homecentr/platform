@@ -12,3 +12,4 @@
 - name: Apply kubelet.conf
   ansible.builtin.command:
     cmd: sysctl -p /etc/sysctl.d/90-kubelet.conf
+  changed_when: true # Handler only called when the source file is changed

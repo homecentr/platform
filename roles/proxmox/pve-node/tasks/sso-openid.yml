@@ -4,8 +4,9 @@
     path: /etc/pve/domains.cfg
 
 - name: Create default domains.cfg if it does not exist
-  run_once: true # Proxmox cluster
+  run_once: true # Cluster level command
   when: not domains_cfg.stat.exists
+  changed_when: not domains_cfg.stat.exists
   ansible.builtin.command:
     cmd: pveum realm modify pam --default 0
 

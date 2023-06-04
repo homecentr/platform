@@ -10,4 +10,5 @@
   ansible.builtin.command:
     cmd: pvenode config set --acmedomain{{ index }} domain={{ domain }},plugin={{ pve_acme_plugin_name }}
   when: acme_domain_list.rc != 0
+  changed_when: true
   notify: Order ACME certificates

@@ -1,6 +1,7 @@
 - name: "Common set up on all servers"
   hosts: all
   become: true
+  become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
     - name: Create users

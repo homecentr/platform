@@ -1,7 +1,7 @@
 - name: Proxmox Virtual Environment Configuration
   hosts: pve_nodes
   become: true
-  become_method: sudo
+  become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
     # Must run before users to make sure the apt repositories are configured in order to install sudo
