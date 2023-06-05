@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint --strict",
-    "install": "ansible-galaxy install -r ./requirements.yml && ansible-playbook ./playbooks/local.yml",
+    "setup:local": "ansible-galaxy install -r ./requirements.yml && ansible-playbook ./playbooks/_local.yml",
     "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./tools ./tools/lab-create.ps1",
     "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./tools ./tools/lab-destroy.ps1",
     "lab:clear-keys": "./tools/clearkeys.sh",
