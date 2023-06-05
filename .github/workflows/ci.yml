@@ -40,9 +40,6 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > ${{ runner.temp }}/ssh.key
           chmod 0600 ${{ runner.temp }}/ssh.key
 
-      - name: Wait
-        run: sleep 3600
-
       - name: Run Ansible playbooks
         run: ANSIBLE_HOST_KEY_CHECKING=False yarn lab:apply _all -u github-runner --private-key ${{ runner.temp }}/ssh.key
         env:
