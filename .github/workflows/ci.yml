@@ -17,11 +17,27 @@ jobs:
           sudo pip install --force-reinstall ansible==7.6.0
           sudo pip install --force-reinstall ansible-lint==6.17.0
 
+      - name: Debug
+        run: |
+          ansible-playbook --version
+
       - name: Lint Ansible files
         run: yarn lint
 
       - name: Compare values across environments
         run: yarn validate-values
 
-  # TODO: Deploy lab from self-hosted
-  # TODO: Run E2E tests from self-hosted (remote + local)
+  deploy-lab:
+    runs-on: self-hosted
+    needs:
+      - validate
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+
+      - name: Run Ansible playbooks
+        run: yarn lab:apply
+
+  # Run in parallel
+  # TBA: e2e-lab-local:
+  # TBA: e2e-lab-remote:
