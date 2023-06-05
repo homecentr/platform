@@ -29,6 +29,8 @@ const differences = diffDirs(
 if (differences.length == 0) {
   console.log(`✔️ All files have matching structures`)
 } else {
+  process.exitCode = 1
+
   differences.forEach(difference => {
     console.log(`❌ ${difference.message}`)
   })
