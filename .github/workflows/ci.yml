@@ -41,9 +41,10 @@ jobs:
           chmod 0600 ${{ runner.temp }}/ssh.key
 
       - name: Run Ansible playbooks
-        run: ANSIBLE_HOST_KEY_CHECKING=False yarn lab:apply _all -u github-runner --private-key ${{ runner.temp }}/ssh.key
+        run: yarn lab:apply _all -e ansible_user=github-runner --private-key ${{ runner.temp }}/ssh.key
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_PRIVATE_KEY }}
+          ANSIBLE_HOST_KEY_CHECKING: "false"
 
   # Run in parallel
   # TBA: e2e-lab-local:
