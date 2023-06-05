@@ -3,6 +3,7 @@ exclude_paths:
   - .github/
   - node_modules/
   - "**/*.sops.yml"
+  - ".sops.yaml"
 
 use_default_rules: true
 
