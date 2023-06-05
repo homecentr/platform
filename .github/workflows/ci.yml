@@ -38,6 +38,7 @@ jobs:
       - name: Write ssh key
         run: 
           echo "${{ secrets.SSH_KEY }}" > ${{ runner.temp }}/ssh.key
+          chmod 0644 ${{ runner.temp }}/ssh.key
 
       - name: Wait
         run: sleep 3600
