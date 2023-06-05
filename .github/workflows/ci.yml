@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@master
 
       - name: Write ssh key
-        run: 
+        run: |
           echo "${{ secrets.SSH_KEY }}" > ${{ runner.temp }}/ssh.key
           chmod 0600 ${{ runner.temp }}/ssh.key
 
