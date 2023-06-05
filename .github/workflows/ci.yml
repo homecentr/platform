@@ -37,7 +37,7 @@ jobs:
 
       - name: Write ssh key
         run: 
-          echo ${{ secrets.SSH_KEY }} > ${{ runner.temp }}/ssh.key
+          echo "${{ secrets.SSH_KEY }}" > ${{ runner.temp }}/ssh.key
 
   #     - name: Run Ansible playbooks # TODO: SET SSH key from env
   #       run: yarn lab:apply -u github-runner --private-key TODO
