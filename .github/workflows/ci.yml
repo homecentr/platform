@@ -27,13 +27,13 @@ jobs:
         env:
           SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_PRIVATE_KEY }}
 
-  # deploy-lab:
-  #   runs-on: self-hosted
-  #   needs:
-  #     - validate
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@master
+  deploy-lab:
+    runs-on: self-hosted
+    needs:
+      - validate
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
 
   #     - name: Write ssh key
   #       run: |
