@@ -25,7 +25,7 @@ jobs:
   e2e-prod-local:
     uses: homecentr/e2e/.github/workflows/run-e2e.yml@master
     needs:
-      - deploy-lab
+      - deploy-prod
     with:
       environment: prod
       client: local
