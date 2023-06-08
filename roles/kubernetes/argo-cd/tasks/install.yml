@@ -29,7 +29,6 @@
     wait: true
     timeout: 5m0s
     skip_crds: true # CRDs installed separately outside of helm chart scope
-    force: true
     values:
       crds:
         install: false

@@ -6,6 +6,10 @@
   ansible.builtin.include_tasks:
     file: cis-hardening-runtime.yml
 
+- name: Set up sysctl options
+  ansible.builtin.include_tasks:
+    file: setup-sysctls.yml
+
 - name: Set up helm
   ansible.builtin.include_tasks:
     file: setup-helm.yml

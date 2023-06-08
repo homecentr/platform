@@ -9,7 +9,7 @@ case "$1" in
   INVENTORY="./environments/lab"
   ;;
  prod)
-  INVENTORY="./inventories/prod"
+  INVENTORY="./environments/prod"
   ;;
  *)
   # else
