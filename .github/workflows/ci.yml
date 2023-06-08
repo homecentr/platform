@@ -47,7 +47,7 @@ jobs:
           ANSIBLE_HOST_KEY_CHECKING: "false"
 
   e2e-lab-local:
-    uses: homecentr/e2e/.github/workflows/run-e2e.yml
+    uses: homecentr/e2e/.github/workflows/run-e2e.yml@master
     needs:
       - deploy-lab
     with:
@@ -57,7 +57,7 @@ jobs:
       sops_age_key: ${{ secrets.SOPS_AGE_PRIVATE_KEY }}
 
   e2e-lab-remote:
-    uses: homecentr/e2e/.github/workflows/run-e2e.yml
+    uses: homecentr/e2e/.github/workflows/run-e2e.yml@master
     needs:
       - deploy-lab
     with:
