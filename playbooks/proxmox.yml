@@ -1,0 +1,36 @@
+- name: Proxmox Virtual Environment Configuration
+  hosts: pve_nodes
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    # Must run before users to make sure the apt repositories are configured in order to install sudo
+    - name: Configure Proxmox VE specific components
+      ansible.builtin.import_role:
+        name: ../../roles/proxmox/pve-node
+      tags:
+        - pve-nodes
+        - init
+
+    # Root's password must be set so that it can be used to communicate with Proxmox API
+    - name: Create users
+      ansible.builtin.import_role:
+        name: homecentr.system.users
+      tags:
+        - users
+        - init
+
+    - name: Configure ACME
+      ansible.builtin.import_role:
+        name: ../../roles/proxmox/pve-acme
+      tags:
+        - acme
+
+    - name: Flush handlers before starting the VMs
+      ansible.builtin.meta: flush_handlers
+
+    - name: Create virtual machines
+      ansible.builtin.import_role:
+        name: ../../roles/proxmox/virtual-machines
+      tags:
+        - vm

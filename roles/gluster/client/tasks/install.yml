@@ -1,0 +1,10 @@
+- name: Install Gluster client
+  ansible.builtin.apt:
+    name: glusterfs-client # Implicitly depends on fuse
+    state: present
+    update_cache: true
+
+- name: "Load fuse kernel module if not present"
+  community.general.modprobe:
+    name: fuse
+    state: present

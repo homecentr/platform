@@ -1,0 +1,23 @@
+{
+  "name": "@homecentr/platform",
+  "version": "1.0.0",
+  "repository": "git@github.com:homecentr/platform.git",
+  "author": "Lukas Holota",
+  "license": "GPL",
+  "private": true,
+  "scripts": {
+    "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint --strict",
+    "setup:local": "ansible-galaxy install -r ./requirements.yml && ansible-playbook ./playbooks/_local.yml",
+    "lab:create": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./tools ./tools/lab-create.ps1",
+    "lab:destroy": "pwsh -ExecutionPolicy RemoteSigned -WorkingDirectory ./tools ./tools/lab-destroy.ps1",
+    "lab:clear-keys": "./tools/clearkeys.sh",
+    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
+    "lab:apply": "./tools/apply.sh lab",
+    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh prod proxmox -u root -e ansible_user=root --tags init -k",
+    "prod:apply": "./tools/apply.sh prod",
+    "validate-values": "node ./tools/validations.js"
+  },
+  "devDependencies": {
+    "@homecentr/yaml-diff": "^1.1.3"
+  }
+}

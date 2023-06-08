@@ -1,0 +1,30 @@
+- name: Set up Kubernetes cluster
+  hosts: k8s_nodes
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Verify playbook is running in allowed environment
+      ansible.builtin.assert:
+        that:
+          - "(inventory_dir | basename) == 'lab'"
+        fail_msg: "Running this playbook is only allowed in non-production environments"
+        quiet: true
+
+    - name: Collect service facts
+      ansible.builtin.service_facts:
+
+    - name: Stop k3s service
+      ansible.builtin.service:
+        name: k3s
+        state: stopped
+      # when: "'k3s' in ansible_facts.services"
+
+    - name: Remove directories
+      ansible.builtin.file:
+        path: "{{ item }}"
+        state: absent
+      with_items:
+        - /etc/rancher
+        - /var/lib/rancher
+        - /var/lib/kubelet

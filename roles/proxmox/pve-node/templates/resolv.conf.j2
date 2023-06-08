@@ -1,0 +1,4 @@
+search {{ pve_domain }}
+{% for nameserver in pve_nameservers %}
+nameserver {{ nameserver }}
+{% endfor %}

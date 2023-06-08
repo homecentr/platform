@@ -1,0 +1,43 @@
+- name: Configure postfix smtp relay
+  ansible.builtin.lineinfile:
+    path: /etc/postfix/main.cf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - regexp: "^relayhost\\s*="
+      line: "relayhost = {{ pve_smtp_host }}:{{ pve_smtp_port }}"
+    - regexp: "^smtp_use_tls\\s*="
+      line: "smtp_use_tls = {{ 'yes' if pve_smtp_tls else 'no' }}"
+    - regexp: "^smtp_sasl_auth_enable\\s*="
+      line: "smtp_sasl_auth_enable = {{ 'yes' if (pve_smtp_username is defined and pve_smtp_username | length) else 'no' }}"
+    - regexp: "^smtp_sasl_security_options\\s*="
+      line: "smtp_sasl_security_options = {{ 'nonanonymous' if (pve_smtp_username is defined and pve_smtp_username | length) else '' }}"
+    - regexp: "^smtp_sasl_password_maps\\s*="
+      line: "smtp_sasl_password_maps = /etc/postfix/sasl_passwd"
+    - regexp: "^smtp_tls_CAfile\\s*="
+      line: "smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt"
+  notify:
+    - Restart postfix
+
+- name: Configure postfix smtp authentication  # noqa no-tabs
+  ansible.builtin.copy:
+    dest: /etc/postfix/sasl_passwd.cf
+    force: true
+    owner: root
+    group: root
+    mode: 0600
+    content: |
+      # This file is managed by Ansible. All changes will be lost.
+
+      {{ pve_smtp_host }}:{{ pve_smtp_port }}	{{ pve_smtp_username }}:{{ pve_smtp_password }}
+  when: pve_smtp_username is defined and pve_smtp_username | length
+  notify:
+    - Restart postfix
+
+- name: Remove postfix smtp authentication when not used
+  ansible.builtin.file:
+    dest: /etc/postfix/sasl_passwd.cf
+    state: absent
+  when: pve_smtp_username is not defined or not pve_smtp_username | length
+  notify:
+    - Restart postfix

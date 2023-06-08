@@ -1,0 +1,5 @@
+- name: Install Argo CD
+  ansible.builtin.include_tasks: ./install.yml
+
+- name: Configure Argo CD
+  ansible.builtin.include_tasks: ./configure.yml

@@ -1,0 +1,46 @@
+- name: Configure apt repository
+  ansible.builtin.include_tasks:
+    file: ../../shared/apt.yml
+
+- name: Add host entries for glusterfs servers
+  ansible.builtin.include_tasks:
+    file: hosts.yml
+
+- name: Install Gluster
+  ansible.builtin.include_tasks:
+    file: install.yml
+
+- name: Configure TLS identity for the node
+  ansible.builtin.include_tasks:
+    file: ../../shared/tls.yml
+  register: gluster_tls
+  vars:
+    gluster_server_restart: true
+    gluster_node_hostname: "{{ gluster_hostname }}" # Servers must use their gluster specific identity
+    gluster_node_additional_names:
+      - "{{ gluster_fqdn }}"
+      - "{{ ansible_hostname }}"
+      - "{{ fqdn }}"
+
+- name: Turn Gluster nodes into a cluster
+  ansible.builtin.include_tasks:
+    file: cluster.yml
+
+- name: Install and configure Prometheus exporter
+  ansible.builtin.include_tasks:
+    file: exporter.yml
+
+- name: Create Gluster volumes
+  ansible.builtin.include_tasks:
+    file: create-volume.yml
+  vars:
+    gluster_volume_config: "{{ item }}"
+  loop: "{{ gluster_volumes }}"
+
+- name: Mount Gluster volumes
+  ansible.builtin.include_tasks:
+    file: ../../shared/volume-mount.yml
+  vars:
+    gluster_volume: "{{ gluster_volumes | selectattr('name', 'equalto', item) | first }}"
+  when: gluster_volume_mounts is defined
+  loop: "{{ gluster_volume_mounts }}"

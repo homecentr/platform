@@ -1,0 +1,82 @@
+gluster_volumes:
+  - name: k8s-services
+    mount_path: /mnt/gfs/k8s-services
+    storage_bricks:
+      # Replica set
+      - host: pve1
+        path: /user-data0/k8s-services/brick0
+      - host: pve2
+        path: /user-data0/k8s-services/brick0
+
+      # Replica set
+      - host: pve1
+        path: /user-data1/k8s-services/brick1
+      - host: pve2
+        path: /user-data1/k8s-services/brick1
+    arbiter_bricks:
+      - host: pve3
+        path: /usr/local/gfs/k8s-services/brick0
+      - host: pve3
+        path: /usr/local/gfs/k8s-services/brick1
+    replicas: 2
+    arbiters: 1
+    quota: 1.4TB
+    allowed_clients:
+      - kube1
+      - kube2
+      - kube3
+      - pve1
+      - pve2
+      - pve3
+
+  - name: k8s-monitoring
+    mount_path: /mnt/gfs/k8s-monitoring
+    storage_bricks:
+      # Replica set
+      - host: pve1
+        path: /user-data0/k8s-monitoring/brick0
+      - host: pve2
+        path: /user-data0/k8s-monitoring/brick0
+
+      # Replica set
+      - host: pve1
+        path: /user-data1/k8s-monitoring/brick1
+      - host: pve2
+        path: /user-data1/k8s-monitoring/brick1
+    arbiter_bricks:
+      - host: pve3
+        path: /usr/local/gfs/k8s-monitoring/brick0
+      - host: pve3
+        path: /usr/local/gfs/k8s-monitoring/brick1
+    replicas: 2
+    arbiters: 1
+    quota: 400GB
+    allowed_clients:
+      - kube1
+      - kube2
+      - kube3
+      - pve1
+      - pve2
+      - pve3
+
+  - name: k8s-nvr
+    mount_path: /mnt/gfs/k8s-nvr
+    storage_bricks:
+      # Replica set
+      - host: pve1
+        path: /nvr/brick0
+      - host: pve2
+        path: /nvr/brick0
+    arbiter_bricks:
+      - host: pve3
+        path: /usr/local/gfs/k8s-nvr/brick0
+    replicas: 2
+    arbiters: 1
+    quota: 2.8TB
+    allowed_clients:
+      - kube1
+      - kube2
+      - kube3
+      - pve1
+      - pve2
+      - pve3

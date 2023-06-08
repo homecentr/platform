@@ -1,0 +1,22 @@
+# This is required for VNC proxy between the nodes
+ssh_allow_root_login_trusted_clients:
+  - pve1
+  - pve2
+  - pve3
+
+pve_zfs_max_arc_size_gb: 0.5
+
+pve_domain: homecentr.one
+pve_nameservers:
+  - 1.1.1.1
+  - 1.0.0.1
+
+pve_smtp_host: 10.1.8.130
+pve_smtp_port: 25
+pve_smtp_tls: false
+
+pve_vm_cloud_images:
+  - filename: debian-11.5.0.qcow2
+    url: https://cloud.debian.org/cdimage/cloud/bullseye/20221020-1174/debian-11-generic-amd64-20221020-1174.qcow2
+    format: qcow2
+    checksum: sha512:334bd66215a8ebf98009fc5d1198aa3c99ec1a71d0cd55befb9e5413d016f8b43eeaf141af7f5ae82b6c32a02ad68a0418e1be623df6f62ccf782c31e29af429

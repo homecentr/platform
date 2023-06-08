@@ -1,0 +1,28 @@
+- name: Configure Ansible controller
+  hosts: localhost
+  connection: local
+  become: true
+  become_method: ansible.builtin.sudo
+  tasks:
+    - name: Install required python modules
+      ansible.builtin.include_role:
+        name: geerlingguy.pip
+      vars:
+        pip_package: python3-pip
+        pip_install_packages:
+          - netaddr
+          - stormssh
+          - ansible-lint
+
+    - name: Install required packages
+      ansible.builtin.package:
+        name: sshpass
+
+    - name: Add a host into the configuration
+      community.general.ssh_config:
+        user: "{{ ansible_user_id }}"
+        host: "{{ item }}"
+        hostname: "{{ hostvars[item].fqdn }}"
+        forward_agent: true # To enable YubiKey forwarding
+        state: present
+      with_items: "{{ groups['all'] }}"

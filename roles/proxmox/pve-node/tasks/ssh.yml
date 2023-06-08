@@ -1,0 +1,19 @@
+# - name: "Create known_hosts symlink"
+#   ansible.builtin.file:
+#     dest: /root/.ssh/known_hosts
+#     src: /etc/pve/priv/known_hosts
+#     owner: root
+#     group: root
+#     mode: 0640
+#     follow: false
+#     state: link
+
+# - name: "Create authorized_keys symlink"
+#   ansible.builtin.file:
+#     dest: /root/.ssh/authorized_keys
+#     src: /etc/pve/priv/authorized_keys
+#     owner: root
+#     group: root
+#     mode: 0640
+#     follow: false
+#     state: link

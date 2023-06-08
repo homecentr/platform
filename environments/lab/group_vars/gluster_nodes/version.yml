@@ -1,0 +1,4 @@
+gluster_major_version: 10
+gluster_minor_version: 2
+
+gluster_exporter_version: 0.4.2

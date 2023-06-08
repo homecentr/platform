@@ -1,0 +1,6 @@
+- name: Create root application
+  run_once: true
+  kubernetes.core.k8s:
+    kubeconfig: "{{ argocd_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'application.yml.j2') }}"
+    state: present

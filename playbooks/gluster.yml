@@ -1,0 +1,19 @@
+- name: Set up gluster cluster
+  hosts: gluster_servers
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Install and configure Gluster servers
+      ansible.builtin.import_role:
+        name: ../../roles/gluster/server
+
+- name: Set up gluster clients
+  hosts: gluster_clients
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Install and configure Gluster clients
+      ansible.builtin.import_role:
+        name: ../../roles/gluster/client

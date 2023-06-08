@@ -1,0 +1,31 @@
+- name: Add unstable repository
+  ansible.builtin.apt_repository:
+    repo: deb http://deb.debian.org/debian unstable main contrib non-free
+    state: present
+
+- name: Add unstable repository (src)
+  ansible.builtin.apt_repository:
+    repo: deb-src http://deb.debian.org/debian unstable main contrib non-free
+    state: present
+
+- name: Configure apt pinning
+  ansible.builtin.blockinfile:
+    path: /etc/apt/preferences
+    owner: root
+    group: root
+    mode: 0640
+    marker_begin: "# DEBIAN KERNEL START - Auto generated configuration"
+    marker_end: "# DEBIAN KERNEL END"
+    create: true
+    block: |
+      Package: *
+      Pin: release a=bullseye
+      Pin-Priority: 500
+
+      Package: linux-image-amd64
+      Pin: release a=unstable
+      Pin-Priority: 1000
+
+      Package: *
+      Pin: release a=unstable
+      Pin-Priority: 100

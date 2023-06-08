@@ -1,0 +1,21 @@
+- name: Download exporter binary
+  ansible.builtin.get_url:
+    url: "https://github.com/kadalu/gluster-metrics-exporter/releases/download/{{ gluster_exporter_version }}/gluster-metrics-exporter-amd64"
+    dest: /usr/sbin/gluster-metrics-exporter
+    owner: root
+    group: root
+    mode: '0550'
+
+- name: Download systemd service file
+  ansible.builtin.get_url:
+    url: "https://github.com/kadalu/gluster-metrics-exporter/releases/download/{{ gluster_exporter_version }}/gluster-metrics-exporter.service"
+    dest: /etc/systemd/system/gluster-metrics-exporter.service
+    owner: root
+    group: root
+    mode: '0440'
+
+- name: Start exporter
+  ansible.builtin.systemd:
+    name: gluster-metrics-exporter.service
+    state: started
+    daemon_reload: true

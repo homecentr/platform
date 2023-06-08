@@ -1,0 +1,15 @@
+- name: Restart k3s
+  register: k3s_restart
+  ansible.builtin.service:
+    name: k3s
+    state: restarted
+    enabled: true
+  until: k3s_restart.status.ActiveState == "active"
+  delay: 20
+  retries: 15
+  throttle: 1
+
+- name: Apply kubelet.conf
+  ansible.builtin.command:
+    cmd: sysctl -p /etc/sysctl.d/90-kubelet.conf
+  changed_when: true # Handler only called when the source file is changed

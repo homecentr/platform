@@ -1,0 +1,32 @@
+- name: Check if domains.cfg exists
+  register: domains_cfg
+  ansible.builtin.stat:
+    path: /etc/pve/domains.cfg
+
+- name: Create default domains.cfg if it does not exist
+  run_once: true # Cluster level command
+  when: not domains_cfg.stat.exists
+  changed_when: not domains_cfg.stat.exists
+  ansible.builtin.command:
+    cmd: pveum realm modify pam --default 0
+
+# Note: The empty line in the template below must remain, otherwise jinja puts the last two lines on one which creates an invalid file
+- name: Define PVE realm
+  run_once: true
+  no_log: true
+  ansible.builtin.blockinfile:
+    create: false
+    path: /etc/pve/domains.cfg
+    marker: "# {mark} ANSIBLE MANAGED BLOCK (OpenID {{ item.name }})"
+    block: |
+      openid: {{ item.name }}
+          comment {{ item.display_name }}
+          client-id {{ item.client_id }}
+          client-key {{ item.client_secret }}
+          issuer-url {{ item.url }}
+          autocreate {{ '1' if item.autocreate_users else '0' }}
+          default {{ '1' if pve_default_realm_name == item.name else '0' }}
+          {% if 'username_claim' in item %}username-claim {{ item.username_claim }}{% endif %}
+
+          {% if 'scopes' in item %}scopes {{ item.scopes }}{% endif %}
+  with_items: "{{ pve_openid_realms }}"

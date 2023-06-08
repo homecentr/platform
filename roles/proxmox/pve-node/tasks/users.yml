@@ -1,0 +1,23 @@
+- name: Create users
+  ansible.builtin.lineinfile:
+    path: /etc/pve/user.cfg
+    create: false
+    regex: "^user:{{ item.username }}@{{ item.realm }}:(.*)"
+      # hardcoded 0 is expiration time, ignored by design
+    line: "user:{{ item.username }}@{{ item.realm }}:{{ '1' if item.enabled else '0' }}:0:{{ item.first_name }}:{{ item.last_name }}:{{ item.email }}:::"
+  with_items: "{{ pve_users }}"
+  when: pve_users is defined
+
+- name: Assign roles to users
+  ansible.builtin.include_tasks:
+    file: user-permissions.yml
+  with_items: "{{ pve_users }}"
+  when: pve_users is defined
+  vars:
+    user: "{{ item }}"
+
+- name: Remove root@pam user
+  ansible.builtin.lineinfile:
+    path: /etc/pve/user.cfg
+    state: absent
+    regex: "^user:root@pam:(.*)"

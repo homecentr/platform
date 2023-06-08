@@ -1,0 +1,113 @@
+# Note: this role is not using the existing gluster.gluster modules because the module for managing volumes is poorly designed
+# (doesn't for example support replicated distributed volumes). Another reason is that this way ansible creates the volume(s)
+# if they don't exist but doesn't touch them if they already do. This isn't ideal but it's safer because it can never corrupt a volume containing data.
+
+- name: Check if volume exists
+  ansible.builtin.command:
+    cmd: "gluster volume info {{ gluster_volume_config.name }}"
+  failed_when: false
+  changed_when: false
+  register: volume_exists
+
+- name: Create storage bricks directories if they do not exist
+  ansible.builtin.file:
+    path: "{{ brick.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0770
+  with_items: "{{ gluster_volume_config.storage_bricks | selectattr('host', 'equalto', inventory_hostname) }}"
+  loop_control:
+    loop_var: brick
+  when: volume_exists.rc != 0
+
+- name: Create arbiter bricks directories if they do not exist
+  ansible.builtin.file:
+    path: "{{ brick.path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0770
+  with_items: "{{ gluster_volume_config.arbiter_bricks | selectattr('host', 'equalto', inventory_hostname) }}"
+  loop_control:
+    loop_var: brick
+  when: volume_exists.rc != 0 and ('arbiters' in gluster_volume_config) and gluster_volume_config.arbiters > 0
+
+- name: Create volume if does not exist
+  run_once: true
+  ansible.builtin.command:
+    cmd: "{{ lookup('template', 'create-volume-command.j2') }}"
+  changed_when: volume_exists.rc != 0
+  when: volume_exists.rc != 0
+
+- name: Enable server tls
+  run_once: true
+  ansible.builtin.command:
+    cmd: "gluster volume set {{ gluster_volume_config.name }} server.ssl on"
+  changed_when: true
+
+- name: Enable client tls
+  run_once: true
+  ansible.builtin.command:
+    cmd: "gluster volume set {{ gluster_volume_config.name }} client.ssl on"
+  changed_when: true
+
+- name: "Set allowed clients"
+  run_once: true
+  ansible.builtin.command:
+    cmd: "{{ lookup('template', 'set-volume-clients-command.j2') }}"
+  changed_when: true
+
+- name: Check volume status
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      gluster volume info {{ gluster_volume_config.name }} | grep 'Status:' | cut -d' ' -f2
+  args:
+    executable: /bin/bash
+  changed_when: false
+  register: volume_status
+
+- name: Start the volume
+  run_once: true
+  ansible.builtin.command:
+    cmd: "gluster volume start {{ gluster_volume_config.name }}"
+  changed_when: volume_status.stdout != "Started"
+  when: volume_status.stdout != "Started"
+
+- name: Check if quota is enabled
+  run_once: true
+  ansible.builtin.shell:
+    cmd: |
+      set -o pipefail
+      gluster volume info {{ gluster_volume_config.name }} | grep 'features.quota:' | cut -d' ' -f2
+  args:
+    executable: /bin/bash
+  register: volume_quota_enabled
+  changed_when: false
+
+- name: Enable quota
+  retries: 5
+  delay: 5
+  run_once: true
+  ansible.builtin.command:
+    cmd: "gluster volume quota {{ gluster_volume_config.name }} enable"
+  changed_when: "volume_quota_enabled.stdout != 'on'"
+  when: "volume_quota_enabled.stdout != 'on'"
+
+- name: Check if volume level quota is set
+  retries: 5
+  delay: 5
+  until: "'Another transaction is in progress' | string not in volume_quota_set.stdout"
+  register: volume_quota_set
+  throttle: 1
+  changed_when: false
+  ansible.builtin.command:
+    cmd: "gluster volume quota {{ gluster_volume_config.name }} list /"
+
+- name: Set volume level quota
+  run_once: true
+  ansible.builtin.command:
+    cmd: "gluster volume quota {{ gluster_volume_config.name }} limit-usage / {{ gluster_volume_config.quota }}"
+  changed_when: "'N/A' | string in volume_quota_set.stdout"
+  when: "'N/A' | string in volume_quota_set.stdout"

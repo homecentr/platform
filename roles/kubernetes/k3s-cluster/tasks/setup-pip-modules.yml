@@ -1,0 +1,6 @@
+- name: Install required pip modules
+  ansible.builtin.pip:
+    name:
+      - kubernetes
+      - kubernetes-validate
+    state: present

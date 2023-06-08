@@ -1,0 +1,3 @@
+pve_acme_plugin_name: cloudflare
+pve_acme_plugin_api: cf
+pve_acme_account_name: default

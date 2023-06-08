@@ -1,0 +1,20 @@
+- name: Install required pip modules
+  ansible.builtin.pip:
+    name: proxmoxer
+    state: present
+
+- name: Enable snippets in local storage
+  ansible.builtin.include_tasks:
+    file: snippets.yml
+
+- name: Download installation cloud images
+  ansible.builtin.include_tasks:
+    file: images.yml
+
+- name: Create virtual machines
+  ansible.builtin.include_tasks:
+    file: vm.yml
+  vars:
+    vm: "{{ item }}"
+  when: pve_vm_machines is defined
+  with_items: "{{ pve_vm_machines }}"

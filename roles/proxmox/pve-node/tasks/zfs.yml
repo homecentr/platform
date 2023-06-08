@@ -1,0 +1,12 @@
+- name: Update ZFS ARC max size
+  notify:
+    - Update initamfs image
+    - Reboot machine
+  ansible.builtin.lineinfile:
+    path: /etc/modprobe.d/zfs.conf
+    regexp: "^options zfs zfs_arc_max=(.*)$"
+    line: "options zfs zfs_arc_max={{ (pve_zfs_max_arc_size_gb * 1024 * 1024 * 1024) | int }}"
+    create: true
+    owner: root
+    group: root
+    mode: 0644
