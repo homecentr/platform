@@ -5,15 +5,39 @@ on:
       - master
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write # To add version tags
-      issues: write   # Semantic release to link issues
+  deploy-prod:
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@master
 
-      - name: Create GitHub release
-        uses: docker://ghcr.io/codfish/semantic-release-action:v1.9.0
+      - name: Write ssh key
+        run: |
+          echo "${{ secrets.SSH_KEY }}" > ${{ runner.temp }}/ssh.key
+          chmod 0600 ${{ runner.temp }}/ssh.key
+
+      - name: Run Ansible playbooks
+        run: yarn prod:apply _all -e ansible_user=github-runner --private-key ${{ runner.temp }}/ssh.key
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_PRIVATE_KEY }}
+          ANSIBLE_HOST_KEY_CHECKING: "false"
+
+  e2e-prod-local:
+    uses: homecentr/e2e/.github/workflows/run-e2e.yml@master
+    needs:
+      - deploy-lab
+    with:
+      environment: prod
+      client: local
+    secrets:
+      sops_age_key: ${{ secrets.SOPS_AGE_PRIVATE_KEY }}
+
+  e2e-prod-remote:
+    uses: homecentr/e2e/.github/workflows/run-e2e.yml@master
+    needs:
+      - deploy-prod
+    with:
+      environment: prod
+      client: remote
+    secrets:
+      sops_age_key: ${{ secrets.SOPS_AGE_PRIVATE_KEY }}
