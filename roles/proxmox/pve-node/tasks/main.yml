@@ -40,6 +40,10 @@
   ansible.builtin.include_tasks:
     file: zfs.yml
 
+- name: Configure USB HID
+  ansible.builtin.include_tasks:
+    file: usbhid.yml
+
 - name: Configure SSH
   ansible.builtin.include_tasks:
     file: ssh.yml
