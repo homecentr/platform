@@ -1,0 +1,12 @@
+- name: Update USB HID quirks
+  notify:
+    - Update initamfs image
+    - Reboot machine
+  ansible.builtin.lineinfile:
+    path: /etc/modprobe.d/zfs.conf
+    regexp: "^options usbhid quirks=(.*)$"
+    line: "options usbhid quirks=0x0463:0xffff:0x08"
+    create: true
+    owner: root
+    group: root
+    mode: 0644
