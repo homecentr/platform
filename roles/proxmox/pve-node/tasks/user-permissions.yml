@@ -1,4 +1,5 @@
 - name: Assign scoped roles to users
+  no_log: true
   ansible.builtin.lineinfile:
     path: /etc/pve/user.cfg
     create: false

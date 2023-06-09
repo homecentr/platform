@@ -17,6 +17,7 @@
         - default
       {% for user in users_admin_users %}
         - name: {{ user.username }}
+          sudo: ALL=(ALL) NOPASSWD:ALL
           ssh_authorized_keys:
       {% for key in user.public_keys %}
           - {{ key }}
