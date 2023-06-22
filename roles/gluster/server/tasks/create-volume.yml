@@ -9,7 +9,7 @@
     that:
       - gluster_validation_item.0.storage_bricks | count == gluster_validation_item.1
     msg: |-
-      Storage bricks for volume {{ gluster_volume_config.name }} do not match. 
+      Storage bricks for volume {{ gluster_volume_config.name }} do not match.
       Found {{ gluster_validation_item.0.storage_bricks | count }} bricks, expected {{ gluster_validation_item.1 }}
   loop: "{{ gluster_volume_config.replica_sets | product([gluster_volume_config.replicas]) }}"
   loop_control:
