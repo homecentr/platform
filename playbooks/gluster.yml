@@ -3,6 +3,8 @@
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
+  tags:
+    - server
   tasks:
     - name: Install and configure Gluster servers
       ansible.builtin.import_role:
@@ -13,6 +15,8 @@
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
+  tags:
+    - client
   tasks:
     - name: Install and configure Gluster clients
       ansible.builtin.import_role:
