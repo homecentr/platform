@@ -52,7 +52,7 @@ gluster_volumes:
         arbiter_bricks:
           - host: pve3
             path: /usr/local/gfs/k8s-monitoring/brick1
-    
+
     replicas: 2
     arbiters: 1
     quota: 10.0GB
