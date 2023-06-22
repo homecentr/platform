@@ -3,7 +3,7 @@
     - Update initamfs image
     - Reboot machine
   ansible.builtin.lineinfile:
-    path: /etc/modprobe.d/zfs.conf
+    path: /etc/modprobe.d/usbhid.conf
     regexp: "^options usbhid quirks=(.*)$"
     line: "options usbhid quirks=0x0463:0xffff:0x08"
     create: true
