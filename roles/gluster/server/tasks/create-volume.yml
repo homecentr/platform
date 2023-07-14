@@ -1,6 +1,32 @@
 # Note: this role is not using the existing gluster.gluster modules because the module for managing volumes is poorly designed
-# (doesn't for example support replicated distributed volumes). Another reason is that this way ansible creates the volume(s)
+# (doesn't for example support allow specifying individual brick paths). Another reason is that this way ansible creates the volume(s)
 # if they don't exist but doesn't touch them if they already do. This isn't ideal but it's safer because it can never corrupt a volume containing data.
+
+- name: Validate storage bricks count
+  run_once: true
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - gluster_validation_item.0.storage_bricks | count == gluster_validation_item.1
+    msg: |-
+      Storage bricks for volume {{ gluster_volume_config.name }} do not match.
+      Found {{ gluster_validation_item.0.storage_bricks | count }} bricks, expected {{ gluster_validation_item.1 }}
+  loop: "{{ gluster_volume_config.replica_sets | product([gluster_volume_config.replicas]) }}"
+  loop_control:
+    loop_var: gluster_validation_item
+
+- name: Validate arbiter bricks count
+  run_once: true
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - gluster_validation_item.0.arbiter_bricks | count == gluster_validation_item.1
+    msg: |-
+      Arbiter bricks for volume {{ gluster_volume_config.name }} do not match.
+      Found {{ gluster_validation_item.0.arbiter_bricks | count }} bricks, expected {{ gluster_validation_item.1 }}
+  loop: "{{ gluster_volume_config.replica_sets | product([gluster_volume_config.arbiters]) }}"
+  loop_control:
+    loop_var: gluster_validation_item
 
 - name: Check if volume exists
   ansible.builtin.command:
@@ -16,7 +42,7 @@
     owner: root
     group: root
     mode: 0770
-  with_items: "{{ gluster_volume_config.storage_bricks | selectattr('host', 'equalto', inventory_hostname) }}"
+  loop: "{{ gluster_volume_config.replica_sets | map(attribute='storage_bricks') | flatten | selectattr('host', 'equalto', inventory_hostname) }}"
   loop_control:
     loop_var: brick
   when: volume_exists.rc != 0
@@ -28,10 +54,10 @@
     owner: root
     group: root
     mode: 0770
-  with_items: "{{ gluster_volume_config.arbiter_bricks | selectattr('host', 'equalto', inventory_hostname) }}"
+  loop: "{{ gluster_volume_config.replica_sets | map(attribute='arbiter_bricks') | flatten | selectattr('host', 'equalto', inventory_hostname) }}"
   loop_control:
     loop_var: brick
-  when: volume_exists.rc != 0 and ('arbiters' in gluster_volume_config) and gluster_volume_config.arbiters > 0
+  when: volume_exists.rc != 0
 
 - name: Create volume if does not exist
   run_once: true
@@ -78,9 +104,8 @@
 - name: Check if quota is enabled
   run_once: true
   ansible.builtin.shell:
-    cmd: |
-      set -o pipefail
-      gluster volume info {{ gluster_volume_config.name }} | grep 'features.quota:' | cut -d' ' -f2
+    # pipefail is ignored by design - it's a valid case
+    cmd: gluster volume info {{ gluster_volume_config.name }} | grep 'features.quota:' | cut -d' ' -f2
   args:
     executable: /bin/bash
   register: volume_quota_enabled
