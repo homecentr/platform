@@ -18,8 +18,6 @@ gluster_volumes:
             path: /user-data1/k8s-services/brick1
         arbiter_bricks:
           - host: pve3
-            path: /usr/local/gfs/k8s-services/brick0
-          - host: pve3
             path: /usr/local/gfs/k8s-services/brick1
     replicas: 2
     arbiters: 1
