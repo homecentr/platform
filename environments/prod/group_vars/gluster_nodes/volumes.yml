@@ -22,6 +22,7 @@ gluster_volumes:
     replicas: 2
     arbiters: 1
     quota: 1.4TB
+    force: true # Required because node 3 which has only one disk
     allowed_clients:
       - kube1
       - kube2
@@ -53,6 +54,7 @@ gluster_volumes:
     replicas: 2
     arbiters: 1
     quota: 400GB
+    force: true # Required because node 3 which has only one disk
     allowed_clients:
       - kube1
       - kube2
@@ -75,6 +77,7 @@ gluster_volumes:
     replicas: 2
     arbiters: 1
     quota: 2.8TB
+    force: true # Required because node 3 which has only one disk
     allowed_clients:
       - kube1
       - kube2
