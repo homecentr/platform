@@ -63,7 +63,7 @@
     bootdisk: scsi1
     tablet: false
     cpu: "{{ vm.cpu_type | default('kvm64') }}"
-    vcpus: "{{ vm.cpu_count * cpu_cores_per_cpu }}"
+    vcpus: "{{ vm.cpu_count * vm.cpu_cores_per_cpu }}"
     sockets: "{{ vm.cpu_count }}"
     cores: "{{ vm.cpu_cores_per_cpu }}"
     memory: "{{ vm.max_memory }}"
