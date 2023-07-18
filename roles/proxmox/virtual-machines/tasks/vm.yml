@@ -62,8 +62,9 @@
     scsihw: virtio-scsi-pci
     bootdisk: scsi1
     tablet: false
-    cpu: "kvm64"
-    vcpus: "{{ vm.cpu_count }}"
+    cpu: "{{ vm.cpu_type | default('kvm64') }}"
+    vcpus: "{{ vm.cpu_count * cpu_cores_per_cpu }}"
+    sockets: "{{ vm.cpu_count }}"
     cores: "{{ vm.cpu_cores_per_cpu }}"
     memory: "{{ vm.max_memory }}"
     balloon: "{{ vm.min_memory }}"

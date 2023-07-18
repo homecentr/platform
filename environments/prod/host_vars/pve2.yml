@@ -23,8 +23,9 @@ pve_vm_machines:
     nic_bridge: vmbr0
     os_storage: local-zfs
     os_disk_size_gb: 128
+    cpu_type: "cputype=host,flags=+aes"
     cpu_count: 2
-    cpu_cores_per_cpu: 12
+    cpu_cores_per_cpu: 13
     min_memory: 16384
     max_memory: 98304
     nic_ipv4_address: 10.1.2.22
