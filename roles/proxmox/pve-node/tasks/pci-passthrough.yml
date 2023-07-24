@@ -10,7 +10,7 @@
   loop:
     - "intel-iommu=on"
     - "iommu=pt"
-  when: pve_pci_passhthrough_enabled is defined and pve_pci_passhthrough_enabled == true
+  when: pve_pci_passhthrough_enabled is defined and pve_pci_passhthrough_enabled
 
 - name: Load required kernel modules
   notify:
@@ -24,4 +24,4 @@
     - vfio_iommu_type1
     - vfio_pci
     - vfio_virqfd
-  when: pve_pci_passhthrough_enabled is defined and pve_pci_passhthrough_enabled == true
+  when: pve_pci_passhthrough_enabled is defined and pve_pci_passhthrough_enabled
