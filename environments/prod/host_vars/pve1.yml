@@ -13,6 +13,8 @@ gluster_fqdn: gfs-pve1.homecentr.one
 gluster_mount_host: pve1
 
 # PVE
+pve_pci_passhthrough_enabled: true
+
 pve_vm_machines:
   - vmid: 101
     name: kube1
