@@ -60,5 +60,9 @@
   ansible.builtin.include_tasks:
     file: cluster.yml
 
+- name: Enable PCI passthrough
+  ansible.builtin.include_tasks:
+    file: pci-passthrough.yml
+
 - name: Flush handlers
   ansible.builtin.meta: flush_handlers # restart networking immediately if needed

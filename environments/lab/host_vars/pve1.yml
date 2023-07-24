@@ -13,6 +13,8 @@ gluster_fqdn: gfs-pve1-lab.homecentr.one
 gluster_mount_host: pve1
 
 # PVE
+pve_pci_passhthrough_enabled: false
+
 pve_network_interfaces:
   eth1:
     method: static
