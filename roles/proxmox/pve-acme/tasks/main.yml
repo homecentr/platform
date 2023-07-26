@@ -1,7 +1,7 @@
 # Inspired by https://github.com/simoncaron/ansible-role-pve_acme/blob/master/tasks/pve-acme.yml
 - name: Install required python modules
   ansible.builtin.apt:
-    name: 
+    name:
       - python3-pexpect
 
 - name: Check if default ACME account is registered
