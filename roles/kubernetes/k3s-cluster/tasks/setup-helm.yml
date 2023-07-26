@@ -12,7 +12,7 @@
     state: present
     update_cache: true
     force_apt_get: true
-    default_release: bullseye
+    default_release: bookworm
 
 - name: Install Helm diff plugin
   kubernetes.core.helm_plugin:
