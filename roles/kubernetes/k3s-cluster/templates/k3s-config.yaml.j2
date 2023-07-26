@@ -55,6 +55,5 @@ kubelet-arg:
 kube-controller-manager-arg: 
     - 'terminated-pod-gc-threshold=10'
     - 'use-service-account-credentials=true'
-    - 'pod-eviction-timeout={{ k3s_cluster_pod_eviction_timeout }}'
     - 'node-monitor-period=5s'
     - 'node-monitor-grace-period={{ k3s_cluster_node_unhealthy_grace_period | default(20) }}s'
