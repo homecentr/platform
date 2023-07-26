@@ -17,12 +17,9 @@
     file: apt-repositories.yml
 
 - name: Install required python modules
-  ansible.builtin.include_role:
-    name: geerlingguy.pip
-  vars:
-    pip_package: python3-pip
-    pip_install_packages:
-      - passlib # Required for users' password hash computation
+  ansible.builtin.apt:
+    name: 
+      - python3-passlib # Required for users' password hash computation
 
 - name: Upgrade
   ansible.builtin.include_tasks:
