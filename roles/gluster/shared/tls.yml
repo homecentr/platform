@@ -1,4 +1,4 @@
-- name: Install required python modules
+- name: Install python modules
   ansible.builtin.apt:
     name: 
       - python3-passlib
