@@ -67,7 +67,7 @@
     group: root
     mode: 0644
 
-- name: Restart server daemon  # noqa no-handler include_tasks cannot notify a handler
+- name: Restart server daemon # noqa no-handler include_tasks cannot notify a handler
   register: gluster_restart
   until: gluster_restart.status.ActiveState == "active"
   delay: 20
