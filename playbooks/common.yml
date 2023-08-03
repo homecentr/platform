@@ -43,7 +43,7 @@
 
     - name: Install ClamAV antivirus
       ansible.builtin.import_role:
-        name: ../../roles/common/clamav
+        name: homecentr.system.clamav
       tags:
         - clamav
 

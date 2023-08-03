@@ -2,8 +2,8 @@ $ErrorActionPreference = "Stop"
 
 $ExternalSwitchName = "Homecentr-Lab-External"
 $StorageSwitchName = "Homecentr-Lab-Storage"
-$ProxmoxIsoLink = "https://www.proxmox.com/en/downloads?task=callelement&format=raw&item_id=654&element=f85c494b-2b32-4109-b8c1-083cca2b7db6&method=download&args[0]=0cead966a536924afe4fbc82903dd27e"
-$ProxmoxIsoPath = [System.IO.Path]::Join([System.Environment]::CurrentDirectory, "./.images/Proxmox-7-2.iso")
+$ProxmoxIsoLink = "https://enterprise.proxmox.com/iso/proxmox-ve_8.0-2.iso"
+$ProxmoxIsoPath = [System.IO.Path]::Join([System.Environment]::CurrentDirectory, "./.images/Proxmox-8-0.iso")
 
 Function Create-ExternalSwitch()
 {

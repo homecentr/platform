@@ -16,7 +16,7 @@ pve_smtp_port: 25
 pve_smtp_tls: false
 
 pve_vm_cloud_images:
-  - filename: debian-11.5.0.qcow2
-    url: https://cloud.debian.org/cdimage/cloud/bullseye/20221020-1174/debian-11-generic-amd64-20221020-1174.qcow2
+  - filename: debian-12.1.0.qcow2
+    url: https://cloud.debian.org/images/cloud/bookworm/20230723-1450/debian-12-generic-amd64-20230723-1450.qcow2
     format: qcow2
-    checksum: sha512:334bd66215a8ebf98009fc5d1198aa3c99ec1a71d0cd55befb9e5413d016f8b43eeaf141af7f5ae82b6c32a02ad68a0418e1be623df6f62ccf782c31e29af429
+    checksum: sha512:398589d1baa0c1a79358d2c6f14ba9212c25419df2693c513645cb493e15e19952f873703f27d87c491272a478f51a957fb26b21f485dca5933db6be37207d59

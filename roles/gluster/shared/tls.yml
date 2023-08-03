@@ -1,11 +1,8 @@
-- name: Install required python modules
-  ansible.builtin.include_role:
-    name: geerlingguy.pip
-  vars:
-    pip_package: python3-pip
-    pip_install_packages:
-      - passlib
-      - cryptography
+- name: Install python modules
+  ansible.builtin.apt:
+    name:
+      - python3-passlib
+      - python3-cryptography
 
 - name: Get certificates default directory
   ansible.builtin.shell:
@@ -70,7 +67,7 @@
     group: root
     mode: 0644
 
-- name: Restart server daemon  # noqa no-handler include_tasks cannot notify a handler
+- name: Restart server daemon # noqa no-handler include_tasks cannot notify a handler
   register: gluster_restart
   until: gluster_restart.status.ActiveState == "active"
   delay: 20
