@@ -17,7 +17,7 @@ collections:
     version: 1.6.0
   - name: https://github.com/homecentr/ansible-collection-system
     type: git
-    version: origin/master
+    version: master
 
 roles:
   - name: geerlingguy.pip
