@@ -1,0 +1,11 @@
+- name: "nVidia drivers installation"
+  hosts: nvidia_gpu_nodes
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Install drivers
+      ansible.builtin.import_role:
+        name: homecentr.system.nvidia_drivers
+      tags:
+        - drivers
