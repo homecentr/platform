@@ -123,7 +123,8 @@
 - name: Check if volume level quota is set
   retries: 5
   delay: 5
-  until: "('Another transaction is in progress' | string not in volume_quota_set.stdout) and ('Failed to start aux mount' | string not in volume_quota_set.stdout)"
+  until: |
+    "('Another transaction is in progress' | string not in volume_quota_set.stdout) and ('Failed to start aux mount' | string not in volume_quota_set.stdout)"
   register: volume_quota_set
   throttle: 1
   changed_when: false
