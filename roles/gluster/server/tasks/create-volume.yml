@@ -132,6 +132,10 @@
     cmd: "gluster volume quota {{ gluster_volume_config.name }} list /"
 
 - name: Set volume level quota
+  retries: 5
+  delay: 5
+  register: volume_quota_limit_set
+  until: "'Failed to start aux mount' | string not in volume_quota_limit_set.stdout"
   run_once: true
   ansible.builtin.command:
     cmd: "gluster volume quota {{ gluster_volume_config.name }} limit-usage / {{ gluster_volume_config.quota }}"
