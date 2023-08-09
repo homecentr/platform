@@ -78,11 +78,21 @@
     cmd: "gluster volume set {{ gluster_volume_config.name }} client.ssl on"
   changed_when: true
 
-- name: "Set allowed clients"
+- name: Set allowed clients
   run_once: true
   ansible.builtin.command:
     cmd: "{{ lookup('template', 'set-volume-clients-command.j2') }}"
   changed_when: true
+
+- name: Apply option groups
+  run_once: true
+  changed_when: true
+  ansible.builtin.command:
+    cmd: "gluster volume set {{ gluster_volume_config.name }} group {{ group_name }}"
+  loop: "{{ gluster_volume_config.option_groups }}"
+  loop_control:
+    loop_var: group_name
+  when: "'option_groups' in gluster_volume_config"
 
 - name: Check volume status
   ansible.builtin.shell:
@@ -124,7 +134,7 @@
   retries: 5
   delay: 5
   until: |
-    "('Another transaction is in progress' | string not in volume_quota_set.stdout) and ('Failed to start aux mount' | string not in volume_quota_set.stdout)"
+    "('Another transaction is in progress' | string not in volume_quota_set.stdout) and ('Failed to start aux mount' | string not in volume_quota_set.stderr)"
   register: volume_quota_set
   throttle: 1
   changed_when: false
