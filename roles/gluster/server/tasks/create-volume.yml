@@ -137,7 +137,7 @@
   throttle: 1
   changed_when: false
   ansible.builtin.command:
-    cmd: "gluster volume quota {{ gluster_volume_config.name }} list /" 
+    cmd: "gluster volume quota {{ gluster_volume_config.name }} list /"
 
 - name: Set volume level quota
   retries: 5
