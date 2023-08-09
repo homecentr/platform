@@ -31,6 +31,40 @@ gluster_volumes:
       - pve2
       - pve3
 
+  - name: k8s-services-db
+    mount_path: /mnt/gfs/k8s-services-db
+    replica_sets:
+      - storage_bricks:
+          - host: pve1
+            path: /user-data0/k8s-services-db/brick0
+          - host: pve2
+            path: /user-data0/k8s-services-db/brick0
+        arbiter_bricks:
+          - host: pve3
+            path: /usr/local/gfs/k8s-services-db/brick0
+
+      - storage_bricks:
+          - host: pve1
+            path: /user-data1/k8s-services-db/brick1
+          - host: pve2
+            path: /user-data1/k8s-services-db/brick1
+        arbiter_bricks:
+          - host: pve3
+            path: /usr/local/gfs/k8s-services-db/brick1
+    replicas: 2
+    arbiters: 1
+    quota: 0.3TB
+    force: true # Required because node 3 which has only one disk
+    allowed_clients:
+      - kube1
+      - kube2
+      - kube3
+      - pve1
+      - pve2
+      - pve3
+    option_groups:
+      - db-workload
+
   - name: k8s-monitoring
     mount_path: /mnt/gfs/k8s-monitoring
     replica_sets:
