@@ -133,8 +133,6 @@
   retries: 5
   delay: 10
   until: volume_quota_set.rc == 0
-  #|
-  #  "('Another transaction is in progress' | string not in volume_quota_set.stdout) and ('Failed to start aux mount' | string not in volume_quota_set.stderr)"
   register: volume_quota_set
   throttle: 1
   changed_when: false
