@@ -112,7 +112,6 @@
   when: volume_status.stdout != "Started"
 
 - name: Check if quota is enabled
-  run_once: true
   ansible.builtin.shell:
     # pipefail is ignored by design - it's a valid case
     cmd: gluster volume info {{ gluster_volume_config.name }} | grep 'features.quota:' | cut -d' ' -f2
@@ -132,9 +131,8 @@
 
 - name: Check if volume level quota is set
   retries: 5
-  delay: 5
-  until: |
-    "('Another transaction is in progress' | string not in volume_quota_set.stdout) and ('Failed to start aux mount' | string not in volume_quota_set.stderr)"
+  delay: 10
+  until: volume_quota_set.rc == 0
   register: volume_quota_set
   throttle: 1
   changed_when: false
