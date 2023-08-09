@@ -121,7 +121,10 @@ spec:
       automountServiceAccountToken: true
       tolerations:
         - key: "CriticalAddonsOnly"
-          operator: "Exists"
+          operator: "Exists"        
+        - key: homecentr.one/critical-only
+          operator: Exists
+          effect: NoSchedule
       nodeSelector:
         kubernetes.io/os: linux
       affinity:
