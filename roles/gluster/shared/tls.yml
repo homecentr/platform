@@ -69,7 +69,7 @@
 
 - name: Restart server daemon # noqa no-handler include_tasks cannot notify a handler
   register: gluster_restart
-  until: gluster_restart.status.ActiveState == "active"
+  until: "status' in gluster_restart and gluster_restart.status.ActiveState == 'active'"
   delay: 20
   retries: 15
   throttle: 1
