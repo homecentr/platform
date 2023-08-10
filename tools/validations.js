@@ -16,6 +16,13 @@ const options = {
         "pve_network_interfaces"
       ]
     }
+
+    if(fileName.match(/kube\d\.y(a)?ml/)) {
+      return [
+        // Drivers depend on hardware configuration which differs across environments
+        "nvidia_drivers_driver_package_name"
+      ]
+    }
     
     return []
   }
