@@ -17,7 +17,10 @@ collections:
     version: 1.6.0
   - name: https://github.com/homecentr/ansible-collection-system
     type: git
-    version: master
+    version: feat/zfs-usbhid
+  - name: https://github.com/homecentr/ansible-collection-proxmox
+    type: git
+    version: feat/v1
 
 roles:
   - name: geerlingguy.pip

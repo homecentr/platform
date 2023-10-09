@@ -6,12 +6,12 @@
   tasks:
     - name: Install and configure k3s
       ansible.builtin.import_role:
-        name: ../../roles/kubernetes/k3s-cluster
+        name: ../../roles/k3s_cluster
       tags:
         - k3s
 
     - name: Install and configure Argo CD
       ansible.builtin.import_role:
-        name: ../../roles/kubernetes/argo-cd
+        name: ../../roles/argocd
       tags:
         - argocd

@@ -1,2 +1,2 @@
-roles/gluster/server/tasks/create-volume.yml risky-shell-pipe
+roles/gluster_server/tasks/create-volume.yml risky-shell-pipe
 playbooks/nvidia.yml name[casing]
