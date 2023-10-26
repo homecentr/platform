@@ -56,7 +56,7 @@
     net:
       net0: "virtio,bridge={{ pve_virtual_machines_current_vm.nic_bridge }}"
     ipconfig:
-      ipconfig0: "ip={{ (pve_virtual_machines_current_vm.nic_ipv4_address + '/' + pve_virtual_machines_current_vm.nic_ipv4_subnet) | ansible.utils.ipaddr('host/prefix') }},gw={{ pve_virtual_machines_current_vm.nic_ipv4_gateway }}"
+      ipconfig0: "ip={{ (pve_virtual_machines_current_vm.nic_ipv4_address + '/' + pve_virtual_machines_current_vm.nic_ipv4_subnet) | ansible.utils.ipaddr('host/prefix') }},gw={{ pve_virtual_machines_current_vm.nic_ipv4_gateway }}"  # noqa yaml[line-length]
     nameservers: "{{ pve_virtual_machines_current_vm.nameservers }}"
     efidisk0: "{{ ({'storage': pve_virtual_machines_current_vm.os_storage, 'format': 'raw', 'efitype': '4m', 'pre_enrolled_keys': false}) if (pve_virtual_machines_current_vm.bios | default('bios')) == 'efi' else none }}" # noqa yaml[line-length]
     scsihw: virtio-scsi-pci

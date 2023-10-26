@@ -6,8 +6,8 @@
     update_cache: true
 
 - name: Start the Gluster daemon
-  register: gluster_start
-  until: gluster_start.status.ActiveState == "active"
+  register: gluster_server_daemon_start
+  until: gluster_server_daemon_start.status.ActiveState == "active"
   delay: 20
   retries: 15
   throttle: 1
