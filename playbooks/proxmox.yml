@@ -16,7 +16,7 @@
         name: homecentr.system.users
       tags: [ init, users ]
 
-    - name: Configure proxmox user permissions
+    - name: Configure proxmox user and their permissions
       ansible.builtin.import_role:
         name: homecentr.proxmox.pve_users
       tags: [ init, users ]

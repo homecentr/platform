@@ -93,7 +93,7 @@
     api_host: 127.0.0.1
     vmid: "{{ vm.vmid }}"
     disk: scsi1
-    size: "{{ vm.os_disk_size_gb }}"
+    size: "{{ vm.os_disk_size }}"
     state: resized
 
 - name: Start VM

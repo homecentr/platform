@@ -1,0 +1,36 @@
+- name: Check if quota is enabled
+  ansible.builtin.shell:
+    # pipefail is ignored by design - it's a valid case
+    cmd: gluster volume info {{ gluster_volume_config.name }} | grep 'features.quota:' | cut -d' ' -f2
+  args:
+    executable: /bin/bash
+  register: volume_quota_enabled
+  changed_when: false
+
+- name: Enable quota
+  retries: 10
+  delay: 5
+  ansible.builtin.command:
+    cmd: "gluster volume quota {{ gluster_volume_config.name }} enable"
+  changed_when: "volume_quota_enabled.stdout != 'on'"
+  when: "volume_quota_enabled.stdout != 'on'"
+
+- name: Check if volume level quota is set
+  retries: 15
+  delay: 15
+  until: volume_quota_set.rc == 0
+  register: volume_quota_set
+  throttle: 1
+  changed_when: false
+  ansible.builtin.command:
+    cmd: "gluster volume quota {{ gluster_volume_config.name }} list /"
+
+- name: Set volume level quota
+  retries: 5
+  delay: 5
+  register: volume_quota_limit_set
+  until: "'Failed to start aux mount' | string not in volume_quota_limit_set.stdout"
+  ansible.builtin.command:
+    cmd: "gluster volume quota {{ gluster_volume_config.name }} limit-usage / {{ gluster_volume_config.quota }}"
+  changed_when: "'N/A' | string in volume_quota_set.stdout"
+  when: "'N/A' | string in volume_quota_set.stdout"

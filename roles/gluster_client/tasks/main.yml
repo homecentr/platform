@@ -1,6 +1,6 @@
 - name: Configure apt repository
   ansible.builtin.include_tasks:
-    file: ../../shared/apt.yml
+    file: ../../gluster_shared/apt.yml
 
 - name: Add host entries for glusterfs servers
   ansible.builtin.include_tasks:
@@ -12,7 +12,7 @@
 
 - name: Configure TLS identity for the node
   ansible.builtin.include_tasks:
-    file: ../../shared/tls.yml
+    file: ../../gluster_shared/tls.yml
   register: gluster_tls
   vars:
     gluster_node_hostname: "{{ ansible_hostname }}"
@@ -21,7 +21,7 @@
 
 - name: Mount GlusterFS volumes
   ansible.builtin.include_tasks:
-    file: ../../shared/volume-mount.yml
+    file: ../../gluster_shared/volume-mount.yml
   vars:
     gluster_volume: "{{ gluster_volumes | selectattr('name', 'equalto', item) | first }}"
   when: gluster_volume_mounts is defined
