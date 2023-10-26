@@ -3,8 +3,6 @@ ansible_host: 10.1.2.13
 ansible_hostname: pve3
 fqdn: pve3.homecentr.one
 
-network_interfaces: []
-
 # UPS
 ups_name: ups1
 

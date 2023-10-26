@@ -13,7 +13,7 @@ const options = {
     if(fileName.match(/pve\d\.y(a)?ml/)) {
       return [
         // Managed manually in prod due to bonded NICs
-        "pve_network_interfaces"
+        "network_interfaces"
       ]
     }
 

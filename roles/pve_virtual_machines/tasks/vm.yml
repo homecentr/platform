@@ -1,13 +1,13 @@
 - name: Create cloud-init config
   ansible.builtin.copy:
-    dest: "{{ pve_local_storage.proxmox_storages[0].path }}/snippets/{{ pve_virtual_machines_current_vm.vmid }}.yml"
+    dest: "{{ pve_local_storage.proxmox_storages[0].path }}/snippets/{{ vm.vmid }}.yml"
     owner: root
     group: root
     mode: 0640
     force: true
     content: |
       #cloud-config
-      hostname: {{ pve_virtual_machines_current_vm.name }}
+      hostname: {{ vm.name }}
       manage_etc_hosts: false
       user: "{{ (users_admin_users | first).username }}"
       password: Heslo123
@@ -27,26 +27,26 @@
 
 - name: Create virtual machine
   community.general.proxmox_kvm:
-    vmid: "{{ pve_virtual_machines_current_vm.vmid }}"
+    vmid: "{{ vm.vmid }}"
     proxmox_default_behavior: no_defaults
     node: "{{ ansible_hostname }}"
     kvm: true
     api_user: root@pam
     api_password: "{{ users_root_password }}"
     api_host: 127.0.0.1
-    name: "{{ pve_virtual_machines_current_vm.name }}"
-    protection: "{{ pve_virtual_machines_current_vm.protection | default(true) }}"
-    acpi: "{{ pve_virtual_machines_current_vm.acpi | default(true) }}"
-    autostart: "{{ pve_virtual_machines_current_vm.autostart | default(true) }}"
-    onboot: "{{ pve_virtual_machines_current_vm.onboot | default(true) }}"
-    ostype: "{{ pve_virtual_machines_current_vm.ostype | default('l26') }}"
-    boot: "{{ pve_virtual_machines_current_vm.boot_order | default('cd') }}"
+    name: "{{ vm.name }}"
+    protection: "{{ vm.protection | default(true) }}"
+    acpi: "{{ vm.acpi | default(true) }}"
+    autostart: "{{ vm.autostart | default(true) }}"
+    onboot: "{{ vm.onboot | default(true) }}"
+    ostype: "{{ vm.ostype | default('l26') }}"
+    boot: "{{ vm.boot_order | default('cd') }}"
     ciuser: "{{ (users_admin_users | first).username }}"
     cipassword: "Heslo123"
     sshkeys: "{{ (users_admin_users | first).public_keys | join('\n') }}"
-    cicustom: "user=local:snippets/{{ pve_virtual_machines_current_vm.vmid }}.yml"
-    bios: "{{ 'seabios' if (pve_virtual_machines_current_vm.bios | default('bios')) != 'efi' else 'ovmf' }}"
-    startup: "down={{ pve_virtual_machines_current_vm.shutdown_timeout_seconds }}"
+    cicustom: "user=local:snippets/{{ vm.vmid }}.yml"
+    bios: "{{ 'seabios' if (vm.bios | default('bios')) != 'efi' else 'ovmf' }}"
+    startup: "down={{ vm.shutdown_timeout_seconds }}"
     # required due to a bug: https://forum.proxmox.com/threads/kernel-panic-after-resizing-a-clone.93738/
     # which causes kernel panic after resizing the os disk
     serial:
@@ -54,34 +54,34 @@
     scsi:
       scsi0: 'local-zfs:cloudinit,format=raw'
     net:
-      net0: "virtio,bridge={{ pve_virtual_machines_current_vm.nic_bridge }}"
+      net0: "virtio,bridge={{ vm.nic_bridge }}"
     ipconfig:
-      ipconfig0: "ip={{ (pve_virtual_machines_current_vm.nic_ipv4_address + '/' + pve_virtual_machines_current_vm.nic_ipv4_subnet) | ansible.utils.ipaddr('host/prefix') }},gw={{ pve_virtual_machines_current_vm.nic_ipv4_gateway }}"  # noqa yaml[line-length]
-    nameservers: "{{ pve_virtual_machines_current_vm.nameservers }}"
-    efidisk0: "{{ ({'storage': pve_virtual_machines_current_vm.os_storage, 'format': 'raw', 'efitype': '4m', 'pre_enrolled_keys': false}) if (pve_virtual_machines_current_vm.bios | default('bios')) == 'efi' else none }}" # noqa yaml[line-length]
+      ipconfig0: "ip={{ (vm.nic_ipv4_address + '/' + vm.nic_ipv4_subnet) | ansible.utils.ipaddr('host/prefix') }},gw={{ vm.nic_ipv4_gateway }}"  # noqa yaml[line-length]
+    nameservers: "{{ vm.nameservers }}"
+    efidisk0: "{{ ({'storage': vm.os_storage, 'format': 'raw', 'efitype': '4m', 'pre_enrolled_keys': false}) if (vm.bios | default('bios')) == 'efi' else none }}" # noqa yaml[line-length]
     scsihw: virtio-scsi-pci
     bootdisk: scsi1
     tablet: false
-    cpu: "{{ pve_virtual_machines_current_vm.cpu_type | default('kvm64') }}"
-    vcpus: "{{ pve_virtual_machines_current_vm.cpu_count * pve_virtual_machines_current_vm.cpu_cores_per_cpu }}"
-    sockets: "{{ pve_virtual_machines_current_vm.cpu_count }}"
-    cores: "{{ pve_virtual_machines_current_vm.cpu_cores_per_cpu }}"
-    memory: "{{ pve_virtual_machines_current_vm.max_memory }}"
-    balloon: "{{ pve_virtual_machines_current_vm.min_memory }}"
+    cpu: "{{ vm.cpu_type | default('kvm64') }}"
+    vcpus: "{{ vm.cpu_count * vm.cpu_cores_per_cpu }}"
+    sockets: "{{ vm.cpu_count }}"
+    cores: "{{ vm.cpu_cores_per_cpu }}"
+    memory: "{{ vm.max_memory }}"
+    balloon: "{{ vm.min_memory }}"
     state: present
 
 - name: Import disk from cloud image
-  register: pve_virtual_machines_current_vm_disk
+  register: vm_disk
   retries: 5 # transient timeouts
-  until: pve_virtual_machines_current_vm_disk.vmid == pve_virtual_machines_current_vm.vmid
+  until: vm_disk.vmid == vm.vmid
   community.general.proxmox_disk:
     api_user: root@pam
     api_password: "{{ users_root_password }}"
     api_host: 127.0.0.1
-    vmid: "{{ pve_virtual_machines_current_vm.vmid }}"
+    vmid: "{{ vm.vmid }}"
     disk: scsi1
-    import_from: "/var/lib/vz/images/{{ pve_virtual_machines_current_vm.cloud_image_filename }}"
-    storage: "{{ pve_virtual_machines_current_vm.os_storage }}"
+    import_from: "/var/lib/vz/images/{{ vm.cloud_image_filename }}"
+    storage: "{{ vm.os_storage }}"
     ssd: true
     timeout: 600
     state: present
@@ -91,9 +91,9 @@
     api_user: root@pam
     api_password: "{{ users_root_password }}"
     api_host: 127.0.0.1
-    vmid: "{{ pve_virtual_machines_current_vm.vmid }}"
+    vmid: "{{ vm.vmid }}"
     disk: scsi1
-    size: "{{ pve_virtual_machines_current_vm.os_disk_size }}"
+    size: "{{ vm.os_disk_size }}"
     state: resized
 
 - name: Start VM
@@ -101,14 +101,14 @@
     api_user: root@pam
     api_password: "{{ users_root_password }}"
     api_host: 127.0.0.1
-    vmid: "{{ pve_virtual_machines_current_vm.vmid }}"
+    vmid: "{{ vm.vmid }}"
     node: "{{ ansible_hostname }}"
     state: started
 
 - name: Wait for VM to start responding on SSH
   ansible.builtin.wait_for:
-    host: "{{ pve_virtual_machines_current_vm.nic_ipv4_address }}"
+    host: "{{ vm.nic_ipv4_address }}"
     port: 22
     timeout: 400
     sleep: 2
-    msg: "VM {{ pve_virtual_machines_current_vm.name }} did not start responding on SSH in time."
+    msg: "VM {{ vm.name }} did not start responding on SSH in time."
