@@ -13,7 +13,6 @@
 - name: Configure TLS identity for the node
   ansible.builtin.include_tasks:
     file: ../../gluster_shared/tls.yml
-  register: gluster_tls
   vars:
     gluster_server_restart: true
     gluster_node_hostname: "{{ gluster_hostname }}" # Servers must use their gluster specific identity
