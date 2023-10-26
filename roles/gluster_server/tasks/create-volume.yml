@@ -33,7 +33,7 @@
     cmd: "gluster volume info {{ gluster_volume_config.name }}"
   failed_when: false
   changed_when: false
-  register: volume_exists
+  register: gluster_volume_exists
 
 - name: Create storage bricks directories if they do not exist
   ansible.builtin.file:
@@ -45,7 +45,7 @@
   loop: "{{ gluster_volume_config.replica_sets | map(attribute='storage_bricks') | flatten | selectattr('host', 'equalto', inventory_hostname) }}"
   loop_control:
     loop_var: brick
-  when: volume_exists.rc != 0
+  when: gluster_volume_exists.rc != 0
 
 - name: Create arbiter bricks directories if they do not exist
   ansible.builtin.file:
@@ -57,14 +57,14 @@
   loop: "{{ gluster_volume_config.replica_sets | map(attribute='arbiter_bricks') | flatten | selectattr('host', 'equalto', inventory_hostname) }}"
   loop_control:
     loop_var: brick
-  when: volume_exists.rc != 0
+  when: gluster_volume_exists.rc != 0
 
 - name: Create volume if does not exist
   run_once: true
   ansible.builtin.command:
     cmd: "{{ lookup('template', 'create-volume-command.j2') }}"
-  changed_when: volume_exists.rc != 0
-  when: volume_exists.rc != 0
+  changed_when: gluster_volume_exists.rc != 0
+  when: gluster_volume_exists.rc != 0
 
 - name: Enable server tls
   run_once: true
@@ -102,14 +102,14 @@
   args:
     executable: /bin/bash
   changed_when: false
-  register: volume_status
+  register: gluster_volume_status
 
 - name: Start the volume
   run_once: true
   ansible.builtin.command:
     cmd: "gluster volume start {{ gluster_volume_config.name }}"
-  changed_when: volume_status.stdout != "Started"
-  when: volume_status.stdout != "Started"
+  changed_when: gluster_volume_status.stdout != "Started"
+  when: gluster_volume_status.stdout != "Started"
 
 - name: Configure quota
   run_once: true
