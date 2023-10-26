@@ -71,19 +71,6 @@
     state: started
     enabled: true
 
-- name: Wait for node-token
-  ansible.builtin.wait_for:
-    path: "{{ k3s_cluster_server_location }}/server/node-token"
-
-- name: Read node-token from master
-  ansible.builtin.slurp:
-    path: "{{ k3s_cluster_server_location }}/server/node-token"
-  register: node_token
-
-- name: Store Master node-token
-  ansible.builtin.set_fact:
-    token: "{{ node_token.content | b64decode | regex_replace('\n', '') }}"
-
 - name: Create kubectl symlink
   ansible.builtin.file:
     src: /usr/local/bin/k3s
