@@ -3,6 +3,8 @@ ansible_host: 10.1.2.11
 ansible_hostname: pve1
 fqdn: pve1.homecentr.one
 
+network_interfaces: []
+
 # UPS
 ups_name: ups1
 
