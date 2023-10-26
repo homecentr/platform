@@ -32,7 +32,7 @@ shift
 export ANSIBLE_CONFIG="./ansible.cfg"
 
 # Install Ansible dependencies (roles and collections)
-ansible-galaxy install -r ./requirements.yml
+ansible-galaxy install -r ./requirements.yml --force
 
 COMMAND="ansible-playbook -i $INVENTORY $PLAYBOOK ${@:1}"
 

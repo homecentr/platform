@@ -24,7 +24,9 @@ collections:
 
 roles:
   - name: geerlingguy.pip
+    version: 2.2.0
   - name: geerlingguy.security
+    version: 2.2.0
   - name: geerlingguy.clamav
   - name: geerlingguy.helm
   - name: geerlingguy.node_exporter
