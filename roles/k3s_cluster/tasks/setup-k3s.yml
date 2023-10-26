@@ -18,12 +18,12 @@
     force: false
 
 - name: "Check k3s symlink destination"
-  register: k3s_symlink
+  register: k3s_cluster_k3s_symlink
   ansible.builtin.stat:
     path: "/usr/local/bin/k3s"
 
 - name: "Create k3s symlink"
-  when: "not k3s_symlink.stat.exists or k3s_symlink.stat.lnk_source != '/usr/local/bin/k3s-bins/' + k3s_cluster_version + '/k3s'"
+  when: "not k3s_cluster_k3s_symlink.stat.exists or k3s_cluster_k3s_symlink.stat.lnk_source != '/usr/local/bin/k3s-bins/' + k3s_cluster_version + '/k3s'"
   ansible.builtin.file:
     src: "/usr/local/bin/k3s-bins/{{ k3s_cluster_version }}/k3s"
     dest: "/usr/local/bin/k3s"
@@ -34,7 +34,7 @@
     mode: 0750
 
 - name: Create K3s service file
-  register: k3s_service
+  register: k3s_cluster_k3s_service
   ansible.builtin.template:
     src: "k3s.service.j2"
     dest: "{{ k3s_cluster_systemd_dir }}/k3s.service"
@@ -63,8 +63,8 @@
 
 - name: Start the k3s service
   retries: 10
-  until: "'status' in k3s_service and k3s_service.status.ActiveState == 'active'"
-  register: k3s_service
+  until: "'status' in k3s_cluster_k3s_service and k3s_cluster_k3s_service.status.ActiveState == 'active'"
+  register: k3s_cluster_k3s_service
   ansible.builtin.systemd:
     name: k3s
     daemon_reload: true
