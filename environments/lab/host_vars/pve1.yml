@@ -13,7 +13,7 @@ network_interfaces:
 ups_name: dummy-ups1
 
 # Gluster
-gluster_ip: 192.168.1.11
+gluster_ip: 192.168.7.11
 gluster_hostname: gfs-pve1-lab
 gluster_fqdn: gfs-pve1-lab.homecentr.one
 gluster_mount_host: pve1
