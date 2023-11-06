@@ -3,22 +3,22 @@ ansible_host: 10.1.8.13
 ansible_hostname: pve3-lab
 fqdn: pve3-lab.homecentr.one
 
+network_interfaces:
+  ens19:
+    method: static
+    address: 192.168.7.13/24
+    auto: true
+
 # UPS
 ups_name: dummy-ups1
 
 # Gluster
-gluster_ip: 192.168.1.13
+gluster_ip: 192.168.7.13
 gluster_hostname: gfs-pve3-lab
 gluster_fqdn: gfs-pve3-lab.homecentr.one
 gluster_mount_host: pve3
 
 # PVE
-pve_network_interfaces:
-  eth1:
-    method: static
-    address: 192.168.1.13/24
-    auto: true
-
 pve_vm_machines:
   - vmid: 301
     name: kube3-lab
@@ -28,11 +28,11 @@ pve_vm_machines:
     shutdown_timeout_seconds: 120
     nic_bridge: vmbr0
     os_storage: local-zfs
-    os_disk_size_gb: 32
+    os_disk_size: 32G
     cpu_count: 1
-    cpu_cores_per_cpu: 4
-    min_memory: 4096
-    max_memory: 4096
+    cpu_cores_per_cpu: 8
+    min_memory: 8192
+    max_memory: 15360
     nic_ipv4_address: 10.1.8.23
     nic_ipv4_subnet: 255.255.255.0
     nic_ipv4_gateway: 10.1.8.1

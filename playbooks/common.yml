@@ -12,7 +12,7 @@
 
     - name: Create host records for servers
       ansible.builtin.import_role:
-        name: ../../roles/common/hosts
+        name: ../../roles/hosts
       tags:
         - hosts
 

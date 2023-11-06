@@ -1,0 +1,25 @@
+- name: Get local storage info
+  community.general.proxmox_storage_info:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: 127.0.0.1
+    name: local
+  register: pve_virtual_machines_local_storage
+
+- name: Update config
+  when: not 'snippets' in pve_virtual_machines_local_storage.proxmox_storages[0].content
+  ansible.builtin.lineinfile:
+    path: /etc/pve/storage.cfg
+    create: false
+    firstmatch: true
+    insertafter: "^\\W*dir:\\W*local$"
+    regex: "^\\W*content\\W*(.*)$"
+    line: "        content {{ (pve_virtual_machines_local_storage.proxmox_storages[0].content + ['snippets']) | join(',') }}"
+
+- name: Create snippets directory
+  ansible.builtin.file:
+    path: "{{ pve_virtual_machines_local_storage.proxmox_storages[0].path }}/snippets"
+    state: directory
+    owner: root
+    group: root
+    mode: 0750

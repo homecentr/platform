@@ -34,38 +34,13 @@ Working with this repository requires installation of several command line tools
 
 ## Environments
 
-- **Lab** - test environment used to develop the roles running locally inside of HyperV on a developer's workstation.
+- **Lab** - test environment used to develop the roles. The environment is defined in the [lab](https://github.com/homecentr/lab) repository using Proxmox nested virtualization. Please refer to this repository on how to (re)create this environment.
 - **Production** - the actual deployment used by the users.
 
-### Create a Lab environment in Hyper-V
-- Make sure you are running Windows 11 because earlier versions do not support nested virtualization which is required
-- Install latest version of Powershell using [this guide](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.2)
-- Create VMs using `yarn lab:create` command (must be executed as administrator)
-- Start the VMs and install the Proxmox VMs with following parameters  
-    - Disk: ZFS with RAID0
-    - Country: Czechia
-    - Timezone: Europe/Prague
-    - Password: any, just watch out for english keyboard layout when typing numbers and make sure **all nodes have the same password**
-    - E-mail: stg-pve&lt;X&gt;@lab.&lt;domain&gt;
-    - Hostname: stg-pve&lt;X&gt;.lab.&lt;domain&gt;
-    - IP Address: 10.1.8.1&lt;X&gt;/24
-    - Gateway: 10.1.8.1
-- Create a Proxmox cluster (there's currently no way to automate this)
-- Remove previous SSH keys in case you have re-created the lab using the following command
-```bash
-yarn lab:clear-keys
-```
-- Apply Ansible playbooks which will set up ssh access using the standard admin user using the following command
-```bash
-yarn lab:init
-```
-- Apply the rest of Ansible playbooks using the following command
-```bash
-yarn lab:apply site
-```
-
 ## Applying playbooks
-Simply run the following bash command (requires Linux e.g. in WSL with [Yarn](https://yarnpkg.com/) installed):
+In case you are running the playbooks against freshly installed machines, make sure you first run the initialization using the `yarn lab:init` command.
+
+To apply a playbook simply run the following bash command (requires Linux e.g. in WSL with [Yarn](https://yarnpkg.com/) installed):
 ```
 yarn <env>:apply <playbook>
 ```
@@ -73,5 +48,3 @@ yarn <env>:apply <playbook>
 for example `yarn lab:apply common.yml`
 
 The script automatically installs dependencies from Ansible Galaxy and runs the playbook.
-
-> Note that the first time applying playbooks on a clean server, you need to use whatever authentication is available (most likely a password based one). During the first run the roles configure the SSH daemon to only allow non-root user with an RSA key and/or hardware device like YubiKey you need to use for subsequent logins.

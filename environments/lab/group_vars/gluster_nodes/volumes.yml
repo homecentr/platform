@@ -32,7 +32,7 @@ gluster_volumes:
       - pve3
 
   - name: k8s-services-db
-    mount_path: /mnt/gfs/k8s-services
+    mount_path: /mnt/gfs/k8s-services-db
     replica_sets:
       - storage_bricks:
           - host: pve1
