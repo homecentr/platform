@@ -1,0 +1,59 @@
+disable:
+- servicelb
+- coredns
+- metrics-server
+# - traefik
+- local-storage
+
+disable-helm-controller: true
+bind-address: {{ k3s_cluster_node_ip | default(ansible_host) }}
+node-ip: {{ k3s_cluster_node_ip | default(ansible_host) }}
+cluster-cidr: {{ k3s_cluster_cidr | mandatory }}
+service-cidr: {{ k3s_cluster_services_cidr | mandatory }}
+{% if k3s_cluster_init is defined and k3s_cluster_init %}
+cluster-init: true
+{% else %}
+server: {{ k3s_cluster_join | mandatory }}
+{% endif %}
+token: "{{ k3s_cluster_secret | mandatory }}"
+
+{% if k3s_cluster_node_labels is defined %}
+node-label:
+{% for label in k3s_cluster_node_labels %}
+    - {{ label.name }}={{ label.value }}
+{% endfor %}
+{% endif %}
+
+{% if k3s_cluster_node_taints is defined %}
+node-taint:
+{% for taint in k3s_cluster_node_taints %}
+    - {{ taint.name }}={{ taint.value }}:{{ taint.effect }}
+{% endfor %}
+{% endif %}
+
+# etcd-expose-metrics: true
+write-kubeconfig-mode: 600
+
+protect-kernel-defaults: true
+secrets-encryption: true
+kube-apiserver-arg:
+    - 'audit-log-path=/var/lib/rancher/k3s/server/logs/audit.log'
+    - 'audit-policy-file=/var/lib/rancher/k3s/server/audit.yaml'
+    - 'audit-log-maxage=30'
+    - 'audit-log-maxbackup=10' 
+    - 'audit-log-maxsize=100'
+    - 'request-timeout=300s'
+    - 'service-account-lookup=true'
+    - 'enable-admission-plugins=NodeRestriction,NamespaceLifecycle,ServiceAccount'
+    - 'feature-gates=PodSecurity=true'
+
+kubelet-arg:
+    - 'streaming-connection-idle-timeout=5m'
+    - 'make-iptables-util-chains=true'
+    - 'node-status-update-frequency=10s'
+
+kube-controller-manager-arg: 
+    - 'terminated-pod-gc-threshold=10'
+    - 'use-service-account-credentials=true'
+    - 'node-monitor-period=5s'
+    - 'node-monitor-grace-period={{ k3s_cluster_node_unhealthy_grace_period | default(20) }}s'

@@ -12,7 +12,7 @@
 
     - name: Create host records for servers
       ansible.builtin.import_role:
-        name: ../../roles/common/hosts
+        name: ../../roles/hosts
       tags:
         - hosts
 
@@ -43,7 +43,7 @@
 
     - name: Install ClamAV antivirus
       ansible.builtin.import_role:
-        name: ../../roles/common/clamav
+        name: homecentr.system.clamav
       tags:
         - clamav
 

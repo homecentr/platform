@@ -1,1 +1,8 @@
-roles/gluster/server/tasks/create-volume.yml risky-shell-pipe
+roles/gluster_server/tasks/create-volume-quota.yml risky-shell-pipe
+roles/gluster_server/tasks/main.yml var-naming[no-role-prefix]
+roles/gluster_server/tasks/create-volume.yml var-naming[no-role-prefix]
+roles/gluster_server/tasks/create-volume-quota.yml var-naming[no-role-prefix]
+roles/gluster_client/tasks/main.yml var-naming[no-role-prefix]
+roles/pve_virtual_machines/tasks/main.yml var-naming[no-role-prefix]
+roles/pve_virtual_machines/tasks/vm.yml var-naming[no-role-prefix]
+playbooks/nvidia.yml name[casing]

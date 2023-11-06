@@ -8,3 +8,12 @@ gluster_mount_host: pve2
 
 # Kubernetes
 k3s_cluster_join: https://kube1:6443
+
+k3s_cluster_node_labels:
+  - name: homecentr.one/tpu
+    value: "true"
+  - name: homecentr.one/gpu
+    value: "true"
+
+# nVidia drivers
+nvidia_drivers_install_containers: true

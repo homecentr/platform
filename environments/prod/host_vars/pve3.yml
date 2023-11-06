@@ -17,16 +17,17 @@ pve_vm_machines:
   - vmid: 301
     name: kube3
     protection: false
-    cloud_image_filename: debian-11.5.0.qcow2
+    cloud_image_filename: debian-12.1.0.qcow2
     bios: efi
     shutdown_timeout_seconds: 120
     nic_bridge: vmbr0
     os_storage: local-zfs
     os_disk_size_gb: 32
+    cpu_type: "cputype=host,flags=+aes"
     cpu_count: 1
     cpu_cores_per_cpu: 3
-    min_memory: 4096
-    max_memory: 4096
+    min_memory: 8192
+    max_memory: 8192
     nic_ipv4_address: 10.1.2.23
     nic_ipv4_subnet: 255.255.255.0
     nic_ipv4_gateway: 10.1.2.1

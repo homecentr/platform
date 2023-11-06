@@ -5,32 +5,76 @@
   any_errors_fatal: true
   tasks:
     # Must run before users to make sure the apt repositories are configured in order to install sudo
-    - name: Configure Proxmox VE specific components
+    - name: Configure proxmox apt repositories
       ansible.builtin.import_role:
-        name: ../../roles/proxmox/pve-node
-      tags:
-        - pve-nodes
-        - init
+        name: homecentr.proxmox.pve_apt
+      tags: [ init, apt ]
 
     # Root's password must be set so that it can be used to communicate with Proxmox API
     - name: Create users
       ansible.builtin.import_role:
         name: homecentr.system.users
-      tags:
-        - users
-        - init
+      tags: [ init, users ]
+
+    - name: Configure proxmox user and their permissions
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_users
+      tags: [ init, users ]
+
+    - name: Configure network interfaces
+      ansible.builtin.import_role:
+        name: homecentr.system.network
+      tags: [ network ]
+
+    - name: Run upgrade (only first time)
+      ansible.builtin.import_role:
+        name: homecentr.system.init_upgrade
+      tags: [ upgrade ]
+
+    - name: Configure https port forwarding
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_https_forward
+      tags: [ pve-https-forward ]
+
+    - name: Configure PCI passthrough dependencies
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_pci_passthrough
+      tags: [ pve-pci-passthrough ]
+
+    - name: Configure SMTP
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_smtp
+      tags: [ pve-smtp ]
+
+    - name: Configure SSO via Open ID
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_sso_openid
+      tags: [ pve-sso-openid ]
+
+    - name: Apply corosync fix
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_corosync_fix
+      tags: [ corosync ]
 
     - name: Configure ACME
       ansible.builtin.import_role:
-        name: ../../roles/proxmox/pve-acme
-      tags:
-        - acme
+        name: homecentr.proxmox.pve_acme
+      tags: [ acme ]
+
+    - name: Configure USB HID quirk for UPS communication
+      ansible.builtin.import_role:
+        name: homecentr.system.usbhid_quirk
+      tags: [ usbhid-quirk ]
+
+    - name: Configure ZFS
+      ansible.builtin.import_role:
+        name: homecentr.system.zfs_configuration
+      tags: [ usbhid-quirk ]
 
     - name: Flush handlers before starting the VMs
       ansible.builtin.meta: flush_handlers
 
     - name: Create virtual machines
       ansible.builtin.import_role:
-        name: ../../roles/proxmox/virtual-machines
-      tags:
-        - vm
+        name: ../../roles/pve_virtual_machines
+      tags: [ vm ]

@@ -1,0 +1,8 @@
+- name: Probe servers
+  run_once: true
+  retries: 15
+  delay: "{{ gluster_server_daemon_start.changed | ternary(10, 0) }}"
+  gluster.gluster.gluster_peer:
+    state: present
+    # Current node has to be removed from the list because probing self throws an error
+    nodes: "{{ groups['gluster_servers'] | map('extract', hostvars) | map(attribute='gluster_hostname') | difference([gluster_hostname]) }}"

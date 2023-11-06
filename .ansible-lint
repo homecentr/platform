@@ -11,5 +11,7 @@ skip_list:
   - role-name[path]
   - name[play]
   - yaml[octal-values]
+  - yaml[brackets]
+  - yaml[new-line-at-end-of-file]
 
 offline: false

@@ -17,11 +17,16 @@ collections:
     version: 1.6.0
   - name: https://github.com/homecentr/ansible-collection-system
     type: git
-    version: origin/master
+    version: master
+  - name: https://github.com/homecentr/ansible-collection-proxmox
+    type: git
+    version: master
 
 roles:
   - name: geerlingguy.pip
+    version: 2.2.0
   - name: geerlingguy.security
+    version: 2.2.0
   - name: geerlingguy.clamav
   - name: geerlingguy.helm
   - name: geerlingguy.node_exporter

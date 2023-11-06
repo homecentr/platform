@@ -1,8 +1,0 @@
-- name: Configure nameservers
-  ansible.builtin.copy:
-    content: "{{ lookup('template', 'resolv.conf.j2') }}"
-    dest: /etc/resolv.conf
-    mode: 0644
-    owner: root
-    group: root
-    force: true
