@@ -22,7 +22,7 @@ pve_vm_machines:
     shutdown_timeout_seconds: 120
     nic_bridge: vmbr0
     os_storage: local-zfs
-    os_disk_size_gb: 32
+    os_disk_size: 32G
     cpu_type: "cputype=host,flags=+aes"
     cpu_count: 1
     cpu_cores_per_cpu: 3
