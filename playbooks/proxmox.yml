@@ -71,6 +71,14 @@
         name: homecentr.system.zfs_configuration
       tags: [ usbhid-quirk ]
 
+    - name: Configure local storage
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_local_storage
+      tags: [ pve-storage ]
+      vars:
+        pve_storage_snippets_api_user: root@pam
+        pve_storage_snippets_api_password: "{{ users_root_password }}"
+
     - name: Flush handlers before starting the VMs
       ansible.builtin.meta: flush_handlers
 
