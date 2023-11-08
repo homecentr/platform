@@ -1,6 +1,6 @@
 - name: Create cloud-init config
   ansible.builtin.copy:
-    dest: "{{ ansible_facts['pve_local_storage_path'] }}/snippets/{{ vm.vmid }}.yml"
+    dest: "{{ hostvars[inventory_hostname].pve_local_storage_path }}/snippets/{{ vm.vmid }}.yml"
     owner: root
     group: root
     mode: 0640
