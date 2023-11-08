@@ -74,7 +74,7 @@
     - name: Configure local storage
       ansible.builtin.import_role:
         name: homecentr.proxmox.pve_local_storage
-      tags: [ pve-storage ]
+      tags: [ vm, pve-storage ]
       vars:
         pve_local_storage_api_user: root@pam
         pve_local_storage_api_password: "{{ users_root_password }}"
