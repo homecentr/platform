@@ -1,5 +1,6 @@
 - name: Install Argo CD
   ansible.builtin.include_tasks: ./install.yml
 
-- name: Configure Argo CD
-  ansible.builtin.include_tasks: ./configure.yml
+# TODO: Replace with application sets
+# - name: Configure Argo CD
+#   ansible.builtin.include_tasks: ./configure.yml

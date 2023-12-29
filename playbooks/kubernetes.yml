@@ -13,6 +13,25 @@
         - k8s
         - rke2
 
+    - name: Configure sysctls
+      ansible.builtin.import_role:
+        name: ../../roles/k8s-sysctls
+      tags:
+        - k8s
+        - rke2
+
+    - name: Install python modules for k8s management
+      ansible.builtin.import_role:
+        name: ../../roles/k8s-python-modules
+      tags:
+        - always
+
+    - name: Install helm
+      ansible.builtin.import_role:
+        name: geerlingguy.helm
+      tags:
+        - helm
+
     - name: Install and configure Argo CD
       ansible.builtin.import_role:
         name: ../../roles/argocd
