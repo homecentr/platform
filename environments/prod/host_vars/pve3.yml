@@ -6,12 +6,6 @@ fqdn: pve3.homecentr.one
 # UPS
 ups_name: ups1
 
-# Gluster
-gluster_ip: 10.1.7.13
-gluster_hostname: gfs-pve3
-gluster_fqdn: gfs-pve3.homecentr.one
-gluster_mount_host: pve3
-
 # PVE
 pve_vm_machines:
   - vmid: 301

@@ -1,6 +1,0 @@
-gluster volume create {{ gluster_volume_config.name }} replica {{ gluster_volume_config.replicas }} arbiter {{ gluster_volume_config.arbiters }} 
-{%- for replica_set in gluster_volume_config.replica_sets %}
-{%- for brick in replica_set.storage_bricks %} {{ hostvars[brick.host].gluster_hostname }}:{{ brick.path }}{% endfor -%}
-{%- for brick in replica_set.arbiter_bricks %} {{ hostvars[brick.host].gluster_hostname }}:{{ brick.path }}{% endfor -%}
-{%- endfor %}
-{%- if "force" in gluster_volume_config and gluster_volume_config.force %} force{% endif %}

@@ -12,12 +12,6 @@ network_interfaces:
 # UPS
 ups_name: dummy-ups1
 
-# Gluster
-gluster_ip: 192.168.7.13
-gluster_hostname: gfs-pve3-lab
-gluster_fqdn: gfs-pve3-lab.homecentr.one
-gluster_mount_host: pve3
-
 # PVE
 pve_vm_machines:
   - vmid: 301
@@ -30,9 +24,9 @@ pve_vm_machines:
     os_storage: local-zfs
     os_disk_size: 32G
     cpu_count: 1
-    cpu_cores_per_cpu: 8
+    cpu_cores_per_cpu: 6
     min_memory: 8192
-    max_memory: 15360
+    max_memory: 8192
     nic_ipv4_address: 10.1.8.23
     nic_ipv4_subnet: 255.255.255.0
     nic_ipv4_gateway: 10.1.8.1

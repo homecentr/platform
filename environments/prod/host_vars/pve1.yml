@@ -6,12 +6,6 @@ fqdn: pve1.homecentr.one
 # UPS
 ups_name: ups1
 
-# Gluster
-gluster_ip: 10.1.7.11
-gluster_hostname: gfs-pve1
-gluster_fqdn: gfs-pve1.homecentr.one
-gluster_mount_host: pve1
-
 # PVE
 pve_pci_passhthrough_enabled: true
 

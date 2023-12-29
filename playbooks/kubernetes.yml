@@ -1,14 +1,17 @@
 - name: Set up Kubernetes cluster
-  hosts: k8s_nodes
+  hosts: k8s_cluster
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
-    - name: Install and configure k3s
+    # TODO: Kube nodes will need ZFS (later)
+
+    - name: Install Kubernetes cluster (RKE 2)
       ansible.builtin.import_role:
-        name: ../../roles/k3s_cluster
+        name: lablabs.rke2
       tags:
-        - k3s
+        - k8s
+        - rke2
 
     - name: Install and configure Argo CD
       ansible.builtin.import_role:

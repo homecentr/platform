@@ -20,7 +20,7 @@ collections:
     version: master
   - name: https://github.com/homecentr/ansible-collection-proxmox
     type: git
-    version: master
+    version: fix/proxmoxer
 
 roles:
   - name: geerlingguy.pip
@@ -31,3 +31,5 @@ roles:
   - name: geerlingguy.helm
   - name: geerlingguy.node_exporter
     version: 2.0.0
+  - name: lablabs.rke2
+    version: 1.28.0
