@@ -1,7 +1,7 @@
 - name: Download CRD manifests
   register: argocd_crd_manifests
   ansible.builtin.uri:
-    url: "https://raw.githubusercontent.com/argoproj/argo-cd/v{{ argocd_app_version }}/manifests/crds/{{ item }}"
+    url: "https://raw.githubusercontent.com/argoproj/argo-cd/{{ argocd_app_version }}/manifests/crds/{{ item }}"
     return_content: true
   loop:
     - application-crd.yaml
@@ -21,7 +21,7 @@
     state: present
     create_namespace: true
     release_name: argo-cd
-    release_namespace: argo-cd
+    release_namespace: "{{ argocd_namespace }}"
     chart_ref: argo-cd
     chart_repo_url: https://argoproj.github.io/argo-helm
     chart_version: "{{ argocd_chart_version }}"
@@ -33,6 +33,8 @@
       crds:
         install: false
       global:
+        image:
+          tag: "{{ argocd_app_version }}"
         networkPolicy:
           create: true
           defaultDenyIngress: false
@@ -139,7 +141,7 @@
           }
         cm:
           timeout.reconciliation: "{{ argocd_git_refresh_interval }}"
-          admin.enabled: false
+          # admin.enabled: false
           url: "{{ argocd_url }}"
           help.chatText: ""
           oidc.config: |
@@ -242,7 +244,7 @@
           kind: Secret
           metadata:
             name: argocd-sops
-            namespace: argo-cd
+            namespace: "{{ argocd_namespace }}"
           data:
             public_key: "{{ argocd_sops.public_key | b64encode }}"
             private_key: "{{ argocd_sops.private_key | b64encode }}"

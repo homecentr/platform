@@ -1,6 +1,36 @@
-- name: Create root application
+- name: Configure default project
   run_once: true
   kubernetes.core.k8s:
     kubeconfig: "{{ argocd_kubeconfig_path }}"
-    definition: "{{ lookup('template', 'application.yml.j2') }}"
+    definition: "{{ lookup('template', 'project-default.yml.j2') }}"
     state: present
+
+- name: Create projects
+  run_once: true
+  kubernetes.core.k8s:
+    kubeconfig: "{{ argocd_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'project.yml.j2') }}"
+    state: present
+  loop: "{{ argocd_projects }}"
+  loop_control:
+    loop_var: argocd_project
+
+- name: Debug app sets
+  run_once: true
+  delegate_to: localhost
+  copy:
+    dest: "/tmp/{{ argocd_application_set.name }}.debug"
+    content: "{{ lookup('template', 'application-set.yml.j2') }}"
+  loop: "{{ argocd_application_sets }}"
+  loop_control:
+    loop_var: argocd_application_set
+
+- name: Create application sets
+  run_once: true
+  kubernetes.core.k8s:
+    kubeconfig: "{{ argocd_kubeconfig_path }}"
+    definition: "{{ lookup('template', 'application-set.yml.j2') }}"
+    state: present
+  loop: "{{ argocd_application_sets }}"
+  loop_control:
+    loop_var: argocd_application_set
