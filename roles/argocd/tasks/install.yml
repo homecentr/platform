@@ -135,10 +135,10 @@
           policy.default: role:readonly
           policy.csv: |
             g, "{{ argocd_admin_group_id }}", role:admin
-        styles: |
-          .sidebar__version {
-            display: none;
-          }
+        # styles: |
+        #   .sidebar__version {
+        #     display: none;
+        #   }
         cm:
           timeout.reconciliation: "{{ argocd_git_refresh_interval }}"
           # admin.enabled: false

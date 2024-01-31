@@ -27,6 +27,9 @@ spec:
         targetRevision: {{ argocd_git_ref }}
   templatePatch: | {% raw %}
     {{- $environment  := .values.environment -}}
+    metadata:
+      annotations:
+        argocd.argoproj.io/sync-wave: "{{ . | dig "syncWave" 0 }}"
     spec:
       source:
         path: '{{ .path.path }}'

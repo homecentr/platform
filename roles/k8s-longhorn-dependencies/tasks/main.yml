@@ -1,0 +1,21 @@
+- name: Add apt key for k8s repository
+  ansible.builtin.apt_key:
+    url: https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key
+    keyring: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    state: present
+
+- name: Add kubectl apt repository
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /'
+    filename: kubernetes.list
+    update_cache: true
+    state: present
+
+- name: Install required packages
+  ansible.builtin.apt:
+    name:
+      - jq
+      - kubectl
+      - nfs-common
+      - open-iscsi
+    state: present

@@ -1,1 +1,1 @@
-argocd_namespace: argo-cd
+argocd_namespace: argocd-system

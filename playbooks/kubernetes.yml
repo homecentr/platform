@@ -32,6 +32,12 @@
       tags:
         - helm
 
+    - name: Install Longhorn dependencies
+      ansible.builtin.import_role:
+        name: ../../roles/k8s-longhorn-dependencies
+      tags:
+        - longhorn
+
     - name: Install and configure Argo CD
       ansible.builtin.import_role:
         name: ../../roles/argocd
