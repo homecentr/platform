@@ -36,7 +36,7 @@
         image:
           tag: "{{ argocd_app_version }}"
         networkPolicy:
-          create: true
+          create: false
           defaultDenyIngress: false
       redis-ha:
         enabled: false
@@ -135,10 +135,6 @@
           policy.default: role:readonly
           policy.csv: |
             g, "{{ argocd_admin_group_id }}", role:admin
-        # styles: |
-        #   .sidebar__version {
-        #     display: none;
-        #   }
         cm:
           timeout.reconciliation: "{{ argocd_git_refresh_interval }}"
           # admin.enabled: false

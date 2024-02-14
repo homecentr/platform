@@ -9,7 +9,7 @@ argocd_environment: lab
 # Make sure the chart version contains the app version below
 # The app version drives the CRDs and should be bumped before upgrading the app itself
 argocd_chart_version: 5.51.6
-argocd_app_version: v2.10.0-rc1
+argocd_app_version: v2.10.0
 
 argocd_application_sets:
   - name: cluster
