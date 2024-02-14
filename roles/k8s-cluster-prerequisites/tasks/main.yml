@@ -1,0 +1,11 @@
+- name: Install required python modules
+  ansible.builtin.include_tasks:
+    file: python-modules.yml
+
+- name: Configure sysctls
+  ansible.builtin.include_tasks:
+    file: sysctls.yml
+
+- name: Create zfs datasets
+  ansible.builtin.include_tasks:
+    file: zfs-datasets.yml

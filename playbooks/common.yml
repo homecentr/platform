@@ -59,6 +59,12 @@
       tags:
         - ups
 
+    - name: Install zfs-auto-snapshot
+      ansible.builtin.apt:
+        name: zfs-auto-snapshot
+      tags:
+        - zfs-auto-snapshot
+
     - name: Set up Message-of-the-day
       ansible.builtin.import_role:
         name: homecentr.system.motd

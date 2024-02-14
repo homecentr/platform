@@ -1,0 +1,13 @@
+- name: Create a dataset for /var/lib/rancher/rke2
+  community.general.zfs:
+    name: rpool/ROOT/rke2/var
+    state: present
+    extra_zfs_properties:
+      mountpoint: /var/lib/rancher/rke2
+
+- name: Create a dataset for /etc/rancher/rke2
+  community.general.zfs:
+    name: rpool/ROOT/rke2/etc
+    state: present
+    extra_zfs_properties:
+      mountpoint: /etc/rke2
