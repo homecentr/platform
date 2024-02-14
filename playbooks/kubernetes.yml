@@ -28,8 +28,8 @@
       tags:
         - rke2
 
-    # - name: Install and configure Argo CD
-    #   ansible.builtin.import_role:
-    #     name: ../../roles/k8s-argocd
-    #   tags:
-    #     - argocd
+    - name: Install and configure Argo CD
+      ansible.builtin.import_role:
+        name: ../../roles/k8s-argocd
+      tags:
+        - argocd
