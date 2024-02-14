@@ -4,8 +4,6 @@
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
-    # TODO: Kube nodes will need ZFS (later)
-
     - name: Install Kubernetes cluster (RKE 2)
       ansible.builtin.import_role:
         name: lablabs.rke2
@@ -36,10 +34,10 @@
       ansible.builtin.import_role:
         name: ../../roles/k8s-longhorn-dependencies
       tags:
-        - longhorn
+        - longhorn-deps
 
-    - name: Install and configure Argo CD
-      ansible.builtin.import_role:
-        name: ../../roles/argocd
-      tags:
-        - argocd
+    # - name: Install and configure Argo CD
+    #   ansible.builtin.import_role:
+    #     name: ../../roles/k8s-argocd
+    #   tags:
+    #     - argocd

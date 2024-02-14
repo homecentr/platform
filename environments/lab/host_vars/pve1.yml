@@ -12,30 +12,5 @@ network_interfaces:
 # UPS
 ups_name: dummy-ups1
 
-# PVE
-pve_pci_passhthrough_enabled: false
-
-pve_vm_machines:
-  - vmid: 101
-    name: kube1-lab
-    protection: false
-    cloud_image_filename: debian-12.1.0.qcow2
-    bios: efi
-    shutdown_timeout_seconds: 120
-    nic_bridge: vmbr0
-    os_storage: local-zfs
-    os_disk_size: 32G
-    cpu_count: 1
-    cpu_cores_per_cpu: 8
-    min_memory: 8192
-    max_memory: 15360
-    nic_ipv4_address: 10.1.8.21
-    nic_ipv4_subnet: 255.255.255.0
-    nic_ipv4_gateway: 10.1.8.1
-    nameservers:
-      - 1.1.1.1
-      - 1.0.0.1
-
-# ClamAV
-# clamav_scanned_dirs:
-# - /usr/local/gfs
+# nVidia drivers
+nvidia_drivers_install_containers: true

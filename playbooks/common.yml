@@ -56,7 +56,6 @@
     - name: Install and configure Network UPS tools
       ansible.builtin.import_role:
         name: homecentr.system.ups
-      when: "'bare_metal_nodes' in group_names"
       tags:
         - ups
 
@@ -64,7 +63,7 @@
       ansible.builtin.import_role:
         name: homecentr.system.motd
       vars:
-        motd_enable_ups_status: "{{ 'bare_metal_nodes' in group_names }}"
+        motd_enable_ups_status: "true"
       tags:
         - motd
 

@@ -20,7 +20,7 @@ collections:
     version: master
   - name: https://github.com/homecentr/ansible-collection-proxmox
     type: git
-    version: fix/proxmoxer
+    version: master
 
 roles:
   - name: geerlingguy.pip

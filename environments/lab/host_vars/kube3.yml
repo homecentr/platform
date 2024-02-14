@@ -1,8 +1,0 @@
-# Common
-ansible_host: 10.1.8.23
-ansible_hostname: kube3-lab
-fqdn: kube3-lab.homecentr.one
-
-# Kubernetes
-rke2_server_node_taints:
-  - 'CriticalAddonsOnly=true:NoSchedule'

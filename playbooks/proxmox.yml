@@ -26,11 +26,6 @@
         name: homecentr.system.network
       tags: [ network ]
 
-    - name: Run upgrade (only first time)
-      ansible.builtin.import_role:
-        name: homecentr.system.init_upgrade
-      tags: [ upgrade ]
-
     - name: Configure https port forwarding
       ansible.builtin.import_role:
         name: homecentr.proxmox.pve_https_forward

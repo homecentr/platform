@@ -1,7 +1,0 @@
-# Common
-ansible_host: 10.1.8.21
-ansible_hostname: kube1-lab
-fqdn: kube1-lab.homecentr.one
-
-# nVidia drivers
-nvidia_drivers_install_containers: true
