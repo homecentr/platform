@@ -21,7 +21,7 @@ spec:
       project: {{ argocd_application_set.project_name }}
       destination:
         server: https://kubernetes.default.svc
-        namespace: '{% raw %}{{ index .path.segments 1 }}{% endraw %}'
+        namespace: '{% if argocd_application_set.namespace is defined %}{{ argocd_application_set.namespace }}{% else %}{% raw %}{{ index .path.segments 1 }}{% endraw %}{% endif %}'
       source:
         repoURL: {{ argocd_git_repository_url }}
         targetRevision: {{ argocd_git_ref }}

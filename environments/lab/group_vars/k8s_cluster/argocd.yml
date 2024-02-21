@@ -16,6 +16,7 @@ argocd_application_sets:
     project_name: cluster
   - name: apps
     project_name: apps
+    namespace: apps
 
 argocd_projects:
   - name: cluster

@@ -122,7 +122,7 @@
               - mountPath: /custom-tools
                 name: custom-tools
       applicationSet:
-        replicaCount: 1
+        replicas: 1
       dex:
         enabled: false
       configs:
@@ -244,3 +244,50 @@
           data:
             public_key: "{{ argocd_sops.public_key | b64encode }}"
             private_key: "{{ argocd_sops.private_key | b64encode }}"
+
+
+        - apiVersion: crd.projectcalico.org/v1
+          kind: NetworkPolicy
+          metadata:
+            name: argocd
+            namespace: "{{ argocd_namespace }}"
+          spec:
+            # Instance is not filtered because argo-cd is deployed by ansible so from this chart's point of view the instance is not predictable
+            selector: app.kubernetes.io/part-of == 'argocd'
+            ingress:
+              # Allow internal component calls
+              - action: Allow
+                source:
+                  selector: app.kubernetes.io/part-of == 'argocd'
+
+              # Allow traffic from kubernetes api
+              - action: Allow
+                source:
+                  services:
+                    name: kubernetes
+                    namespace: default
+            egress:
+              # Allow traffic to kubernetes api
+              - action: Allow
+                destination:
+                  services:
+                    name: kubernetes
+                    namespace: default
+
+              # Allow traffic to internet
+              - action: Allow
+                destination:
+                  notNets:
+                    - 10.0.0.0/8
+                    - 172.16.0.0/12
+
+              # Allow internal component calls
+              - action: Allow
+                destination:
+                  selector: app.kubernetes.io/part-of == 'argocd'
+
+              # Explicitly allow access to DNS to bypass dependency on global policies deployed by argocd itself
+              - action: Allow
+                destination:
+                  selector: k8s-app == 'kube-dns'
+                  namespaceSelector: projectcalico.org/name == "kube-system"
