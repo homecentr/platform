@@ -3,10 +3,19 @@ rke2_type: server # All nodes are servers
 rke2_ha_mode: true
 rke2_ha_mode_kubevip: true
 rke2_ha_mode_keepalived: false
+
 rke2_kubevip_cloud_provider_enable: true
-rke2_kubevip_svc_enable: true
-rke2_kubevip_image: ghcr.io/kube-vip/kube-vip:v0.6.4
-rke2_kubevip_cloud_provider_image: ghcr.io/kube-vip/kube-vip-cloud-provider:v0.0.4
+rke2_kubevip_svc_enable: "true"
+rke2_kubevip_image: ghcr.io/kube-vip/kube-vip:v0.7.0
+rke2_kubevip_cloud_provider_image: ghcr.io/kube-vip/kube-vip-cloud-provider:v0.0.8
+
+rke2_kubevip_args: 
+- param: svc_election
+  value: "'true'"
+- param: enable_node_labeling
+  value: "'true'"
+# - param: onlyAllowTrafficServicePorts
+#   value: true
 
 rke2_api_ip: 10.1.8.130
 rke2_api_cidr: 24
@@ -24,13 +33,5 @@ rke2_server_options:
 
 rke2_loadbalancer_ip_range:
   range-global: 10.1.8.160-10.1.8.191
-
-rke2_kubevip_args: 
-- param: enableServicesElection
-  value: "'true'"
-- param: enableNodeLabeling
-  value: "'true'"
-# - param: onlyAllowTrafficServicePorts
-#   value: true
 
 # TODO: etcd snapshot backup to S3 ?
