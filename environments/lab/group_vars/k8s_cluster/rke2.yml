@@ -25,4 +25,12 @@ rke2_server_options:
 rke2_loadbalancer_ip_range:
   range-global: 10.1.8.160-10.1.8.191
 
+rke2_kubevip_args: 
+- param: enableServicesElection
+  value: "true"
+- param: enableNodeLabeling
+  value: "true"
+# - param: onlyAllowTrafficServicePorts
+#   value: true
+
 # TODO: etcd snapshot backup to S3 ?
