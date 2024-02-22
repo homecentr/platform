@@ -27,9 +27,9 @@ rke2_loadbalancer_ip_range:
 
 rke2_kubevip_args: 
 - param: enableServicesElection
-  value: "true"
+  value: "'true'"
 - param: enableNodeLabeling
-  value: "true"
+  value: "'true'"
 # - param: onlyAllowTrafficServicePorts
 #   value: true
 
