@@ -12,8 +12,8 @@ rke2_kubevip_cloud_provider_image: ghcr.io/kube-vip/kube-vip-cloud-provider:v0.0
 rke2_kubevip_args: 
 - param: svc_election
   value: "'true'"
-- param: enable_node_labeling
-  value: "'true'"
+# - param: enable_node_labeling
+#   value: "'true'"
 # - param: onlyAllowTrafficServicePorts
 #   value: true
 
