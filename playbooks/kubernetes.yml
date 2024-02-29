@@ -4,29 +4,24 @@
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
-    - name: Create ZFS datasets for rke2
-      ansible.builtin.import_role:
-        name: ../../roles/k8s-cluster-prerequisites
-      tags:
-        - prereqs
-
-    - name: Install Longhorn dependencies
-      ansible.builtin.import_role:
-        name: ../../roles/k8s-longhorn-dependencies
-      tags:
-        - longhorn-deps
-
     - name: Install helm
       ansible.builtin.import_role:
         name: geerlingguy.helm
       tags:
         - helm
 
-    - name: Install rke2 cluster
+    - name: Set up storage
       ansible.builtin.import_role:
-        name: lablabs.rke2
+        name: ../../roles/k8s-storage
       tags:
-        - rke2
+        - storage
+      when: k8s_storage_enabled == true
+
+    - name: Install and configure the rke2 cluster
+      ansible.builtin.import_role:
+        name: ../../roles/k8s-cluster
+      tags:
+        - cluster
 
     - name: Install and configure Argo CD
       ansible.builtin.import_role:

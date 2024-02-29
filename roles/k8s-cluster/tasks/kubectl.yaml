@@ -14,13 +14,5 @@
 - name: Install required packages
   ansible.builtin.apt:
     name:
-      - jq
       - kubectl
-      - nfs-common
-      - open-iscsi
     state: present
-
-- name: Start iscsi daemon
-  ansible.builtin.service:
-    name: iscsid
-    state: started

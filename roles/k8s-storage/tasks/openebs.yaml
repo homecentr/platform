@@ -1,0 +1,7 @@
+- name: Create ZFS datasets for OpenEBS
+  community.general.zfs:
+    name: "{{ item.name }}"
+    state: present
+    extra_zfs_properties:
+      quota: "{{ item.quota }}"
+  loop: "{{ k8s_storage_openebs_zfs_datasets }}"

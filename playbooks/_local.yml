@@ -4,6 +4,24 @@
   become: true
   become_method: ansible.builtin.sudo
   tasks:
+    - name: Get distro codename
+      register: ubuntu_lsb_release
+      changed_when: false
+      ansible.builtin.command:
+        cmd: lsb_release -sc
+
+    - name: Add Cloudflare apt key
+      ansible.builtin.get_url:
+        url: https://pkg.cloudflare.com/cloudflare-main.gpg
+        dest: /usr/share/keyrings/cloudflare-main.gpg
+
+    - name: Add Cloudflare repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared {{ ubuntu_lsb_release.stdout }} main"
+        filename: cloudflare
+        update_cache: true
+        state: present
+
     - name: Install required python modules
       ansible.builtin.include_role:
         name: geerlingguy.pip
@@ -16,13 +34,53 @@
 
     - name: Install required packages
       ansible.builtin.package:
-        name: sshpass
+        name:
+          - sshpass
+          - cloudflared
+          - grepcidr
 
-    - name: Add a host into the configuration
+    - name: Create proxy command script (for wsl)
+      become: false
+      ansible.builtin.copy:
+        dest: "{{ lookup('env', 'HOME') }}/.ssh/proxy-{{ environment_name }}.sh"
+        mode: 0700
+        content: |
+          #!/usr/bin/env bash
+
+          # $1 = FQDN of the host
+          # $2 = Remote user
+          # $3 = Remote port
+
+          IP=$(dig -t a $1 +short @ | tail -n1)
+          LOCAL_IP=$(echo "$IP" | grepcidr "10.0.0.0/8")
+          
+          if [ -z "$LOCAL_IP" ]; then
+            echo "Remote, using Cloudflare Access..."
+            /usr/local/bin/cloudflared access ssh --hostname $1
+          else
+            ssh $2@$1
+          fi
+
+    - name: Add a host into the configuration (short name)
+      become: false
       community.general.ssh_config:
-        user: "{{ ansible_user_id }}"
-        host: "{{ item }}"
+        user: "{{ ansible_user }}"
+        host: "{{ hostvars[item].ansible_hostname }}"
+        hostname: "{{ hostvars[item].ansible_hostname }}"
+        forward_agent: true # To enable YubiKey forwarding
+        proxycommand: "{{ lookup('env', 'HOME') }}/.ssh/proxy-{{ environment_name }}.sh %h %r"
+        remote_user: "{{ ansible_user }}"
+        state: present
+      with_items: "{{ groups['all'] }}"
+
+    - name: Add a host into the configuration (full name)
+      become: false
+      community.general.ssh_config:
+        user: "{{ ansible_user }}"
+        host: "{{ hostvars[item].ansible_hostname }}"
         hostname: "{{ hostvars[item].fqdn }}"
         forward_agent: true # To enable YubiKey forwarding
+        proxycommand: "{{ lookup('env', 'HOME') }}/.ssh/proxy-{{ environment_name }}.sh %h %r"
+        remote_user: "{{ ansible_user }}"
         state: present
       with_items: "{{ groups['all'] }}"

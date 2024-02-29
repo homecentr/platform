@@ -1,0 +1,12 @@
+k8s_cluster_kubevip_image: ghcr.io/kube-vip/kube-vip:v0.7.0
+k8s_cluster_kubevip_cloud_provider_image: ghcr.io/kube-vip/kube-vip-cloud-provider:v0.0.8
+
+k8s_cluster_kubeapi_vip: 10.1.8.130
+k8s_cluster_rke2_version: v1.28.4+rke2r1
+
+k8s_cluster_cluster_cidr: "172.16.0.0/16" # Pod internal IP addresses
+k8s_cluster_service_cidr: "172.17.0.0/16" # Services internal IP addresses
+
+k8s_cluster_kubevip_dynamic_range: "10.1.8.160-10.1.8.191"
+
+# TODO: etcd snapshot backup to S3 ?

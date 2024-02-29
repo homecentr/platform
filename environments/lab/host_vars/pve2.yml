@@ -14,3 +14,6 @@ ups_name: dummy-ups1
 
 # nVidia drivers
 nvidia_drivers_install_containers: true
+
+# Kubernetes
+k8s_storage_enabled: true

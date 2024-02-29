@@ -1,0 +1,11 @@
+k8s_storage_openebs_zfs_datasets:
+  - name: dpool/openebs/db
+    quota: 10G
+
+k8s_storage_longhorn_zvols:
+  - name: dpool/longhorn/data
+    mountpoint: /longhorn/data
+    size: 20G
+  - name: dpool/longhorn/nvr
+    mountpoint: /longhorn/nvr
+    size: 20G

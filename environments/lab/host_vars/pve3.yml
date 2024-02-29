@@ -13,5 +13,6 @@ network_interfaces:
 ups_name: dummy-ups1
 
 # Kubernetes
+k8s_storage_enabled: false
 rke2_server_node_taints:
   - 'CriticalAddonsOnly=true:NoSchedule'
