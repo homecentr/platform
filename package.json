@@ -6,8 +6,8 @@
   "license": "GPL",
   "private": true,
   "scripts": {
+    "install": "./tools/install.sh",
     "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint",
-    "setup:local": "ansible-galaxy install -r ./requirements.yml --force && ansible-playbook ./playbooks/_local.yml",
     "lab:clear-keys": "./tools/clearkeys.sh",
     "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
     "lab:apply": "./tools/apply.sh lab",

@@ -1,0 +1,36 @@
+---
+collections:
+  - name: ansible.posix
+    version: 1.4.0
+  - name: ansible.utils
+    version: 2.7.0
+  - name: oasis_roles.system
+  - name: community.general
+    version: 6.3.0
+  - name: gluster.gluster
+    version: 1.0.2
+  - name: kubernetes.core
+    version: 2.3.2
+  - name: community.crypto
+    version: 2.5.0
+  - name: community.sops
+    version: 1.6.0
+  - name: https://github.com/homecentr/ansible-collection-system
+    type: git
+    version: master
+  - name: https://github.com/homecentr/ansible-collection-proxmox
+    type: git
+    version: master
+
+roles:
+  - name: geerlingguy.pip
+    version: 2.2.0
+  - name: geerlingguy.security
+    version: 2.2.0
+  - name: geerlingguy.clamav
+  - name: geerlingguy.helm
+    version: 1.0.1
+  - name: geerlingguy.node_exporter
+    version: 2.0.0
+  - name: lablabs.rke2
+    version: 1.28.0

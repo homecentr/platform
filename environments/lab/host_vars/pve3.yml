@@ -3,16 +3,5 @@ ansible_host: 10.1.8.13
 ansible_hostname: pve3-lab
 fqdn: pve3-lab.homecentr.one
 
-network_interfaces:
-  ens19:
-    method: static
-    address: 192.168.7.13/24
-    auto: true
-
 # UPS
 ups_name: dummy-ups1
-
-# Kubernetes
-k8s_storage_enabled: false
-rke2_server_node_taints:
-  - 'CriticalAddonsOnly=true:NoSchedule'

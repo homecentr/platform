@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-printHelp() {
-  echo "Usage: apply (lab|prod) <category> <playbook>"
-}
-
 case "$1" in
  lab)
   INVENTORY="./environments/lab"
@@ -13,12 +9,12 @@ case "$1" in
   ;;
  *)
   # else
-  printHelp
+  echo "Error, invalid arguments"
   exit 1
   ;;
 esac
 
-PLAYBOOK="./playbooks/${2:-_all}.yml"
+PLAYBOOK="./playbooks/${2:-_all}.yaml"
 
 if [ ! -f "$PLAYBOOK" ]; then
   printHelp
@@ -30,9 +26,6 @@ shift
 shift
 
 export ANSIBLE_CONFIG="./ansible.cfg"
-
-# Install Ansible dependencies (roles and collections)
-ansible-galaxy install -r ./requirements.yml --force
 
 COMMAND="ansible-playbook -i $INVENTORY $PLAYBOOK ${@:1}"
 

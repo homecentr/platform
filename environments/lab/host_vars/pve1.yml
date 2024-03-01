@@ -3,17 +3,5 @@ ansible_host: 10.1.8.11
 ansible_hostname: pve1-lab
 fqdn: pve1-lab.homecentr.one
 
-network_interfaces:
-  ens19:
-    method: static
-    address: 192.168.7.11/24
-    auto: true
-
 # UPS
 ups_name: dummy-ups1
-
-# nVidia drivers
-nvidia_drivers_install_containers: true
-
-# Kubernetes
-k8s_storage_enabled: true

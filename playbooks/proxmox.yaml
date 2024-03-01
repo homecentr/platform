@@ -74,5 +74,43 @@
         pve_local_storage_api_user: root@pam
         pve_local_storage_api_password: "{{ users_root_password }}"
 
-    - name: Flush handlers before starting the VMs
+    - name: Create host records for servers
+      ansible.builtin.import_role:
+        name: ../../roles/hosts
+      tags:
+        - hosts
+
+    - name: Install benchmarks
+      ansible.builtin.import_role:
+        name: homecentr.system.benchmarks
+      tags:
+        - benchmarks
+
+    - name: Install lynis
+      ansible.builtin.import_role:
+        name: homecentr.system.lynis
+      tags:
+        - lynis
+
+    - name: Harden the system according to lynis recommendations
+      ansible.builtin.import_role:
+        name: homecentr.system.lynis_hardening
+      tags:
+        - lynis
+
+    - name: Install and configure Network UPS tools
+      ansible.builtin.import_role:
+        name: homecentr.system.ups
+      tags:
+        - ups
+
+    - name: Set up Message-of-the-day
+      ansible.builtin.import_role:
+        name: homecentr.system.motd
+      vars:
+        motd_enable_ups_status: "true"
+      tags:
+        - motd
+
+    - name: Flush handlers before starting the VMs & Containers
       ansible.builtin.meta: flush_handlers
