@@ -1,0 +1,3 @@
+{%- if rule.interface | default("") != "" %}
+ -i {{ rule.interface }}
+{%- endif %}

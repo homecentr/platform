@@ -1,0 +1,19 @@
+- name: Configure aliases
+  ansible.builtin.include_tasks:
+    file: aliases.yaml
+
+- name: Configure ipsets
+  ansible.builtin.include_tasks:
+    file: ipsets.yaml
+
+- name: Configure security groups
+  ansible.builtin.include_tasks:
+    file: security-groups.yaml
+
+- name: Configure rules
+  ansible.builtin.include_tasks:
+    file: rules.yaml
+
+- name: Configure options
+  ansible.builtin.include_tasks:
+    file: options.yaml

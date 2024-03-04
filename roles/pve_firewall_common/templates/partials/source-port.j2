@@ -1,0 +1,3 @@
+{%- if rule.source_port | default("") != "" %}
+ -sport {{ rule.source_port }}
+{%- endif %}

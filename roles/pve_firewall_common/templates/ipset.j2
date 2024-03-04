@@ -1,0 +1,8 @@
+[IPSET {{ ipset.name }}]
+{% for item in ipset["items"] %}
+{% if item.type | default("") == "alias" %}
+{{ item.scope | default(default_scope) }}/{{ item.name }}
+{% else %}
+{{ item.cidr }}
+{% endif %}
+{%- endfor %}

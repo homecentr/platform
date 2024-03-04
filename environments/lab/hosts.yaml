@@ -1,0 +1,15 @@
+all:
+  children:
+    pve_nodes:
+      hosts:
+        pve1:
+        pve2:
+        pve3:
+    app_containers:
+      # children:
+      #   app_coredns:
+      #     hosts:
+      #       app_coredns_primary:
+      #       app_coredns_secondary:
+      hosts:
+        app_coredns:

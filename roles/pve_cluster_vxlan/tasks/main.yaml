@@ -1,0 +1,23 @@
+- name: Install required packages
+  ansible.builtin.apt:
+    name: libpve-network-perl
+    state: present
+
+- name: Verify SDN is enabled
+  ansible.builtin.lineinfile:
+    path: /etc/network/interfaces
+    create: false
+    line: "source /etc/network/interfaces.d/*"
+
+- name: Configure zones
+  run_once: true
+  loop: "{{ pve_cluster_vxlans }}"
+  loop_control:
+    loop_var: zone
+  ansible.builtin.include_tasks:
+    file: zone.yaml
+
+- name: Apply changes to the whole cluster
+  changed_when: true
+  ansible.builtin.command:
+    cmd: pvesh set /cluster/sdn

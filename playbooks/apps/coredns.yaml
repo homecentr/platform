@@ -1,0 +1,28 @@
+- name: Create application container
+  hosts: pve_nodes
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tags: create-container
+  tasks:
+    # Create container
+    - name: Create application container
+      ansible.builtin.import_role:
+        name: ../../roles/app-container
+      vars:
+        container_inventory_name: app_coredns
+
+- name: Setup Coredns containers
+  hosts: app_coredns
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tags: configure-container
+  tasks:
+    - name: Dummy
+      ansible.builtin.copy:
+        dest: /tmp/test.txt
+        owner: root
+        group: root
+        mode: 0666
+        content: Hello, world!

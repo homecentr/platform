@@ -1,4 +1,4 @@
-- name: Configure Ansible controller
+- name: Install required packages
   hosts: localhost
   connection: local
   become: true
@@ -42,8 +42,9 @@
     - name: Create proxy command script (for wsl)
       become: false
       ansible.builtin.copy:
-        dest: "{{ lookup('env', 'HOME') }}/.ssh/proxy-{{ environment_name }}.sh"
+        dest: "{{ lookup('env', 'HOME') }}/.ssh/proxy.sh"
         mode: 0700
+        force: true
         content: |
           #!/usr/bin/env bash
 
@@ -60,27 +61,3 @@
           else
             ssh $2@$1
           fi
-
-    - name: Add a host into the configuration (short name)
-      become: false
-      community.general.ssh_config:
-        user: "{{ ansible_user }}"
-        host: "{{ hostvars[item].ansible_hostname }}"
-        hostname: "{{ hostvars[item].ansible_hostname }}"
-        forward_agent: true # To enable YubiKey forwarding
-        proxycommand: "{{ lookup('env', 'HOME') }}/.ssh/proxy-{{ environment_name }}.sh %h %r"
-        remote_user: "{{ ansible_user }}"
-        state: present
-      with_items: "{{ groups['all'] }}"
-
-    - name: Add a host into the configuration (full name)
-      become: false
-      community.general.ssh_config:
-        user: "{{ ansible_user }}"
-        host: "{{ hostvars[item].ansible_hostname }}"
-        hostname: "{{ hostvars[item].fqdn }}"
-        forward_agent: true # To enable YubiKey forwarding
-        proxycommand: "{{ lookup('env', 'HOME') }}/.ssh/proxy-{{ environment_name }}.sh %h %r"
-        remote_user: "{{ ansible_user }}"
-        state: present
-      with_items: "{{ groups['all'] }}"

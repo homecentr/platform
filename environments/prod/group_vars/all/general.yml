@@ -1,4 +1,2 @@
 ansible_user: lholota
 ansible_python_interpreter: "/usr/bin/python3"
-
-environment_name: prod

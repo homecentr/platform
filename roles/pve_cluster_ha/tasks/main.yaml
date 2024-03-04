@@ -1,0 +1,9 @@
+- name: Create ha config file if it does not exist
+  run_once: true
+  ansible.builtin.copy:
+    dest: /etc/pve/ha/groups.cfg
+    owner: root
+    group: www-data
+    mode: "0640"
+    force: true
+    content: "{{ lookup('template', 'ha-groups.j2') }}"

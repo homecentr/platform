@@ -1,0 +1,3 @@
+{%- if rule.protocol | default("") != "" %}
+ -p {{ rule.protocol | lower }}
+{%- endif %}

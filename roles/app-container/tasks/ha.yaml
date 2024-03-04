@@ -1,0 +1,17 @@
+- name: Configure container as a ha resource
+  run_once: true
+  ansible.builtin.blockinfile:
+    path: /etc/pve/ha/resources.cfg
+    create: true
+    owner: root
+    group: www-data
+    mode: "0640"
+    marker: "# {mark} Ansible managed ha container {{ container_vars.ansible_hostname }}"
+    prepend_newline: true
+    block: |
+      ct: {{ app_container_info.vmid }}
+        state {{ container_vars.app_container_desired_state | default('started') }}
+        {%- if container_vars.app_container_pve_ha_group_name %}
+
+        group {{ container_vars.app_container_pve_ha_group_name }}
+        {%- endif %}

@@ -21,11 +21,6 @@
         name: homecentr.proxmox.pve_users
       tags: [ init, users ]
 
-    - name: Configure network interfaces
-      ansible.builtin.import_role:
-        name: homecentr.system.network
-      tags: [ network ]
-
     - name: Configure https port forwarding
       ansible.builtin.import_role:
         name: homecentr.proxmox.pve_https_forward

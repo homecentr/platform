@@ -1,0 +1,33 @@
+- name: Proxmox Virtual Environment Configuration
+  hosts: pve_nodes
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Download Container templates
+      ansible.builtin.get_url:
+        url: "{{ item }}"
+        dest: "/var/lib/vz/template/cache/{{ item | basename }}"
+      loop: "{{ pve_ct_templates }}"
+      tags:
+        - ct_templates
+
+    - name: Configure cluster-level options
+      ansible.builtin.import_role:
+        name: ../roles/pve_cluster_options
+      tags: cluster_options
+
+    - name: Configure container vxlan sdn networks
+      ansible.builtin.import_role:
+        name: ../roles/pve_cluster_vxlan
+      tags: vxlan
+
+    - name: Configure cluster-level firewall
+      ansible.builtin.import_role:
+        name: ../roles/pve_cluster_firewall
+      tags: firewall
+
+    - name: Configure HA
+      ansible.builtin.import_role:
+        name: ../roles/pve_cluster_ha
+      tags: ha

@@ -1,0 +1,7 @@
+{%- if expression.type | default("") == "ipset" %}
++{{ expression.scope | default(default_scope) | mandatory }}/{{ expression.name }}
+{%- elif expression.type | default("") == "alias" %}
+{{ expression.scope | default(default_scope) | mandatory }}/{{ expression.name }} 
+{%- else %}
+{{ expression }}
+{%- endif %}

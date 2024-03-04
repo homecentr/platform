@@ -1,0 +1,25 @@
+ansible_host: 10.1.8.191
+ansible_hostname: coredns-lab
+fqdn: coredns-lab.homecentr.one
+
+app_container_ostemplate: local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst
+app_container_memory: 512
+app_container_cpus: 0 # unlimited, should be default
+app_container_storage_name: dpool
+app_container_storage_size_gb: 10
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: 10.1.8.191/24
+    ipv4_gateway: 10.1.8.1
+  - name: eth1
+    bridge: cont
+    ipv4_address: dhcp
+app_container_pve_node: pve1
+app_container_pve_ha_group_name: unrestricted-priority-pve1
+app_container_pve_replication_cron_expression: "*/5"
+app_container_pve_replication_nodes:
+  - pve2
+app_container_bind_mounts:
+  - hostpath: /ssl
+    containerpath: /some-ssl

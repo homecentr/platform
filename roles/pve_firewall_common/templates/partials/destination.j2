@@ -1,0 +1,3 @@
+{%- if rule.source is defined %}
+ -destination {{ lookup('template', 'partials/host-expression.j2',template_vars=(dict(expression=rule.source, default_scope=default_scope))) }}
+{%- endif %}

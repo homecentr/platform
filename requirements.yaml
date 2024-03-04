@@ -6,7 +6,7 @@ collections:
     version: 2.7.0
   - name: oasis_roles.system
   - name: community.general
-    version: 6.3.0
+    version: 8.4.0
   - name: gluster.gluster
     version: 1.0.2
   - name: kubernetes.core
@@ -20,7 +20,7 @@ collections:
     version: master
   - name: https://github.com/homecentr/ansible-collection-proxmox
     type: git
-    version: master
+    version: origin/fix/https-forward-2 # master
 
 roles:
   - name: geerlingguy.pip

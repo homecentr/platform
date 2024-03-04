@@ -1,0 +1,16 @@
+- name: Proxmox Virtual Environment Configuration
+  hosts: pve_nodes
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  vars:
+    hosts: 
+      - pve1
+      - pve2
+  tasks:
+    - name: Debug
+      run_once: true
+      debug:
+        #msg: "{{ hosts }}"
+        msg: "{{ hosts | map('extract', hostvars, 'ansible_host') | join(',') }}"
+        #msg: "{{ ansible_play_hosts_all }}"

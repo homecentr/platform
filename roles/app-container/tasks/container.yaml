@@ -1,0 +1,91 @@
+- name: Create new container with minimal options
+  run_once: true
+  community.general.proxmox:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: "localhost"
+    node: "{{ hostvars[container_vars.app_container_pve_node].ansible_hostname }}"
+    password: "{{ users_root_password }}"
+    hostname: "{{ container_vars.ansible_hostname }}"
+    ostemplate: "{{ container_vars.app_container_ostemplate }}"
+    memory: "{{ container_vars.app_container_memory }}"
+    cpus: "{{ container_vars.app_container_cpus }}"
+    unprivileged: "{{ container_vars.app_container_unprivileged | default(true) }}"
+    swap: "{{ container_vars.app_container_swap_mb | default(512) }}"
+    disk: "{{ container_vars.app_container_storage_name }}:{{ container_vars.app_container_storage_size_gb }},replicate=1"
+    pubkey: "{{ container_vars.users_root_public_keys | join('\n') }}"
+    onboot: "{{ container_vars.start_onboot | default(true) }}"
+    netif: "{{ lookup('template', 'network-interfaces.j2', template_vars=dict(app_container_network_interfaces=container_vars.app_container_network_interfaces)) }}"
+    state: present
+
+- name: Create new container with minimal options
+  run_once: true
+  register: container_update
+  community.general.proxmox:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: "localhost"
+    node: "{{ hostvars[container_vars.app_container_pve_node].ansible_hostname }}"
+    password: "{{ users_root_password }}"
+    hostname: "{{ container_vars.ansible_hostname }}"
+    memory: "{{ container_vars.app_container_memory }}"
+    cpus: "{{ container_vars.app_container_cpus }}"
+    unprivileged: "{{ container_vars.app_container_unprivileged | default(true) }}"
+    swap: "{{ container_vars.app_container_swap_mb | default(512) }}"
+    disk: "{{ container_vars.app_container_storage_name }}:{{ container_vars.app_container_storage_size_gb }},replicate=1"
+    pubkey: "{{ container_vars.users_root_public_keys | join('\n') }}"
+    onboot: "{{ container_vars.start_onboot | default(true) }}"
+    netif: "{{ lookup('template', 'network-interfaces.j2', template_vars=dict(app_container_network_interfaces=container_vars.app_container_network_interfaces)) }}"
+    update: true
+    state: present
+
+- name: Wait for the container to be created
+  register: app_container_info
+  community.general.proxmox_vm_info:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: "localhost"
+    type: lxc
+    name: "{{ container_vars.ansible_hostname }}"
+
+- name: Flatten container info
+  ansible.builtin.set_fact:
+    app_container_info: "{{ app_container_info.proxmox_vms.0 }}"
+
+- name: Add bind-mounts
+  register: bind_mounts
+  loop: container_vars.app_container_bind_mounts
+  loop_control:
+    loop_var: bind
+  ansible.builtin.lineinfile:
+    path: "/etc/pve/lxc/{{ app_container_info.vmid }}.cfg"
+    regex: "^mp{{ loop.index - 1 }}: .*"
+    line: "mp{{ loop.index - 1 }}: {{ bind.hostpath }},mp={{ bind.containerpath }}"
+
+- name: Stop the container if it's started but definition has changed
+  when: (container_update.changed or bind_mounts.changed) and app_container_info.status == 'running' and (container_vars.app_container_autorestart_enabled | default(false))
+  run_once: true
+  community.general.proxmox:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: "localhost"
+    hostname: "{{ container_vars.ansible_hostname }}"
+    state: stopped
+
+- name: Start container
+  run_once: true
+  community.general.proxmox:
+    api_user: root@pam
+    api_password: "{{ hostvars[container_vars.app_container_pve_node].users_root_password }}"
+    api_host: "localhost"
+    hostname: "{{ container_vars.ansible_hostname }}"
+    state: started
+
+- name: Wait for the container to start responding on SSH
+  run_once: true
+  ansible.builtin.wait_for:
+    host: "{{ container_vars.ansible_host }}"
+    port: 22
+    timeout: 400
+    sleep: 2
+    msg: "Container {{ container_vars.ansible_hostname }} did not start responding on SSH in time."

@@ -1,0 +1,12 @@
+{%- for group in pve_cluster_ha_groups %}
+group: {{ group.name }}
+       nodes {% for node in group.nodes %}
+{{- hostvars[node.name].ansible_hostname -}}
+{%- if node.priority | default("") != "" %}:{{ node.priority }}{% endif %}
+{%- if not loop.last %},{% endif %}
+{% endfor %}
+
+       nofailback {{ '1' if (group.nofailback | default(false)) else '0' }}
+       restricted {{ '1' if (group.restricted | default(false)) else '0' }}
+
+{% endfor %}

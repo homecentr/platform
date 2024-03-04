@@ -1,0 +1,12 @@
+- name: Configure ipset
+  run_once: true
+  loop: "{{ pve_firewall_ipsets | default([]) }}"
+  loop_control:
+    loop_var: ipset
+  ansible.builtin.blockinfile:
+    path: "{{ pve_firewall_filepath }}"
+    create: false
+    state: present
+    prepend_newline: true
+    marker: "# {mark} Ansible managed ipset ({{ ipset.name }})"
+    block: "{{ lookup('template', 'ipset.j2', template_vars=dict(ipset=ipset, default_scope=pve_firewall_default_scope)) }}"
