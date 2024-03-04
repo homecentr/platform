@@ -3,13 +3,14 @@
 GROUP {{ rule.name }}
     {{- lookup('template', 'partials/interface.j2', template_vars=dict(rule=rule, default_scope=default_scope)) }}
 {%- elif rule.type | default("") | lower == "macro" %}
-    {{- rule.direction | upper }}
+    {{- rule.direction | upper }}{%raw%} {%endraw%}
     {{- rule.name }}({{ rule.action | upper }})
     {{- lookup('template', 'partials/source.j2', template_vars=dict(rule=rule, default_scope=default_scope)) }}
     {{- lookup('template', 'partials/destination.j2', template_vars=dict(rule=rule, default_scope=default_scope)) }}
     {{- lookup('template', 'partials/interface.j2', template_vars=dict(rule=rule, default_scope=default_scope)) }}
     {{- lookup('template', 'partials/log.j2', template_vars=dict(rule=rule, default_scope=default_scope)) }}
 {%- else %}
+    {{- rule.direction | upper }}{%raw%} {%endraw%}
     {{- rule.action | upper }}
     {{- lookup('template', 'partials/source.j2', template_vars=dict(rule=rule, default_scope=default_scope)) }}
     {{- lookup('template', 'partials/destination.j2', template_vars=dict(rule=rule, default_scope=default_scope)) }}

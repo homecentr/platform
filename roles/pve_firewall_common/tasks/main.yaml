@@ -1,19 +1,42 @@
-- name: Configure aliases
-  ansible.builtin.include_tasks:
-    file: aliases.yaml
+- name: Validate aliases
+  run_once: true
+  loop: "{{ pve_firewall_aliases | default([]) }}"
+  loop_control:
+    loop_var: alias
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - (alias.name | regex_search("[A-Za-z][A-Za-z0-9\-\_]+")) == alias.name
+      - (alias.name | length) <= 64
 
-- name: Configure ipsets
-  ansible.builtin.include_tasks:
-    file: ipsets.yaml
+- name: Validate ipsets
+  run_once: true
+  loop: "{{ pve_firewall_ipsets | default([]) }}"
+  loop_control:
+    loop_var: ipset
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - (ipset.name | regex_search("[A-Za-z][A-Za-z0-9\-\_]+")) == ipset.name
+      - (ipset.name | length) <= 64
 
-- name: Configure security groups
-  ansible.builtin.include_tasks:
-    file: security-groups.yaml
+- name: Validate security groups
+  run_once: true
+  loop: "{{ pve_firewall_security_groups | default([]) }}"
+  loop_control:
+    loop_var: group
+  ansible.builtin.assert:
+    quiet: true
+    that:
+      - (group.name | regex_search("[A-Za-z][A-Za-z0-9\-\_]+")) == group.name
+      - (group.name | length) <= 18
 
-- name: Configure rules
-  ansible.builtin.include_tasks:
-    file: rules.yaml
-
-- name: Configure options
-  ansible.builtin.include_tasks:
-    file: options.yaml
+- name: Update firewall file
+  run_once: true
+  ansible.builtin.copy:
+    dest: "{{ pve_firewall_filepath }}"
+    mode: "0640"
+    owner: root
+    group: www-data
+    force: true
+    content: "{{ lookup('template', 'firewall-file.j2') }}"

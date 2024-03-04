@@ -5,7 +5,7 @@ pve_cluster_firewall_aliases:
     cidr: 10.1.3.0/24 # must be an ip or cidr => cidr
 
 pve_cluster_firewall_ipsets:
-  - name: My set
+  - name: some-ipset
     items:
       - type: alias
         name: some-alias
@@ -16,8 +16,9 @@ pve_cluster_firewall_security_groups:
   - name: my-group
     rules:
       - direction: IN
+        type: macro
+        name: SSH
         action: ACCEPT
-        macro: SSH
         source:
           type: ipset
           name: some-ipset
@@ -26,9 +27,19 @@ pve_cluster_firewall_security_groups:
       - enabled: false # default = true
         direction: IN
         action: ACCEPT
+        protocol: TCP
         source_port: 25
         destination_port: http
         source: # might be: ipset (+<name>), alias (dc/<name>), comma-separated list of ips or most likely also a cidr
           type: alias
           name: some-alias
         destination: 10.1.8.0/24
+
+pve_cluster_firewall_rules:
+  - direction: IN
+    action: ACCEPT
+    macro: SSH
+    source:
+      type: ipset
+      name: some-ipset
+    destination: 10.1.8.0/24 # optional
