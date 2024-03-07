@@ -1,0 +1,25 @@
+- name: Check if version installed
+  failed_when: false
+  register: app_coredns_current_version
+  ansible.builtin.slurp:
+    path: /etc/coredns-version
+
+- name: Download coredns
+  when: (not app_coredns_current_version is succeeded) or (not 'content' in app_coredns_current_version) or (app_coredns_current_version.content | b64decode) != app_coredns_version
+  ansible.builtin.get_url:
+    dest: /tmp/coredns.tar.gz
+    url: "https://github.com/coredns/coredns/releases/download/v{{ app_coredns_version }}/coredns_{{ app_coredns_version }}_linux_amd64.tgz"
+    checksum: "sha256:https://github.com/coredns/coredns/releases/download/v{{ app_coredns_version }}/coredns_{{ app_coredns_version }}_linux_amd64.tgz.sha256"
+
+- name: Extract coredns
+  when: (not app_coredns_current_version is succeeded) or (not 'content' in app_coredns_current_version) or (app_coredns_current_version.content | b64decode) != app_coredns_version
+  ansible.builtin.unarchive:
+    src: /tmp/coredns.tar.gz
+    dest: /usr/bin
+    remote_src: true
+
+- name: Create marker file
+  ansible.builtin.copy:
+    dest: /etc/coredns-version
+    content: "{{ app_coredns_version }}"
+    force: true

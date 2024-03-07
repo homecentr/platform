@@ -17,7 +17,7 @@ collections:
     version: 1.6.0
   - name: https://github.com/homecentr/ansible-collection-system
     type: git
-    version: master
+    version: origin/fix/ssh #master
   - name: https://github.com/homecentr/ansible-collection-proxmox
     type: git
     version: origin/fix/https-forward-2 # master

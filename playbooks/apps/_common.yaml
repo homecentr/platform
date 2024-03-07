@@ -1,0 +1,11 @@
+- name: Configure users
+  ansible.builtin.import_role:
+    name: homecentr.system.users
+
+- name: Configure ssh
+  ansible.builtin.import_role:
+    name: homecentr.system.ssh
+
+- name: Configure motd
+  ansible.builtin.import_role:
+    name: homecentr.system.motd

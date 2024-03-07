@@ -46,6 +46,11 @@
         name: homecentr.proxmox.pve_corosync_fix
       tags: [ corosync ]
 
+    - name: Remove the no-subscription warning
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_nosubs_warning
+      tags: [ no-subs-warning ]
+
     - name: Configure ACME
       ansible.builtin.import_role:
         name: homecentr.proxmox.pve_acme

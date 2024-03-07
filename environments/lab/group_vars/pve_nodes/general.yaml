@@ -18,9 +18,9 @@ pve_cluster_vxlans:
       - pve3
     vnets:
       - name: cont
-        tag: 100
+        tag: 8
         subnets:
-          - cidr: 192.168.100.0/24
+          - cidr: 192.168.8.0/24
 
 pve_cluster_ha_groups:
   - name: critical-priority-pve1

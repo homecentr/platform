@@ -1,0 +1,24 @@
+pct set {{ container_id }}
+{%- if app_container_cpu_cores is defined %} --cores {{ app_container_cpu_cores }} \{% endif %}
+ --features nesting=1{% if app_container_fuse_enabled %},fuse=1{% endif %} \
+ --hostname {{ ansible_hostname }} \
+ --memory {{ app_container_memory }} \
+ {%- for bindmount in app_container_bind_mounts %}
+ --mp{{ loop.index - 1 }} "{{ bindmount.hostpath }},mp={{ bindmount.containerpath }}"
+ {%- endfor %}
+ {%- for nic in app_container_network_interfaces %}
+ --net{{ loop.index - 1 }} "name={{ nic.name }},bridge={{ nic.bridge }},ip={{ nic.ipv4_address }}{{ ",gw=" + nic.ipv4_gateway if (nic.ipv4_gateway | default("")) != "" else "" }}" \
+ {%- endfor %}
+ {%- if app_container_start_onboot is defined %}
+ --onboot {{ '1' if (app_container_start_onboot | default(true)) else '0' }} \
+ {%- endif %}
+ {%- if app_container_protection is defined %}
+ --protection {{ '1' if app_container_protection else '0' }} \
+ {%- endif %}
+ {%- if app_container_startup_order is defined %}
+ --startup {{ app_container_startup_order }} \
+ {%- endif %}
+ {%- if app_container_swap is defined %}
+ --swap {{ app_container_swap }} \
+ {%- endif %}
+ --unprivileged {{ '1' if (app_container_unprivileged | default(1)) else '0' }}

@@ -1,0 +1,15 @@
+- name: Scan for container SSH host keys
+  become: false
+  delegate_to: localhost
+  changed_when: false
+  register: app_container_ssh_scan
+  ansible.builtin.shell:
+    cmd: ssh-keyscan {{ container_vars.ansible_host }} 2>/dev/null
+
+- name: Update known_hosts
+  become: false
+  delegate_to: localhost
+  ansible.builtin.known_hosts:
+    key: "{{ item }}"
+    name: "{{ container_vars.ansible_host }}"
+  with_items: "{{ app_container_ssh_scan.stdout_lines }}"

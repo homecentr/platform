@@ -6,10 +6,8 @@ all:
         pve2:
         pve3:
     app_containers:
-      # children:
-      #   app_coredns:
-      #     hosts:
-      #       app_coredns_primary:
-      #       app_coredns_secondary:
-      hosts:
+      children:
         app_coredns:
+          hosts:
+            app_coredns_primary:
+            app_coredns_secondary:

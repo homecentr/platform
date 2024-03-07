@@ -1,3 +1,9 @@
-# IPSet
-# Alias
-# Rules
+- ansible.builtin.import_role:
+    name: "{{ role_path }}/../pve_firewall_common"
+  vars:
+    pve_firewall_default_scope: null
+    pve_firewall_filepath: "/etc/pve/firewall/{{ app_container_info.vmid }}.fw"
+    pve_firewall_aliases: "{{ container_vars.app_container_firewall_aliases | default([]) }}"
+    pve_firewall_ipsets: "{{ container_vars.app_container_firewall_ipsets | default([]) }}"
+    pve_firewall_rules: "{{ container_vars.app_container_firewall_rules | default([]) }}"
+    pve_firewall_enabled: "{{ container_vars.app_container_firewall_enabled | default(false) }}"

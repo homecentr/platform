@@ -1,4 +1,4 @@
-- name: Create new container with minimal options
+- name: Create app container
   run_once: true
   community.general.proxmox:
     api_user: root@pam
@@ -6,41 +6,15 @@
     api_host: "localhost"
     node: "{{ hostvars[container_vars.app_container_pve_node].ansible_hostname }}"
     password: "{{ users_root_password }}"
-    hostname: "{{ container_vars.ansible_hostname }}"
     ostemplate: "{{ container_vars.app_container_ostemplate }}"
-    memory: "{{ container_vars.app_container_memory }}"
-    cpus: "{{ container_vars.app_container_cpus }}"
-    unprivileged: "{{ container_vars.app_container_unprivileged | default(true) }}"
-    swap: "{{ container_vars.app_container_swap_mb | default(512) }}"
     disk: "{{ container_vars.app_container_storage_name }}:{{ container_vars.app_container_storage_size_gb }},replicate=1"
-    pubkey: "{{ container_vars.users_root_public_keys | join('\n') }}"
-    onboot: "{{ container_vars.start_onboot | default(true) }}"
-    netif: "{{ lookup('template', 'network-interfaces.j2', template_vars=dict(app_container_network_interfaces=container_vars.app_container_network_interfaces)) }}"
-    state: present
-
-- name: Create new container with minimal options
-  run_once: true
-  register: container_update
-  community.general.proxmox:
-    api_user: root@pam
-    api_password: "{{ users_root_password }}"
-    api_host: "localhost"
-    node: "{{ hostvars[container_vars.app_container_pve_node].ansible_hostname }}"
-    password: "{{ users_root_password }}"
-    hostname: "{{ container_vars.ansible_hostname }}"
-    memory: "{{ container_vars.app_container_memory }}"
-    cpus: "{{ container_vars.app_container_cpus }}"
-    unprivileged: "{{ container_vars.app_container_unprivileged | default(true) }}"
-    swap: "{{ container_vars.app_container_swap_mb | default(512) }}"
-    disk: "{{ container_vars.app_container_storage_name }}:{{ container_vars.app_container_storage_size_gb }},replicate=1"
-    pubkey: "{{ container_vars.users_root_public_keys | join('\n') }}"
-    onboot: "{{ container_vars.start_onboot | default(true) }}"
-    netif: "{{ lookup('template', 'network-interfaces.j2', template_vars=dict(app_container_network_interfaces=container_vars.app_container_network_interfaces)) }}"
-    update: true
     state: present
 
 - name: Wait for the container to be created
-  register: app_container_info
+  retries: 10
+  delay: 3
+  until: (app_container_info_raw is defined) and (app_container_info_raw.proxmox_vms | length) > 0
+  register: app_container_info_raw
   community.general.proxmox_vm_info:
     api_user: root@pam
     api_password: "{{ users_root_password }}"
@@ -50,20 +24,15 @@
 
 - name: Flatten container info
   ansible.builtin.set_fact:
-    app_container_info: "{{ app_container_info.proxmox_vms.0 }}"
+    app_container_info: "{{ app_container_info_raw.proxmox_vms.0 }}"
 
-- name: Add bind-mounts
-  register: bind_mounts
-  loop: container_vars.app_container_bind_mounts
-  loop_control:
-    loop_var: bind
-  ansible.builtin.lineinfile:
-    path: "/etc/pve/lxc/{{ app_container_info.vmid }}.cfg"
-    regex: "^mp{{ loop.index - 1 }}: .*"
-    line: "mp{{ loop.index - 1 }}: {{ bind.hostpath }},mp={{ bind.containerpath }}"
+- name: Update existing container values
+  changed_when: true
+  ansible.builtin.command:
+    cmd: "{{ lookup('template', 'pct-set.j2', template_vars=dict(app_container_id=app_container_info.vmid).update(container_vars)) }}"
 
-- name: Stop the container if it's started but definition has changed
-  when: (container_update.changed or bind_mounts.changed) and app_container_info.status == 'running' and (container_vars.app_container_autorestart_enabled | default(false))
+- name: Stop the container if it's started and definition has changed
+  when: bind_mounts.changed and app_container_info.status == 'running' and (container_vars.app_container_autorestart_enabled | default(false))
   run_once: true
   community.general.proxmox:
     api_user: root@pam

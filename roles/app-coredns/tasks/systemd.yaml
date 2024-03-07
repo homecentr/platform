@@ -1,0 +1,19 @@
+- name: Create systemd unit file
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/coredns.service
+    owner: root
+    group: root
+    mode: "0644"
+    content: "{{ lookup('template', 'systemd-unit.j2') }}"
+
+- name: Enable service
+  ansible.builtin.systemd_service:
+    name: coredns
+    enabled: true
+    daemon_reload: true
+    state: present
+
+- name: (Re)start service
+  ansible.builtin.systemd_service:
+    name: coredns
+    state: "{{ 'restarted' if app_coredns_corefile.changed else 'started' }}"

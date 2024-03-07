@@ -31,12 +31,16 @@
       - (group.name | regex_search("[A-Za-z][A-Za-z0-9\-\_]+")) == group.name
       - (group.name | length) <= 18
 
+- name: Touch firewall file to make sure it exists
+  run_once: true
+  ansible.builtin.file:
+    path: "{{ pve_firewall_filepath }}"
+    state: touch
+
 - name: Update firewall file
   run_once: true
   ansible.builtin.copy:
     dest: "{{ pve_firewall_filepath }}"
-    mode: "0640"
-    owner: root
-    group: www-data
     force: true
+    unsafe_writes: true
     content: "{{ lookup('template', 'firewall-file.j2') }}"

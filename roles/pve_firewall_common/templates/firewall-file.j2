@@ -10,12 +10,12 @@ enable: {{ '1' if pve_firewall_enabled else '0' }}
 {%- endfor %}
 {%- endif %}
 
-{% for ipset in pve_firewall_ipsets %}
+{% for ipset in pve_firewall_ipsets | default([]) %}
 
 {{ lookup('template', 'ipset.j2', template_vars=dict(ipset=ipset, default_scope=pve_firewall_default_scope)) }}
 {%- endfor %}
 
-{% for group in pve_firewall_security_groups %}
+{% for group in pve_firewall_security_groups | default([]) %}
 {{ lookup('template', 'security-group.j2', template_vars=dict(group=group, default_scope=pve_firewall_default_scope)) }}
 {%- endfor %}
 

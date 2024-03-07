@@ -1,0 +1,27 @@
+- name: Check if container has been already initialized
+  changed_when: false
+  failed_when: false
+  register: app_container_init_check
+  ansible.builtin.command:
+    cmd: "pct exec {{ app_container_info.vmid }} ls /etc/container-init"
+
+- name: Create initialization script
+  when: app_container_init_check.rc != 0
+  ansible.builtin.copy:
+    dest: "/tmp/ct-{{ app_container_info.vmid }}-init.sh"
+    owner: root
+    group: root
+    mode: 0750
+    content: "{{ lookup('template', 'init-script.j2') }}"
+
+- name: Copy init script into the container
+  when: app_container_init_check.rc != 0
+  changed_when: true
+  ansible.builtin.command:
+    cmd: "pct push {{ app_container_info.vmid }} /tmp/ct-{{ app_container_info.vmid }}-init.sh /tmp/init.sh --perms 0755"
+
+- name: Execute init script
+  when: app_container_init_check.rc != 0
+  changed_when: true
+  ansible.builtin.command:
+    cmd: "pct exec {{ app_container_info.vmid }} /tmp/init.sh"

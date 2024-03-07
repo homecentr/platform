@@ -1,16 +1,13 @@
-- name: Proxmox Virtual Environment Configuration
-  hosts: pve_nodes
+- name: Test
+  hosts: localhost
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
-  vars:
-    hosts: 
-      - pve1
-      - pve2
   tasks:
-    - name: Debug
-      run_once: true
-      debug:
-        #msg: "{{ hosts }}"
-        msg: "{{ hosts | map('extract', hostvars, 'ansible_host') | join(',') }}"
-        #msg: "{{ ansible_play_hosts_all }}"
+  - name: Replace dialog script
+    ansible.builtin.replace:
+      path: /tmp/proxmoxlib.js
+      before: "title:\\s+gettext\\('No valid subscription'\\)"
+      regexp: 'Ext\.Msg\.show'
+      replace: 'void'
+      backup: true

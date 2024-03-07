@@ -4,6 +4,18 @@
   vars:
     container_vars: "{{ hostvars[container_inventory_name] }}"
 
+- name: Initialize container
+  run_once: true
+  ansible.builtin.include_tasks:
+    file: init.yaml
+
+- name: Add container to ssh known_hosts
+  run_once: true
+  ansible.builtin.include_tasks:
+    file: ssh.yaml
+  vars:
+    container_vars: "{{ hostvars[container_inventory_name] }}"
+
 - name: Configure replication
   ansible.builtin.include_tasks:
     file: replication.yaml
@@ -17,14 +29,7 @@
     container_vars: "{{ hostvars[container_inventory_name] }}"
 
 - name: Configure container firewall
-  ansible.builtin.import_role:
-    name: "{{ role_path }}/../pve_firewall_common"
+  ansible.builtin.include_tasks:
+    file: firewall.yaml
   vars:
-    pve_firewall_default_scope: null
-    pve_firewall_filepath: "/etc/pve/firewall/{{ app_container_info.vmid }}.fw"
-    pve_firewall_aliases: "{{ pve_cluster_firewall_aliases }}"
-    pve_firewall_ipsets: "{{ pve_cluster_firewall_ipsets }}"
-    pve_firewall_rules: "{{ pve_cluster_firewall_rules }}"
-    pve_firewall_enabled: "{{ pve_cluster_firewall_enabled }}"
-
-# TODO: Support bindmounts (e.g for ssl cert mount)
+    container_vars: "{{ hostvars[container_inventory_name] }}"
