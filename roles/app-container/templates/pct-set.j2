@@ -1,4 +1,4 @@
-pct set {{ container_id }}
+pct set {{ app_container_id }}
 {%- if app_container_cpu_cores is defined %} --cores {{ app_container_cpu_cores }} \{% endif %}
  --features nesting=1{% if app_container_fuse_enabled %},fuse=1{% endif %} \
  --hostname {{ ansible_hostname }} \

@@ -4,6 +4,7 @@
     api_user: root@pam
     api_password: "{{ users_root_password }}"
     api_host: "localhost"
+    hostname: "{{ ansible_hostname }}"
     node: "{{ hostvars[container_vars.app_container_pve_node].ansible_hostname }}"
     password: "{{ users_root_password }}"
     ostemplate: "{{ container_vars.app_container_ostemplate }}"
@@ -26,8 +27,15 @@
   ansible.builtin.set_fact:
     app_container_info: "{{ app_container_info_raw.proxmox_vms.0 }}"
 
+
+- name: Debug 1
+  debug:
+    msg: "{{ dict(app_container_id=app_container_info.vmid).update(container_vars)) }}"
+
+# Note: This must be executed on the node which hosts the container, pct does not work across hosts
 - name: Update existing container values
   changed_when: true
+  when: inventory_hostname == container_vars.app_container_pve_node
   ansible.builtin.command:
     cmd: "{{ lookup('template', 'pct-set.j2', template_vars=dict(app_container_id=app_container_info.vmid).update(container_vars)) }}"
 
