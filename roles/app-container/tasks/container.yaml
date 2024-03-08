@@ -1,13 +1,13 @@
 - name: Create app container
-  run_once: true
   community.general.proxmox:
     api_user: root@pam
     api_password: "{{ users_root_password }}"
     api_host: "localhost"
-    hostname: "{{ ansible_hostname }}"
+    hostname: "{{ container_vars.ansible_hostname }}"
     node: "{{ hostvars[container_vars.app_container_pve_node].ansible_hostname }}"
     password: "{{ users_root_password }}"
     ostemplate: "{{ container_vars.app_container_ostemplate }}"
+    unprivileged: "{{ container_vars.app_container_unprivileged | default(1) }}"
     disk: "{{ container_vars.app_container_storage_name }}:{{ container_vars.app_container_storage_size_gb }},replicate=1"
     state: present
 
@@ -27,21 +27,23 @@
   ansible.builtin.set_fact:
     app_container_info: "{{ app_container_info_raw.proxmox_vms.0 }}"
 
+- name: Get container definition
+  register: app_container_before_pct
+  ansible.builtin.slurp:
+    src: "/etc/pve/lxc/{{ app_container_info.vmid }}.conf"
 
-- name: Debug 1
-  debug:
-    msg: "{{ dict(app_container_id=app_container_info.vmid).update(container_vars)) }}"
-
-# Note: This must be executed on the node which hosts the container, pct does not work across hosts
 - name: Update existing container values
   changed_when: true
-  when: inventory_hostname == container_vars.app_container_pve_node
   ansible.builtin.command:
-    cmd: "{{ lookup('template', 'pct-set.j2', template_vars=dict(app_container_id=app_container_info.vmid).update(container_vars)) }}"
+    cmd: "{{ lookup('template', 'pct-set.j2', template_vars=(dict(app_container_id=app_container_info.vmid) | combine(container_vars))) }}"
+
+- name: Get container definition
+  register: app_container_after_pct
+  ansible.builtin.slurp:
+    src: "/etc/pve/lxc/{{ app_container_info.vmid }}.conf"
 
 - name: Stop the container if it's started and definition has changed
-  when: bind_mounts.changed and app_container_info.status == 'running' and (container_vars.app_container_autorestart_enabled | default(false))
-  run_once: true
+  when: app_container_before_pct.content != app_container_after_pct.content and app_container_info.status == 'running' and (container_vars.app_container_autorestart_enabled | default(false))
   community.general.proxmox:
     api_user: root@pam
     api_password: "{{ users_root_password }}"
@@ -50,7 +52,6 @@
     state: stopped
 
 - name: Start container
-  run_once: true
   community.general.proxmox:
     api_user: root@pam
     api_password: "{{ hostvars[container_vars.app_container_pve_node].users_root_password }}"

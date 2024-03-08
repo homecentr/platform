@@ -1,16 +1,19 @@
 - name: Create container
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   ansible.builtin.include_tasks:
     file: container.yaml
   vars:
     container_vars: "{{ hostvars[container_inventory_name] }}"
 
 - name: Initialize container
-  run_once: true
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   ansible.builtin.include_tasks:
     file: init.yaml
+  vars:
+    container_vars: "{{ hostvars[container_inventory_name] }}"
 
 - name: Add container to ssh known_hosts
-  run_once: true
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   ansible.builtin.include_tasks:
     file: ssh.yaml
   vars:
@@ -29,6 +32,7 @@
     container_vars: "{{ hostvars[container_inventory_name] }}"
 
 - name: Configure container firewall
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   ansible.builtin.include_tasks:
     file: firewall.yaml
   vars:

@@ -1,16 +1,20 @@
 pct set {{ app_container_id }}
-{%- if app_container_cpu_cores is defined %} --cores {{ app_container_cpu_cores }} \{% endif %}
- --features nesting=1{% if app_container_fuse_enabled %},fuse=1{% endif %} \
- --hostname {{ ansible_hostname }} \
- --memory {{ app_container_memory }} \
- {%- for bindmount in app_container_bind_mounts %}
- --mp{{ loop.index - 1 }} "{{ bindmount.hostpath }},mp={{ bindmount.containerpath }}"
+{%- raw %} --hostname {% endraw %}{{ ansible_hostname }}
+{%- raw %} --memory {% endraw %} {{ app_container_memory }}
+{%- if app_container_cpu_cores is defined %} --cores {{ app_container_cpu_cores }}{% endif -%}
+ {%- raw %} --features nesting=1{% endraw %}{% if app_container_fuse_enabled | default(false) == true %},fuse=1{% endif -%}
+ {%- for mount in (app_container_mounts | default([])) %}
+ {%- if mount.type == "bind" %}
+ --mp{{ loop.index - 1 }} "{{ mount.hostpath }},mp={{ mount.target_path }}"
+ {%- else %}
+ --mp{{ loop.index - 1 }} "{{ mount.zfs_pool }}:{{ zfs_dataset_name }},size={{ mount.size }},replicate={{ '1' if (mount.replicate | default(true)) else '0' }},,mp={{ mount.target_path }}"
+ {%- endif %}
  {%- endfor %}
  {%- for nic in app_container_network_interfaces %}
- --net{{ loop.index - 1 }} "name={{ nic.name }},bridge={{ nic.bridge }},ip={{ nic.ipv4_address }}{{ ",gw=" + nic.ipv4_gateway if (nic.ipv4_gateway | default("")) != "" else "" }}" \
+ --net{{ loop.index - 1 }} "name={{ nic.name }},bridge={{ nic.bridge }},ip={{ nic.ipv4_address }}{{ ",gw=" + nic.ipv4_gateway if (nic.ipv4_gateway | default("")) != "" else "" }}"
  {%- endfor %}
  {%- if app_container_start_onboot is defined %}
- --onboot {{ '1' if (app_container_start_onboot | default(true)) else '0' }} \
+ --onboot {{ '1' if (app_container_start_onboot | default(true)) else '0' }}
  {%- endif %}
  {%- if app_container_protection is defined %}
  --protection {{ '1' if app_container_protection else '0' }} \
@@ -21,4 +25,3 @@ pct set {{ app_container_id }}
  {%- if app_container_swap is defined %}
  --swap {{ app_container_swap }} \
  {%- endif %}
- --unprivileged {{ '1' if (app_container_unprivileged | default(1)) else '0' }}

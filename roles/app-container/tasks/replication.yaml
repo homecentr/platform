@@ -1,3 +1,9 @@
+- name: Create replication file if it does not exist
+  run_once: true
+  ansible.builtin.file:
+    path: "/etc/pve/replication.cfg"
+    state: touch
+
 - name: Configure storage replication
   run_once: true
   loop: "{{ container_vars.app_container_pve_replication_nodes }}"

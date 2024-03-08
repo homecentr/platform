@@ -1,0 +1,9 @@
+- name: Create config file
+  register: app_pomerium_config_file
+  ansible.builtin.copy:
+    dest: /etc/pomerium/config.yaml
+    owner: pomerium
+    group: pomerium
+    mode: 0440
+    force: true
+    content: "{{ lookup('template', 'config.j2') }}"

@@ -9,13 +9,15 @@
     create: false
     line: "source /etc/network/interfaces.d/*"
 
-- name: Configure zones
+- name: Update config files
   run_once: true
-  loop: "{{ pve_cluster_vxlans }}"
-  loop_control:
-    loop_var: zone
   ansible.builtin.include_tasks:
-    file: zone.yaml
+    file: configs.yaml
+
+- name: Update IPAM
+  run_once: true
+  ansible.builtin.include_tasks:
+    file: ipam.yaml
 
 - name: Apply changes to the whole cluster
   changed_when: true

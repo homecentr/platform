@@ -1,0 +1,17 @@
+- name: Download apt key
+  ansible.builtin.get_url:
+    url: "https://dl.cloudsmith.io/public/pomerium/pomerium/gpg.6E388440B94E1407.key"
+    dest: /etc/apt/keyrings/pomerium.asc
+
+- name: Add apt repository
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/etc/apt/keyrings/pomerium.asc] https://dl.cloudsmith.io/public/pomerium/pomerium/deb/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} main"
+    state: present
+    update_cache: true
+    filename: pomerium
+
+- name: Install Pomerium package
+  ansible.builtin.apt:
+    name:
+      - pomerium
+      - pomerium-cli

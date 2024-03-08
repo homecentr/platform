@@ -1,0 +1,6 @@
+{% for zone in pve_cluster_vxlans %}
+vxlan: {{ zone.name }}
+    peers {{ zone.peer_hosts | map('extract', hostvars, 'ansible_host') | join(',') }}
+    ipam {{ zone.ipam | default('pve') }}
+
+{% endfor %}

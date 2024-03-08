@@ -1,10 +1,8 @@
 - name: Create firewall config file if it does not exist
+  run_once: true
   ansible.builtin.file:
     path: /etc/pve/firewall/cluster.fw
-    state: file
-    owner: root
-    group: www-data
-    mode: "0640"
+    state: touch
 
 - name: Configure cluster firewall
   ansible.builtin.import_role:

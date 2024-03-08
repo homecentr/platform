@@ -2,16 +2,18 @@
     log
     errors
     hosts {
-        {%- for host in app_coredns_records %}
+        {% for host in app_coredns_records %}
         {{ host.ip }} {{ host.name }}
-        {%- endfor %}
+        {% endfor %}
+        fallthrough
     }
     forward . {% for forwarder in app_coredns_forwarders %}tls://{{ forwarder }} {% endfor %} {
         tls_servername {{ app_coredns_forwarders_tls_servername }}
         max_concurrent 1000
     }
     cache 30
-    prometheus localhost:9153 # TODO: Internal IP ?
+    # TODO: Use vxlan ip
+    prometheus localhost:9153
     loop
     reload
     loadbalance

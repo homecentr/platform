@@ -1,0 +1,9 @@
+{% for zone in pve_cluster_vxlans %}
+{% for vnet in zone.vnets %}
+{% for subnet in vnet.subnets %}
+- vnet_name: {{ vnet.name }}
+  id: {{ zone.name }}-{{ subnet.cidr | replace('/', '-') }}
+
+{% endfor %}
+{% endfor %}
+{% endfor %}

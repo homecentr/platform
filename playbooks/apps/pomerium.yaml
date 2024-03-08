@@ -5,7 +5,7 @@
   any_errors_fatal: true
   tasks:
     - name: Create application container
-      loop: "{{ groups['app_coredns'] }}"
+      loop: "{{ groups['app_pomerium'] }}"
       loop_control:
         loop_var: container_inventory_name
       ansible.builtin.include_role:
@@ -14,19 +14,19 @@
         container_inventory_name: "{{ container_inventory_name }}"
       tags: [ container ]
 
-- name: Setup Coredns containers
-  hosts: app_coredns
+- name: Setup Pomerium containers
+  hosts: app_pomerium_primary # TODO: Replace with group
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
     - name: Run common set up
-      ansible.builtin.import_tasks:
+      ansible.builtin.include_tasks:
         file: _common.yaml
       tags: [ common ]
 
-    - name: Install coredns
+    - name: Install pomerium
       ansible.builtin.import_role:
-        name: ../../roles/app-coredns
-      tags: [ coredns ]
+        name: ../../roles/app-pomerium
+      tags: [ pomerium ]
     

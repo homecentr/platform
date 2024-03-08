@@ -11,3 +11,7 @@ all:
           hosts:
             app_coredns_primary:
             app_coredns_secondary:
+        app_pomerium:
+          hosts:
+            app_pomerium_primary:
+            app_pomerium_secondary:

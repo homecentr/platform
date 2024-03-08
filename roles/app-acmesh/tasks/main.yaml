@@ -1,0 +1,5 @@
+# TODO: Install - download probably from GitHub
+# TODO: If script does not exist in homedir (of pomerium user), run install
+  # TODO: Else run --update-account to ensure the e-mail is in sync with the ansible var
+# TODO: List certs
+  # TODO: If cert with domain not in the result above, request certs immediately using a shell command

@@ -1,0 +1,12 @@
+{% for zone in pve_cluster_vxlans %}
+{% for vnet in zone.vnets %}
+{% for subnet in vnet.subnets %}
+subnet: {{ zone.name }}-{{ subnet.cidr | replace('/', '-') }}
+        vnet {{ vnet.name }}
+{% for dhcp_range in subnet.dhcp_ranges | default([]) %}
+        dhcp-range start-address={{ dhcp_range.start }},end-address={{ dhcp_range.end }}
+{% endfor %}
+
+{% endfor %}
+{% endfor %}
+{% endfor %}

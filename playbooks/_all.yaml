@@ -1,3 +1,4 @@
 - import_playbook: proxmox-nodes.yaml
 - import_playbook: proxmox-cluster.yaml
-- import_playbook: apps/powerdns.yaml
+- import_playbook: apps/coredns.yaml
+- import_playbook: apps/pomerium.yaml

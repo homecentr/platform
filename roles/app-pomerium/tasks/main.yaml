@@ -1,0 +1,11 @@
+- name: Install pomerium
+  ansible.builtin.include_tasks:
+    file: install.yaml
+
+- name: Configure pomerium
+  ansible.builtin.include_tasks:
+    file: configure.yaml
+
+- name: Configure systemd
+  ansible.builtin.include_tasks:
+    file: systemd.yaml

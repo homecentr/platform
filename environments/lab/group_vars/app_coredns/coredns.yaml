@@ -8,10 +8,10 @@ app_coredns_forwarders:
 
 app_coredns_records:
   - name: dns1-lab.homecentr.one
-    value: 10.1.8.128
+    ip: 10.1.8.128
   - name: dns2-lab.homecentr.one
-    value: 10.1.8.129
+    ip: 10.1.8.129
   - name: login-lab.homecentr.one
-    value: 10.1.8.132
+    ip: 10.1.8.132
   - name: gatus-lab.homecentr.one
-    value: 10.1.8.132
+    ip: 10.1.8.132

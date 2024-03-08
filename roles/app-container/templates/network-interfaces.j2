@@ -1,6 +1,0 @@
-{% raw %}{{% endraw %}
-{%- for nic in app_container_network_interfaces %}
-"net{{ loop.index - 1 }}": "name={{ nic.name }},bridge={{ nic.bridge }},ip={{ nic.ipv4_address }}{{ ",gw=" + nic.ipv4_gateway if (nic.ipv4_gateway | default("")) != "" else "" }}"
-{%- if not loop.last %},{% endif %}
-{%- endfor %}
-{% raw %}}{% endraw %}

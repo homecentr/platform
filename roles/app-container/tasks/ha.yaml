@@ -1,3 +1,9 @@
+- name: Touch ha resources config file
+  run_once: true
+  ansible.builtin.file:
+    path: /etc/pve/ha/resources.cfg
+    state: touch
+
 - name: Configure container as a ha resource
   run_once: true
   ansible.builtin.blockinfile:
