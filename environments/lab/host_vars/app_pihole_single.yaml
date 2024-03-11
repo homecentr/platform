@@ -18,6 +18,8 @@ app_container_pve_ha_group_name: unrestricted-priority-pve1
 app_container_pve_replication_nodes:
   - pve2
 
+app_pihole_version: 5.17.3
 app_pihole_forwarders:
   - 1.1.1.1
   - 1.0.0.1
+app_pihole_local_domain: homecentr.one

@@ -1,0 +1,44 @@
+- name: Create application container
+  hosts: pve_nodes
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Create application container
+      loop: "{{ groups['app_pihole'] }}"
+      loop_control:
+        loop_var: container_inventory_name
+      ansible.builtin.include_role:
+        name: ../../roles/app-container
+      vars:
+        container_inventory_name: "{{ container_inventory_name }}"
+      tags: [ container ]
+
+- name: Setup Pihole containers
+  hosts: app_pihole
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Run common set up
+      ansible.builtin.import_tasks:
+        file: _common.yaml
+      tags: [ common ]
+
+    - name: Create pihole group
+      ansible.builtin.group:
+        name: pihole
+      tags: [ pihole ]
+
+    - name: Create pihole user
+      ansible.builtin.user:
+        name: pihole
+        group: pihole
+        create_home: true
+      tags: [ pihole ]
+
+    - name: Install pihole
+      ansible.builtin.import_role:
+        name: ../../roles/app-pihole
+      tags: [ pihole ]
+    
