@@ -5,3 +5,6 @@ fqdn: pve3-lab.homecentr.one
 
 # UPS
 ups_name: dummy-ups1
+
+# GetSSL
+getssl_cron_renewal_hour: 18

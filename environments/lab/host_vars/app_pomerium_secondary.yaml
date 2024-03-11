@@ -2,11 +2,6 @@ ansible_host: 10.1.8.131
 ansible_hostname: pomerium2-lab
 fqdn: pomerium2-lab.homecentr.one
 
-app_container_ostemplate: local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst
-app_container_memory: 512
-app_container_storage_name: dpool
-app_container_storage_size_gb: 2
-app_container_pve_replication_cron_expression: "*/5"
 app_container_network_interfaces:
   - name: eth0
     bridge: vmbr0

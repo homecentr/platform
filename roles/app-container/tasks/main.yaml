@@ -1,7 +1,27 @@
 - name: Create container
-  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   ansible.builtin.include_tasks:
     file: container.yaml
+  vars:
+    container_vars: "{{ hostvars[container_inventory_name] }}"
+
+- name: Configure SSL certificates passthrough
+  when: hostvars[container_inventory_name].app_container_getssl_certificates is defined
+  ansible.builtin.include_tasks:
+    file: getssl.yaml
+  vars:
+    container_vars: "{{ hostvars[container_inventory_name] }}"
+
+- name: Configure mapped UID/GID
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
+  ansible.builtin.include_tasks:
+    file: uid-gid-mapping.yaml
+  vars:
+    container_vars: "{{ hostvars[container_inventory_name] }}"
+
+- name: Start container
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
+  ansible.builtin.include_tasks:
+    file: start.yaml
   vars:
     container_vars: "{{ hostvars[container_inventory_name] }}"
 

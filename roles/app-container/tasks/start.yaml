@@ -1,0 +1,26 @@
+- name: Stop the container if it's started and definition has changed
+  when: app_container_before_pct.content != app_container_after_pct.content and app_container_info.status == 'running' and (container_vars.app_container_autorestart_enabled | default(false))
+  community.general.proxmox:
+    api_user: root@pam
+    api_password: "{{ users_root_password }}"
+    api_host: "localhost"
+    hostname: "{{ container_vars.ansible_hostname }}"
+    state: stopped
+
+- name: Start container
+  run_once: true
+  community.general.proxmox:
+    api_user: root@pam
+    api_password: "{{ hostvars[container_vars.app_container_pve_node].users_root_password }}"
+    api_host: "localhost"
+    hostname: "{{ container_vars.ansible_hostname }}"
+    state: started
+
+- name: Wait for the container to start responding on SSH
+  run_once: true
+  ansible.builtin.wait_for:
+    host: "{{ container_vars.ansible_host }}"
+    port: 22
+    timeout: 400
+    sleep: 2
+    msg: "Container {{ container_vars.ansible_hostname }} did not start responding on SSH in time."

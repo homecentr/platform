@@ -25,8 +25,22 @@
         file: _common.yaml
       tags: [ common ]
 
+    - name: Create pomerium group with fixed GID
+      ansible.builtin.group:
+        name: pomerium
+        gid: 7000
+
+    - name: Create pomerium user with fixed UID
+      ansible.builtin.user:
+        name: pomerium
+        group: pomerium
+        uid: 7000
+        create_home: false
+
     - name: Install pomerium
       ansible.builtin.import_role:
         name: ../../roles/app-pomerium
       tags: [ pomerium ]
     
+    # TODO: Copy certificate
+    # use delegate to

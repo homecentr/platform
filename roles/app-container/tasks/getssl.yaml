@@ -1,0 +1,21 @@
+- name: Touch passthrough config file
+  ansible.builtin.file:
+    path: "/etc/pve/getssl-containers/{{ app_container_info.vmid }}.json"
+    state: touch
+
+- name: Create passthrough config file
+  ansible.builtin.copy:
+    force: true
+    dest: "/etc/pve/getssl-containers/{{ app_container_info.vmid }}.json"
+    content: "{{ lookup('template', 'getssl-config.j2', template_vars=container_vars) }}"
+
+- name: Create mount directory
+  ansible.builtin.file:
+    path: "/var/lib/getssl/{{ app_container_info.vmid }}"
+    owner: root
+    group: root
+    state: directory
+
+- name: Copy certificates
+  ansible.builtin.command:
+    cmd: "getssl-copy-container {{ app_container_info.vmid }}"

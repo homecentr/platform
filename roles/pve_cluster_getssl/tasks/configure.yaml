@@ -1,0 +1,45 @@
+- name: Create workdir in proxmox cluster fs
+  ansible.builtin.file:
+    path: "/etc/pve/getssl"
+    state: directory
+
+- name: Create containers mapping directory
+  ansible.builtin.file:
+    path: "/etc/pve/getssl-containers"
+    state: directory
+
+- name: Create configuration directory for each certificate
+  loop: "{{ getssl_certificates }}"
+  loop_control:
+    loop_var: certificate
+  ansible.builtin.file:
+    path: "/etc/pve/getssl/{{ certificate.domain }}"
+    state: directory
+
+- name: Touch global configuration file
+  ansible.builtin.file:
+    path: /etc/pve/getssl/getssl.cfg
+    state: touch
+
+- name: Create global configuration file
+  ansible.builtin.copy:
+    dest: /etc/pve/getssl/getssl.cfg
+    content: "{{ lookup('template', 'getssl-root.j2') }}"
+    force: true
+
+- name: Touch certificate configuration files
+  loop: "{{ getssl_certificates }}"
+  loop_control:
+    loop_var: certificate
+  ansible.builtin.file:
+    path: "/etc/pve/getssl/{{ certificate.domain }}/getssl.cfg"
+    state: touch
+
+- name: Create certificate configuration files
+  loop: "{{ getssl_certificates }}"
+  loop_control:
+    loop_var: certificate
+  ansible.builtin.copy:
+    dest: "/etc/pve/getssl/{{ certificate.domain }}/getssl.cfg"
+    content: "{{ lookup('template', 'getssl-certificate.j2', template_vars=certificate) }}"
+    force: true

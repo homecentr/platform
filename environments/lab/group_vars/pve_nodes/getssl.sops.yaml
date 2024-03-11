@@ -1,0 +1,47 @@
+getssl_version: ENC[AES256_GCM,data:ypZgdw==,iv:pktvgmp96bQdFnxa9whJXIyRvjscf93UaZQrPpvk448=,tag:od6ICPAH05wqxE6JFR5fhw==,type:float]
+getssl_acme_email: ENC[AES256_GCM,data:vW1i9Q6FCzicUEkWb0mocVQv8/jVzZc=,iv:wFoCCJYnwC8X/cxXF8MmwpoNYzNuhi3f0/uB+XZrcN8=,tag:bk2FcpQsfZb7Ig7E7jS4mw==,type:str]
+getssl_certificates:
+    - domain: ENC[AES256_GCM,data:IL2U60AOP4Qe2s/Q4JpA,iv:m/Al38Q9+Hfoqbp65rZxcQC3davsj1hCF8sFUILor1Q=,tag:bEvmOKVjk0o6f26FBum4YQ==,type:str]
+      pveproxy: ENC[AES256_GCM,data:Z3PlWw==,iv:G+GeW6QuTS9JcEKJxBKeHvc0mOs6vS4FBpadjnL3swA=,tag:PazIu8PuVI+mwdZTFKNkaw==,type:bool]
+getssl_cloudflare_email: ENC[AES256_GCM,data:g8ra8XdIC3yq9J1zWD+h9C8oqK51hQ==,iv:i8ldg/fJLD3N3Ivrl9jm2PtRUZrbjVRGzv3F1FFT/Qk=,tag:C9HTM5pC9LGo1TWQypv0mA==,type:str]
+getssl_cloudflare_api_token: ENC[AES256_GCM,data:XTT1bBWsslV/LZNg+1G+TXwmhSxlIcy8iA4G268TfX0RaJPHuNmoiQ==,iv:kYnJA1nbVCsxZ45pCub/QFX1hWtoPqYoUuc5pJ7819g=,tag:5rlk9oOHXc7auOG1BbgXcQ==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1zw6c356patclh7q8cq5a99cghpzmnufgtwfaa0tmcg87a038d9ms4xpytn
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA1clBQeVhsWVBBNG05V0NH
+            ejZTQ2RJcFpFMm1DUG16cGFDT2VreDI3dUdzCkdqdTJoL3VVSTV6TGp6Y1FKRUpR
+            UGNQVjYvN1BMek83U29HaHRVeG1TYVUKLS0tIGZMcEtwSUt2UkxhamtRa1c1MUx1
+            NTVRVTlXdlltaHFRN2o0cVV3UFZHa2sKyVnFYLdIIlM4HAnu5UT8zuf0spT70P7t
+            CQA28nBLIEBim+fc7y1iO+1DdFmFK6igoDFx8Rf6IPfihsWjfKs2Cg==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2024-03-08T18:21:39Z"
+    mac: ENC[AES256_GCM,data:dkmcK47/AwyECu300oXilnb/7KZdDUUrimNa3eVNUuhPXa549b9TUJ4TKzQzvCwdU4VtTKE08guyeqalsc2eJVCd1b9HrVYxiIRFUYJWm9pCXoYckq4Fi21o4jaLWgdaBQpR1MiCMt3uDSpKNQwU+lYveWjbEzf2DVFMyp+2d8w=,iv:h3HtWjDT3fgm6Bpkjo1tjZtDfLYoJUobaPohbwfu8Ig=,tag:5b3+IomU+0VWT82YfqhSAw==,type:str]
+    pgp:
+        - created_at: "2024-03-08T17:36:39Z"
+          enc: |
+            -----BEGIN PGP MESSAGE-----
+
+            hQIMA7Pg+ndCcR5CAQ//YMTZz/Hm3udKdJ+o+Lk2o5Y3/KZxU32pndkwIiOQHbQl
+            tu0WIuDLrsMh+wmTDcNYXVjNqs46u+iRYgJoKKABvYAGOI0qXJyZr56KVqewmZ5I
+            i9wdADrUYznAs/0J2UPOocBRGcW/40nR7i0tBOHY3JH6/UUyzqjQTJ8bwkAmIECF
+            p9MiPCyubjcL88Fl9xjae5BFLgT615Gq8ii3N2Aloavalxtge6qRgxIxbGpI3kZ4
+            P26PVTWj/KqCi2SxfWm9E4R5/7/Wb6puYGS8Ey4QPGwnpNgPpEJOu8GnAOfOwgV5
+            KPcJP3alZdQPvQD8ta4Fasm36l+/7YAe4TfZ+9WqdKi9pYZ5p6vpE0rc6u8aELZm
+            38JUva401PE8JWgQdzkXFckMQ3+Dl5gAuZQCUBZi73uG6cEIZxXjPBzVExoIWB7/
+            C+ZCJhb/4q1K8v+ZFuxduMa07W505SnnmL8HVs4cnM9ijvDBn1ZUiq3KDEm9IBdZ
+            CGEfGHrLeL+wlF46s45u/D/ESGiUlTyt+qPl7vvMgQhdn9AIGnHb6qD8zlXE8hVj
+            QfjgyLp8L2TwQaRb1oXltePZyuG3PZOchhCfe18jNzINtPzl9XvFTkAAzIE1fTtz
+            2oXnUgL8DcYH0agzKe7LH6U7j/ZVVJAiuj7y8h3lkgWKsMunAk29o/49FMspDFzS
+            XAFmJ40anJ/M5jbj5Sfeqslm0XaBQYO8t3PO07rSkIiDNeUHwVe5/uB0IICNgteK
+            zsQKDfmCGMKLVMMQqG7K6uXXN5wL0M+3oaIc6cPHfevNT/OG0QL8J3jm4vQu
+            =JxcY
+            -----END PGP MESSAGE-----
+          fp: 2D1D9C803F35BBC24014C3906601E1EB2454827F
+    unencrypted_suffix: _unencrypted
+    version: 3.7.3

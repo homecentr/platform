@@ -1,0 +1,17 @@
+[
+    {% for cert in app_container_getssl_certificates %}
+    {
+        "name": "{{ cert.name }}",
+        "cert_filename": "{{ cert.cert_filename }}",
+        "key_filename": "{{ cert.key_filename }}",
+        "fullchain_filename": "{{ cert.fullchain_filename }}",
+        "user": "{{ cert.user }}",
+        "group": "{{ cert.group }}",
+        "permissions": "{{ cert.permissions | default('0440') }}"
+    {% if loop.last %}
+    }
+    {% else %}
+    },
+    {% endif %}
+    {% endfor %}
+]

@@ -1,0 +1,19 @@
+CA="https://acme-staging-v02.api.letsencrypt.org"
+#CA="https://acme-v02.api.letsencrypt.org"
+
+ACCOUNT_EMAIL="{{ getssl_acme_email }}"
+ACCOUNT_KEY_LENGTH=4096
+
+PRIVATE_KEY_ALG="rsa"
+
+RENEW_ALLOW="30"
+
+SERVER_TYPE="https"
+CHECK_REMOTE="true"
+
+VALIDATE_VIA_DNS="true"
+DNS_ADD_COMMAND=/usr/share/getssl/dns_scripts/dns_add_cloudflare
+DNS_DEL_COMMAND=/usr/share/getssl/dns_scripts/dns_del_cloudflare
+
+export CF_EMAIL="{{ getssl_cloudflare_email }}"
+export CF_API_TOKEN="{{ getssl_cloudflare_api_token }}"

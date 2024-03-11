@@ -1,0 +1,28 @@
+- name: Install required packages
+  ansible.builtin.apt:
+    name: jq # Required for parsing the config files
+
+- name: Install getssl
+  ansible.builtin.apt:
+    deb: "https://github.com/srvrco/getssl/releases/download/v{{ getssl_version }}/getssl_{{ getssl_version }}-1_all.deb"
+
+- name: Configure getssl
+  run_once: true
+  ansible.builtin.include_tasks:
+    file: configure.yaml
+
+- name: Create copy scripts
+  ansible.builtin.include_tasks:
+    file: scripts.yaml
+
+- name: Create cron jobs
+  ansible.builtin.include_tasks:
+    file: cron.yaml
+
+- name: Issue certificates
+  run_once: true
+  loop: "{{ getssl_certificates }}"
+  loop_control:
+    loop_var: certificate
+  ansible.builtin.command:
+    cmd: "getssl {{ certificate.domain }} -w /etc/pve/getssl"

@@ -1,0 +1,35 @@
+{% for line in current_config | split("\n") %}
+{% if not line | regex_search("^lxc\.idmap:") %}
+{{ line }}
+{% endif %}
+{% endfor %}
+
+{% if app_container_mapped_uids is defined and app_container_mapped_uids | length > 0 %}
+{%- set sorted_uids = app_container_mapped_uids | sort %}
+lxc.idmap: u 0 100000 {{ sorted_uids | first }}
+{% for uid in sorted_uids %}
+lxc.idmap: u {{ uid }} {{ uid }} 1
+{% if not loop.last %}
+{% if sorted_uids[loop.index0 + 1] - uid > 1 %}
+lxc.idmap: u {{ uid + 1 }} {{ uid + 100000 + 1 }} {{ sorted_uids[loop.index0 + 1] - uid - 1 }}
+{% endif %}
+{% else %}
+lxc.idmap: u {{ uid + 1 }} {{ uid + 100000 + 1 }} {{ 65535 - uid - 1 }}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+{% if app_container_mapped_gids is defined and app_container_mapped_gids | length > 0 %}
+{%- set sorted_gids = app_container_mapped_gids | sort %}
+lxc.idmap: g 0 100000 {{ sorted_gids | first }}
+{% for gid in sorted_gids %}
+lxc.idmap: g {{ gid }} {{ gid }} 1
+{% if not loop.last %}
+{% if sorted_gids[loop.index0 + 1] - gid > 1 %}
+lxc.idmap: g {{ gid + 1 }} {{ gid + 100000 + 1 }} {{ sorted_gids[loop.index0 + 1] - gid - 1 }}
+{% endif %}
+{% else %}
+lxc.idmap: g {{ gid + 1 }} {{ gid + 100000 + 1 }} {{ 65535 - gid - 1 }}
+{% endif %}
+{% endfor %}
+{% endif %}

@@ -31,3 +31,8 @@
       ansible.builtin.import_role:
         name: ../roles/pve_cluster_ha
       tags: ha
+
+    - name: Install and configure getssl
+      ansible.builtin.import_role:
+        name: ../roles/pve_cluster_getssl
+      tags: getssl

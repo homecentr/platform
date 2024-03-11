@@ -1,0 +1,5 @@
+VALIDATE_VIA_DNS="true"
+
+{%- if certificate.additional_domains is defined %}
+SANS="{{ certificate.additional_domains | join(",") }}"
+{% endif %}

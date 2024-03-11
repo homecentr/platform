@@ -10,6 +10,9 @@ pct set {{ app_container_id }}
  --mp{{ loop.index - 1 }} "{{ mount.zfs_pool }}:{{ zfs_dataset_name }},size={{ mount.size }},replicate={{ '1' if (mount.replicate | default(true)) else '0' }},,mp={{ mount.target_path }}"
  {%- endif %}
  {%- endfor %}
+ {%- if app_container_getssl_certificates is defined %}
+ --mp{{ app_container_mounts | default([]) | length }} "/var/lib/getssl/{{ app_container_id }},mp={{ app_container_getssl_mountpoint | default('/getssl') }},replicate=0"
+ {%- endif %}
  {%- for nic in app_container_network_interfaces %}
  --net{{ loop.index - 1 }} "name={{ nic.name }},bridge={{ nic.bridge }},ip={{ nic.ipv4_address }}{{ ",gw=" + nic.ipv4_gateway if (nic.ipv4_gateway | default("")) != "" else "" }}"
  {%- endfor %}
@@ -17,11 +20,11 @@ pct set {{ app_container_id }}
  --onboot {{ '1' if (app_container_start_onboot | default(true)) else '0' }}
  {%- endif %}
  {%- if app_container_protection is defined %}
- --protection {{ '1' if app_container_protection else '0' }} \
+ --protection {{ '1' if app_container_protection else '0' }}
  {%- endif %}
  {%- if app_container_startup_order is defined %}
- --startup {{ app_container_startup_order }} \
+ --startup {{ app_container_startup_order }}
  {%- endif %}
  {%- if app_container_swap is defined %}
- --swap {{ app_container_swap }} \
+ --swap {{ app_container_swap }}
  {%- endif %}

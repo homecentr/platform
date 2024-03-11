@@ -51,11 +51,6 @@
         name: homecentr.proxmox.pve_nosubs_warning
       tags: [ no-subs-warning ]
 
-    - name: Configure ACME
-      ansible.builtin.import_role:
-        name: homecentr.proxmox.pve_acme
-      tags: [ acme ]
-
     - name: Configure USB HID quirk for UPS communication
       ansible.builtin.import_role:
         name: homecentr.system.usbhid_quirk

@@ -1,0 +1,8 @@
+app_container_getssl_certificates:
+  - name: "*.homecentr.one"
+    fullchain_filename: "wildcard_fullchain.crt"
+    cert_filename: "wildcard.crt"
+    key_filename: "wildcard.key"
+    user: 7000
+    group: 7000
+    mode: 0440

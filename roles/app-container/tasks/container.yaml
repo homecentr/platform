@@ -1,4 +1,5 @@
 - name: Create app container
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   community.general.proxmox:
     api_user: root@pam
     api_password: "{{ users_root_password }}"
@@ -28,42 +29,19 @@
     app_container_info: "{{ app_container_info_raw.proxmox_vms.0 }}"
 
 - name: Get container definition
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   register: app_container_before_pct
   ansible.builtin.slurp:
     src: "/etc/pve/lxc/{{ app_container_info.vmid }}.conf"
 
 - name: Update existing container values
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   changed_when: true
   ansible.builtin.command:
     cmd: "{{ lookup('template', 'pct-set.j2', template_vars=(dict(app_container_id=app_container_info.vmid) | combine(container_vars))) }}"
 
 - name: Get container definition
+  when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   register: app_container_after_pct
   ansible.builtin.slurp:
     src: "/etc/pve/lxc/{{ app_container_info.vmid }}.conf"
-
-- name: Stop the container if it's started and definition has changed
-  when: app_container_before_pct.content != app_container_after_pct.content and app_container_info.status == 'running' and (container_vars.app_container_autorestart_enabled | default(false))
-  community.general.proxmox:
-    api_user: root@pam
-    api_password: "{{ users_root_password }}"
-    api_host: "localhost"
-    hostname: "{{ container_vars.ansible_hostname }}"
-    state: stopped
-
-- name: Start container
-  community.general.proxmox:
-    api_user: root@pam
-    api_password: "{{ hostvars[container_vars.app_container_pve_node].users_root_password }}"
-    api_host: "localhost"
-    hostname: "{{ container_vars.ansible_hostname }}"
-    state: started
-
-- name: Wait for the container to start responding on SSH
-  run_once: true
-  ansible.builtin.wait_for:
-    host: "{{ container_vars.ansible_host }}"
-    port: 22
-    timeout: 400
-    sleep: 2
-    msg: "Container {{ container_vars.ansible_hostname }} did not start responding on SSH in time."

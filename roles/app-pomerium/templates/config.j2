@@ -1,8 +1,12 @@
 authenticate_service_url: https://{{ app_pomerium_hostname }}
 
-autocert: true
-autocert_email: {{ app_pomerium_letsencrypt_email }}
-autocert_use_staging: {{ app_pomerium_letsencrypt_use_staging }}
+autocert: false
+
+certificates:
+{% for cert in app_pomeriums_certificates %}
+  - cert: '{{ cert.fullchain_path }}'
+    key: '{{ cert.key_path }}'
+{% endfor %}
 
 idp_provider: {{ app_pomerium_idp_provider }}
 idp_provider_url: '{{ app_pomerium_idp_provider_url }}'
