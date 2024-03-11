@@ -1,0 +1,6 @@
+- name: Install Mosquitto
+  ansible.builtin.apt:
+    name: mosquitto
+    state: present
+
+# TODO: Config file

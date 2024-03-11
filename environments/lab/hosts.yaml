@@ -15,3 +15,6 @@ all:
           hosts:
             app_pomerium_primary:
             app_pomerium_secondary:
+        app_mqtt:
+          hosts:
+            app_mqtt_primary:

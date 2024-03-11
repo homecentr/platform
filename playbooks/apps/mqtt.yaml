@@ -5,7 +5,7 @@
   any_errors_fatal: true
   tasks:
     - name: Create application container
-      loop: "{{ groups['app_pomerium'] }}"
+      loop: "{{ groups['app_mqtt'] }}"
       loop_control:
         loop_var: container_inventory_name
       ansible.builtin.include_role:
@@ -15,7 +15,7 @@
       tags: [ container ]
 
 - name: Setup Pomerium containers
-  hosts: app_pomerium
+  hosts: app_mqtt
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
@@ -25,21 +25,7 @@
         file: _common.yaml
       tags: [ common ]
 
-    - name: Create pomerium group with fixed GID
-      ansible.builtin.group:
-        name: pomerium
-        gid: 7000
-      tags: [ pomerium ]
-
-    - name: Create pomerium user with fixed UID
-      ansible.builtin.user:
-        name: pomerium
-        group: pomerium
-        uid: 7000
-        create_home: true
-      tags: [ pomerium ]
-
-    - name: Install pomerium
+    - name: Install Mosquitto
       ansible.builtin.import_role:
-        name: ../../roles/app-pomerium
-      tags: [ pomerium ]
+        name: ../../roles/app-mosquitto
+      tags: [ mosquitto ]
