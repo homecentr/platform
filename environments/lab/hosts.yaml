@@ -7,14 +7,17 @@ all:
         pve3:
     app_containers:
       children:
-        app_coredns:
+        # app_coredns:
+        #   hosts:
+        #     app_coredns_primary:
+        #     app_coredns_secondary:
+        app_pihole:
           hosts:
-            app_coredns_primary:
-            app_coredns_secondary:
+            app_pihole_single:
         app_pomerium:
           hosts:
             app_pomerium_primary:
             app_pomerium_secondary:
         app_mqtt:
           hosts:
-            app_mqtt_primary:
+            app_mqtt_single:

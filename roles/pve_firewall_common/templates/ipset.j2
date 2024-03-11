@@ -1,6 +1,6 @@
 [IPSET {{ ipset.name }}]
 
-{% for item in ipset["items"] %}
+{% for item in ipset["items"] | default([]) %}
 {% if item.type | default("") == "alias" %}
 {{ item.scope | default(default_scope) }}/{{ item.name }}
 {% else %}

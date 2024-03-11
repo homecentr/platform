@@ -7,7 +7,7 @@ enable: {{ '1' if pve_firewall_enabled else '0' }}
 
 {% for alias in pve_firewall_aliases %}
 {{ alias.name }} {{ alias.cidr }}
-{%- endfor %}
+{% endfor %}
 {%- endif %}
 
 {% for ipset in pve_firewall_ipsets | default([]) %}
@@ -17,12 +17,12 @@ enable: {{ '1' if pve_firewall_enabled else '0' }}
 
 {% for group in pve_firewall_security_groups | default([]) %}
 {{ lookup('template', 'security-group.j2', template_vars=dict(group=group, default_scope=pve_firewall_default_scope)) }}
-{%- endfor %}
+{% endfor %}
 
 {%- if pve_firewall_rules | default([]) | length > 0 %}
 
 [RULES]
 {% for rule in pve_firewall_rules %}
 {{ lookup('template', 'firewall-rule.j2', template_vars=dict(rule=rule, default_scope=pve_firewall_default_scope)) }}
-{%- endfor %}
+{% endfor %}
 {%- endif %}

@@ -1,45 +1,95 @@
 pve_cluster_firewall_enabled: false
 
 pve_cluster_firewall_aliases:
-  - name: some-alias
-    cidr: 10.1.3.0/24 # must be an ip or cidr => cidr
+  - name: subnet-home
+    cidr: 10.1.3.0/24
+  - name: subnet-services
+    cidr: 10.1.8.0/24
+
+  - name: pve1
+    cidr: 10.1.8.11/32
+  - name: pve2
+    cidr: 10.1.8.12/32
+  - name: pve3
+    cidr: 10.1.8.13/32
+
+  - name: mqtt
+    cidr: 10.1.8.132/32
+  - name: pomerium1
+    cidr: 10.1.8.130/32
+  - name: pomerium2
+    cidr: 10.1.8.131/32
 
 pve_cluster_firewall_ipsets:
-  - name: some-ipset
+  - name: management
     items:
       - type: alias
-        name: some-alias
-      - type: cidr
-        cidr: 10.1.8.0/24 # type cidr should be default
+        name: subnet-home
+  - name: proxmox
+    items:
+      - type: alias
+        name: pve1
+      - type: alias
+        name: pve2
+      - type: alias
+        name: pve3
+  - name: pomerium
+    items:
+      - type: alias
+        name: pomerium1
+      - type: alias
+        name: pomerium2
+  - name: mqtt
+    items:
+      - type: alias
+        name: mqtt
 
-pve_cluster_firewall_security_groups:
-  - name: my-group
-    rules:
-      - direction: IN
-        type: macro
-        name: SSH
-        action: ACCEPT
-        source:
-          type: ipset
-          name: some-ipset
-        destination: 10.1.8.0/24 # optional
+pve_cluster_firewall_security_groups: []
+  # - name: my-group
+  #   rules:
+  #     - direction: IN
+  #       type: macro
+  #       name: SSH
+  #       action: ACCEPT
+  #       source:
+  #         type: ipset
+  #         name: some-ipset
+  #       destination: 10.1.8.0/24 # optional
 
-      - enabled: false # default = true
-        direction: IN
-        action: ACCEPT
-        protocol: TCP
-        source_port: 25
-        destination_port: http
-        source: # might be: ipset (+<name>), alias (dc/<name>), comma-separated list of ips or most likely also a cidr
-          type: alias
-          name: some-alias
-        destination: 10.1.8.0/24
+  #     - enabled: false # default = true
+  #       direction: IN
+  #       action: ACCEPT
+  #       protocol: TCP
+  #       source_port: 25
+  #       destination_port: http
+  #       source: # might be: ipset (+<name>), alias (dc/<name>), comma-separated list of ips or most likely also a cidr
+  #         type: alias
+  #         name: some-alias
+  #       destination: 10.1.8.0/24
 
-pve_cluster_firewall_rules:
-  - direction: IN
-    action: ACCEPT
-    macro: SSH
-    source:
-      type: ipset
-      name: some-ipset
-    destination: 10.1.8.0/24 # optional
+# pve_cluster_firewall_rules:
+  # - direction: IN
+  #   action: ACCEPT
+  #   macro: SSH
+  #   source:
+  #     type: alias
+  #     name: subnet-home
+  # - direction: IN
+  #   action: ACCEPT
+  #   macro: HTTPS
+  #   destination:
+  #     type: ipset
+  #     name: management
+  #   source:
+  #     type: alias
+  #     name: subnet-home
+  # - direction: IN
+  #   action: ACCEPT
+  #   destination_port: 8006
+  #   protocol: TCP
+  #   destination:
+  #     type: ipset
+  #     name: management
+  #   source:
+  #     type: alias
+  #     name: subnet-home
