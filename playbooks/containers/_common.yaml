@@ -1,3 +1,7 @@
+- name: Configure hosts
+  ansible.builtin.import_role:
+    name: ../../roles/hosts
+
 - name: Configure users
   ansible.builtin.import_role:
     name: homecentr.system.users

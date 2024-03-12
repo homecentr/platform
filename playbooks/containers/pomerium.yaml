@@ -5,13 +5,10 @@
   any_errors_fatal: true
   tasks:
     - name: Create application container
-      loop: "{{ groups['app_pomerium'] }}"
-      loop_control:
-        loop_var: container_inventory_name
       ansible.builtin.include_role:
         name: ../../roles/app-container
       vars:
-        container_inventory_name: "{{ container_inventory_name }}"
+        container_inventory_name: "pomerium"
       tags: [ container ]
 
 - name: Setup Pomerium containers

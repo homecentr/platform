@@ -1,0 +1,4 @@
+- name: Install overlayfs fuse
+  ansible.builtin.apt:
+    name: fuse-overlayfs
+    state: present

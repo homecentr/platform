@@ -5,19 +5,15 @@ all:
         pve1:
         pve2:
         pve3:
-    app_containers:
+    containers:
+      hosts:
+        pihole:
+        pomerium:
+        mqtt:
+        monitoring:
+        frigate:
       children:
-        # app_coredns:
-        #   hosts:
-        #     app_coredns_primary:
-        #     app_coredns_secondary:
-        app_pihole:
+        cloudflared_containers:
           hosts:
-            app_pihole_single:
-        app_pomerium:
-          hosts:
-            app_pomerium_primary:
-            app_pomerium_secondary:
-        app_mqtt:
-          hosts:
-            app_mqtt_single:
+            cloudflared1:
+            cloudflared2:

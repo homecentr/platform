@@ -1,0 +1,14 @@
+- name: Create systemd unit file
+  ansible.builtin.copy:
+    dest: /etc/systemd/system/cloudflared.service
+    owner: root
+    group: root
+    mode: "0644"
+    content: "{{ lookup('template', 'systemd-unit.j2') }}"
+
+- name: (Re)start service
+  ansible.builtin.systemd_service:
+    name: cloudflared
+    enabled: true
+    daemon_reload: true
+    state: "{{ 'restarted' if app_cloudflared_config.changed or app_cloudflared_credentials.changed else 'started' }}"

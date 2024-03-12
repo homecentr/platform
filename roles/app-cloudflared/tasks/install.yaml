@@ -1,0 +1,16 @@
+- name: Download repository key
+  ansible.builtin.get_url:
+    url: https://pkg.cloudflare.com/cloudflare-main.gpg
+    dest: /usr/share/keyrings/cloudflare-main.gpg
+
+- name: Add repository
+  ansible.builtin.apt_repository:
+    repo: deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared bookworm main
+    filename: cloudflared
+    update_cache: true
+    state: present
+
+- name: Install cloudflared package
+  ansible.builtin.apt:
+    name: cloudflared
+    state: present

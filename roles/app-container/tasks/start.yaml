@@ -24,3 +24,9 @@
     timeout: 400
     sleep: 2
     msg: "Container {{ container_vars.ansible_hostname }} did not start responding on SSH in time."
+
+- name: Run outbound ping to workaround the bug when new containers are not reachable
+  changed_when: false
+  ansible.builtin.command:
+    cmd: "pct exec {{ app_container_info.vmid }} -- bash -c 'ping -c 5 google.com'"
+

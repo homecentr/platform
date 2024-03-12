@@ -3,7 +3,7 @@ authenticate_service_url: https://{{ app_pomerium_hostname }}
 autocert: false
 
 certificates:
-{% for cert in app_pomeriums_certificates %}
+{% for cert in app_pomerium_certificates %}
   - cert: '{{ cert.fullchain_path }}'
     key: '{{ cert.key_path }}'
 {% endfor %}
@@ -18,6 +18,21 @@ cookie_secret: {{ app_pomerium_cookie_secret }}
 # TODO: metrics_address: :9090
 
 routes:
-  - from: https://google-lab.homecentr.one
-    to: https://google.com
-    pass_identity_headers: false
+{% for host in groups['all'] %}
+{% for record in hostvars[host].app_pomerium_routes | default([]) %}
+  - from: {{ route.from }}
+    to: {{ route.to }}
+    {% if route.auth_mode == 'administrators' -%}
+    policy:
+      - allow:
+          or:
+            - claim/groups: "{{ app_pomerium_groups_administrators }}"
+    {% elif route.auth_mode == 'users' %}
+    policy:
+      - allow:
+          or:
+            - claim/groups: "{{ app_pomerium_groups_users }}"
+    {% endif %}
+
+{% endfor %}
+{% endfor %}

@@ -5,28 +5,29 @@
   any_errors_fatal: true
   tasks:
     - name: Create application container
-      loop: "{{ groups['app_coredns'] }}"
-      loop_control:
-        loop_var: container_inventory_name
       ansible.builtin.include_role:
         name: ../../roles/app-container
       vars:
-        container_inventory_name: "{{ container_inventory_name }}"
+        container_inventory_name: "frigate"
       tags: [ container ]
 
-- name: Setup Coredns containers
-  hosts: app_coredns
+- name: Setup Frigate container
+  hosts: frigate
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
     - name: Run common set up
-      ansible.builtin.import_tasks:
+      ansible.builtin.include_tasks:
         file: _common.yaml
       tags: [ common ]
 
-    - name: Install coredns
+    - name: Install Docker
       ansible.builtin.import_role:
-        name: ../../roles/app-coredns
-      tags: [ coredns ]
-    
+        name: ../../roles/docker
+      tags: [ docker ]
+
+    - name: Install Frigate
+      ansible.builtin.import_role:
+        name: ../../roles/app-frigate
+      tags: [ frigate ]

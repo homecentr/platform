@@ -1,0 +1,34 @@
+ansible_host: 10.1.8.66
+ansible_hostname: ct-pomerium1-lab
+
+app_container_ostemplate: local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst
+app_container_memory: 512
+app_container_storage_name: dpool
+app_container_storage_size_gb: 2
+app_container_pve_replication_cron_expression: "*/5"
+app_container_mapped_uids:
+  - 7000
+app_container_mapped_gids:
+  - 7000
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: 10.1.8.66/24
+    ipv4_gateway: 10.1.8.1
+app_container_pve_node: pve1
+app_container_pve_ha_group_name: critical-priority-pve1
+app_container_pve_replication_nodes:
+  - pve2
+
+app_container_getssl_certificates:
+  - name: "*.homecentr.one"
+    fullchain_filename: "wildcard_fullchain.crt"
+    cert_filename: "wildcard.crt"
+    key_filename: "wildcard.key"
+    user: 7000
+    group: 7000
+    mode: 0440
+
+app_pihole_records:
+  - hostname: login-lab
+    type: ansible_host

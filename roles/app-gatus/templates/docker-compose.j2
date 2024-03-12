@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  gatus:
+    container_name: gatus
+    image: twinproduction/gatus:{{ app_gatus_image_tag }}
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - /etc/gatus/config.yaml:/config/config.yaml
+
+# TODO: Mount directory with metrics state

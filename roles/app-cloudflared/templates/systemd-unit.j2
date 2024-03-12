@@ -1,0 +1,17 @@
+[Unit]
+Description=Cloudflared
+Documentation=https://coredns.io/manual/
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=cloudflared
+Group=cloudflared
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+Restart=always
+WorkingDirectory=/etc/cloudflared
+ExecStart=/usr/local/bin/cloudflared tunnel --config /etc/cloudflared/config.yaml --metrics 0.0.0.0:3333 run
+ExecReload=/usr/bin/kill -USR1 $MAINPID
+
+[Install]
+WantedBy=multi-user.target

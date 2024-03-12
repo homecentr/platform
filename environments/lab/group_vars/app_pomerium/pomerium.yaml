@@ -1,5 +1,0 @@
-app_pomerium_hostname: login-lab.homecentr.one
-
-app_pomeriums_certificates:
-  - fullchain_path: /getssl/wildcard_fullchain.crt
-    key_path: /getssl/wildcard.key

@@ -2,7 +2,7 @@ pct set {{ app_container_id }}
 {%- raw %} --hostname {% endraw %}{{ ansible_hostname }}
 {%- raw %} --memory {% endraw %} {{ app_container_memory }}
 {%- if app_container_cpu_cores is defined %} --cores {{ app_container_cpu_cores }}{% endif -%}
- {%- raw %} --features nesting=1{% endraw %}{% if app_container_fuse_enabled | default(false) == true %},fuse=1{% endif -%}
+ {%- raw %} --features nesting=1{% endraw %}{% if app_container_fuse_enabled | default(false) == true %},fuse=1{% endif -%}{% if app_container_docker_support | default(false) == true %},keyctl=1,fuse=1{% endif %}
  {%- for mount in (app_container_mounts | default([])) %}
  {%- if mount.type == "bind" %}
  --mp{{ loop.index - 1 }} "{{ mount.hostpath }},mp={{ mount.target_path }}"

@@ -1,5 +1,6 @@
-- import_playbook: proxmox-nodes.yaml
-- import_playbook: proxmox-cluster.yaml
-- import_playbook: apps/coredns.yaml
-- import_playbook: apps/mqtt.yaml
-- import_playbook: apps/pomerium.yaml
+- import_playbook: proxmox/nodes.yaml
+- import_playbook: proxmox/cluster.yaml
+- import_playbook: containers/pihole.yaml
+- import_playbook: containers/cloudflared.yaml
+- import_playbook: containers/mqtt.yaml
+- import_playbook: containers/pomerium.yaml

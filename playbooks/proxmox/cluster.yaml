@@ -17,11 +17,6 @@
         name: ../roles/pve_cluster_options
       tags: cluster_options
 
-    - name: Configure container vxlan sdn networks
-      ansible.builtin.import_role:
-        name: ../roles/pve_cluster_vxlan
-      tags: vxlan
-
     - name: Configure cluster-level firewall
       ansible.builtin.import_role:
         name: ../roles/pve_cluster_firewall

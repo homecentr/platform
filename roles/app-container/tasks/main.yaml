@@ -1,3 +1,8 @@
+- name: Install Docker dependencies
+  when: app_container_docker_support | default(false)
+  ansible.builtin.include_tasks:
+    file: container.yaml
+
 - name: Create container
   ansible.builtin.include_tasks:
     file: container.yaml

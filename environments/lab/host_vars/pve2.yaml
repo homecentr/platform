@@ -1,7 +1,6 @@
 # Common
 ansible_host: 10.1.8.12
 ansible_hostname: pve2-lab
-fqdn: pve2-lab.homecentr.one
 
 # UPS
 ups_name: dummy-ups1

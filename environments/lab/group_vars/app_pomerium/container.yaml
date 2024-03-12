@@ -1,9 +1,0 @@
-app_container_ostemplate: local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst
-app_container_memory: 512
-app_container_storage_name: dpool
-app_container_storage_size_gb: 2
-app_container_pve_replication_cron_expression: "*/5"
-app_container_mapped_uids:
-  - 7000
-app_container_mapped_gids:
-  - 7000

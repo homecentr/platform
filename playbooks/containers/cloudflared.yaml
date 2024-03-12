@@ -5,7 +5,7 @@
   any_errors_fatal: true
   tasks:
     - name: Create application container
-      loop: "{{ groups['app_pihole'] }}"
+      loop: "{{ groups['cloudflared_containers'] }}"
       loop_control:
         loop_var: container_inventory_name
       ansible.builtin.include_role:
@@ -14,8 +14,8 @@
         container_inventory_name: "{{ container_inventory_name }}"
       tags: [ container ]
 
-- name: Setup Pihole containers
-  hosts: app_pihole
+- name: Setup Cloudflared containers
+  hosts: cloudflared_containers
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
@@ -25,20 +25,8 @@
         file: _common.yaml
       tags: [ common ]
 
-    - name: Create pihole group
-      ansible.builtin.group:
-        name: pihole
-      tags: [ pihole ]
-
-    - name: Create pihole user
-      ansible.builtin.user:
-        name: pihole
-        group: pihole
-        create_home: true
-      tags: [ pihole ]
-
-    - name: Install pihole
+    - name: Install cloudflared
       ansible.builtin.import_role:
-        name: ../../roles/app-pihole
-      tags: [ pihole ]
+        name: ../../roles/app-cloudflared
+      tags: [ cloudflared ]
     

@@ -1,0 +1,20 @@
+- name: Create cloudflared group
+  ansible.builtin.group:
+    name: cloudflared
+
+- name: Create cloudflared user
+  ansible.builtin.user:
+    name: cloudflared
+    group: cloudflared
+
+- name: Install cloudflared
+  ansible.builtin.include_tasks:
+    file: install.yaml
+
+- name: Configure cloudflared
+  ansible.builtin.include_tasks:
+    file: configure.yaml
+
+- name: Configure systemd
+  ansible.builtin.include_tasks:
+    file: systemd.yaml

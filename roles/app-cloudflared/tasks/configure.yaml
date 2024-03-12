@@ -1,0 +1,27 @@
+- name: Create config directory
+  ansible.builtin.file:
+    path: /etc/cloudflared
+    owner: cloudflared
+    group: cloudflared
+    mode: "0750"
+    state: directory
+
+- name: Create config file
+  register: app_cloudflared_config
+  ansible.builtin.copy:
+    dest: /etc/cloudflared/config.yaml
+    owner: cloudflared
+    group: cloudflared
+    mode: "0640"
+    force: true
+    content: "{{ lookup('template', 'config.j2') }}"
+
+- name: Create credentials file
+  register: app_cloudflared_credentials
+  ansible.builtin.copy:
+    dest: /etc/cloudflared/tunnel-credentials.json
+    owner: cloudflared
+    group: cloudflared
+    mode: "0640"
+    force: true
+    content: "{{ lookup('template', 'credentials.j2') }}"

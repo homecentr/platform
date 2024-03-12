@@ -25,6 +25,10 @@
   ansible.builtin.include_tasks:
     file: install.yaml
 
-- name: Configure DNS
+- name: Configure dns server
   ansible.builtin.include_tasks:
     file: dns.yaml
+
+- name: Configure http server
+  ansible.builtin.include_tasks:
+    file: http.yaml

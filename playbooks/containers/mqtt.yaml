@@ -5,17 +5,14 @@
   any_errors_fatal: true
   tasks:
     - name: Create application container
-      loop: "{{ groups['app_mqtt'] }}"
-      loop_control:
-        loop_var: container_inventory_name
       ansible.builtin.include_role:
         name: ../../roles/app-container
       vars:
-        container_inventory_name: "{{ container_inventory_name }}"
+        container_inventory_name: "mqtt"
       tags: [ container ]
 
 - name: Setup Pomerium containers
-  hosts: app_mqtt
+  hosts: mqtt
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
