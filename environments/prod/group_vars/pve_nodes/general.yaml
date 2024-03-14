@@ -4,9 +4,9 @@ ssh_allow_root_login_trusted_clients:
   - pve2
   - pve3
 
-pve_zfs_max_arc_size_gb: 0.5
+pve_zfs_max_arc_size_gb: 4
 
-pve_cluster_options_migration_network: 192.168.8.0/24
+pve_cluster_options_migration_network: 10.1.7.0/24
 
 pve_cluster_ha_groups:
   - name: critical-priority-pve1
@@ -47,7 +47,7 @@ pve_nameservers:
   - 1.1.1.1
   - 1.0.0.1
 
-pve_smtp_host: 10.1.8.130
+pve_smtp_host: 10.1.2.130
 pve_smtp_port: 25
 pve_smtp_tls: false
 

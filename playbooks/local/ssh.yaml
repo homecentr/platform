@@ -21,7 +21,7 @@
       community.general.ssh_config:
         user: "{{ ansible_user }}"
         host: "{{ hostvars[item].ansible_hostname }}"
-        hostname: "{{ hostvars[item].fqdn }}"
+        hostname: "{{ hostvars[item].ansible_hostname }}.{{ domain }}"
         forward_agent: true # To enable YubiKey forwarding
         proxycommand: "{{ lookup('env', 'HOME') }}/.ssh/proxy.sh %h %r"
         remote_user: "{{ ansible_user }}"

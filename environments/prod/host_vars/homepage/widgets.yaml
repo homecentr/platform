@@ -1,0 +1,4 @@
+app_homepage_widgets:
+    - search:
+        provider: google
+        target: _blank

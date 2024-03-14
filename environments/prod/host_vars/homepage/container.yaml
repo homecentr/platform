@@ -1,16 +1,16 @@
-ansible_host: 10.1.8.72
-ansible_hostname: ct-homepage-lab
+ansible_host: 10.1.2.72
+ansible_hostname: ct-homepage
 
 app_container_ostemplate: local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst
 app_container_memory: 512
-app_container_storage_name: dpool
+app_container_storage_name: dpool1
 app_container_storage_size_gb: 1
 app_container_pve_replication_cron_expression: "*/5"
 app_container_network_interfaces:
   - name: eth0
     bridge: vmbr0
-    ipv4_address: 10.1.8.72/24
-    ipv4_gateway: 10.1.8.1
+    ipv4_address: 10.1.2.72/24
+    ipv4_gateway: 10.1.2.1
 
 app_container_pve_node: pve2
 app_container_pve_ha_group_name: noncritical
@@ -20,21 +20,21 @@ app_container_pve_replication_nodes:
 app_homepage_image_tag: v0.8.9
 
 app_pomerium_routes:
-  - hostname: homepage-lab
+  - hostname: homepage
     target_port: 3000
     auth_mode: users
 
 app_pihole_records:
-  - hostname: homepage-lab
+  - hostname: homepage
     type: pomerium_proxy
 
 app_gatus_monitored_endpoints:
   - name: Homepage / container
     group: Homepage
     type: http
-    host: ct-homepage-lab
+    host: ct-homepage
     port: 3000
   - name: Homepage / via proxy
     group: Homepage
     type: https-pomerium-proxy
-    host: homepage-lab.homecentr.one
+    host: homepage.homecentr.one

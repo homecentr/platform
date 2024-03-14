@@ -1,0 +1,44 @@
+ansible_host: 10.1.2.64
+ansible_hostname: ct-pihole
+
+app_container_ostemplate: local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst
+app_container_memory: 1024
+app_container_storage_name: dpool1
+app_container_storage_size_gb: 5
+app_container_pve_replication_cron_expression: "*/5"
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: 10.1.2.64/24
+    ipv4_gateway: 10.1.2.1
+
+app_container_pve_node: pve1
+app_container_pve_ha_group_name: critical-priority-pve1
+app_container_pve_replication_nodes:
+  - pve2
+
+app_pihole_version: 5.17.3
+app_pihole_forwarders:
+  - 1.1.1.1
+  - 1.0.0.1
+
+app_pomerium_routes:
+  - hostname: pihole
+    auth_mode: administrators
+
+app_pihole_records:
+  - hostname: pihole
+    type: pomerium_proxy
+
+app_gatus_monitored_endpoints:
+  - name: Web UI
+    group: Pi-hole
+    type: https-pomerium-proxy
+    host: pihole.homecentr.one
+  - name: DNS
+    group: Pi-hole
+    type: dns
+    host: 10.1.2.64
+    dns_query_name: "login.homecentr.one"
+    dns_query_type: "A"
+    dns_query_answer: 10.1.2.66

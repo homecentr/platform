@@ -4,3 +4,6 @@
 - import_playbook: containers/cloudflared.yaml
 - import_playbook: containers/mqtt.yaml
 - import_playbook: containers/pomerium.yaml
+- import_playbook: containers/homepage.yaml
+- import_playbook: containers/monitoring.yaml
+- import_playbook: containers/frigate.yaml

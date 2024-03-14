@@ -9,9 +9,9 @@
     "install": "./tools/install.sh",
     "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint",
     "lab:clear-keys": "./tools/clearkeys.sh",
-    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh lab proxmox-nodes -u root -e ansible_user=root --tags init -k",
+    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh lab proxmox/nodes -u root -e ansible_user=root --tags init -k",
     "lab:apply": "./tools/apply.sh lab",
-    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh prod proxmox-nodes -u root -e ansible_user=root --tags init -k",
+    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh prod proxmox/nodes -u root -e ansible_user=root --tags init -k",
     "prod:apply": "./tools/apply.sh prod",
     "validate-values": "node ./tools/validations.js"
   },

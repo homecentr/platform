@@ -5,7 +5,7 @@
     cmd: "pct config {{ app_container_info.vmid }}"
 
 - name: Add disks
-  loop: "{{ container_vars.app_container_mounts | selectattr('type', 'equalto', 'disk') }}"
+  loop: "{{ container_vars.app_container_mounts | default([]) | selectattr('type', 'equalto', 'disk') }}"
   loop_control:
     loop_var: disk
   when: not 'mp' + disk.index | string + ':' in app_container_config.stdout

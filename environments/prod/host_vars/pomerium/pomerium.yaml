@@ -1,0 +1,8 @@
+app_pomerium_hostname: login.homecentr.one
+
+app_pomerium_groups_administrators: 64d004bd-9218-4fae-9919-0505ff5eeb8e
+app_pomerium_groups_users: aac23af7-2d73-497f-b93c-b8ca4007638d
+
+app_pomerium_certificates:
+  - fullchain_path: /getssl/wildcard_fullchain.crt
+    key_path: /getssl/wildcard.key
