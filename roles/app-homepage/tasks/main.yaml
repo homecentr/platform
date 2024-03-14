@@ -1,0 +1,28 @@
+- name: Create user
+  ansible.builtin.include_tasks:
+    file: user.yaml
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: "{{ item }}"
+    owner: homepage
+    group: homepage
+    mode: "0750"
+    state: directory
+  loop:
+    - /etc/homepage
+    - /etc/homepage/config
+    - /etc/homepage/icons
+    - /var/log/homepage
+
+- name: Copy icons
+  ansible.builtin.include_tasks:
+    file: icons.yaml
+
+- name: Configure homepage
+  ansible.builtin.include_tasks:
+    file: configure.yaml
+
+- name: Start docker stack
+  ansible.builtin.include_tasks:
+    file: docker.yaml

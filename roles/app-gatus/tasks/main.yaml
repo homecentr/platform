@@ -3,6 +3,11 @@
     path: /etc/gatus
     state: directory
 
+- name: Create state directory
+  ansible.builtin.file:
+    path: /var/lib/gatus
+    state: directory
+
 - name: Create config file
   register: app_gatus_config
   ansible.builtin.copy:
@@ -16,7 +21,7 @@
     force: true
     content: "{{ lookup('template', 'docker-compose.j2') }}"
 
-- name: Tear down existing services
+- name: Start docker stack
   community.docker.docker_compose_v2:
     project_src: /etc/gatus
     state: "{{ 'restarted' if app_gatus_config.changed else 'present' }}"

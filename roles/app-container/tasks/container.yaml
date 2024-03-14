@@ -32,7 +32,7 @@
   when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   register: app_container_before_pct
   ansible.builtin.slurp:
-    src: "/etc/pve/lxc/{{ app_container_info.vmid }}.conf"
+    src: "/etc/pve/lxc/{{ app_container_info.vmid }}.conf" 
 
 - name: Update existing container values
   when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node

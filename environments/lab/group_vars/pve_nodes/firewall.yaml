@@ -13,18 +13,28 @@ pve_cluster_firewall_aliases:
   - name: pve3
     cidr: 10.1.8.13/32
 
+  - name: cloudflared1
+    cidr: 10.1.8.70/32
+  - name: cloudflared2
+    cidr: 10.1.8.71/32
+
   - name: mqtt
-    cidr: 10.1.8.132/32
+    cidr: 10.1.8.67/32
+
+  - name: homepage
+    cidr: 10.1.8.72/32
+
   - name: pomerium1
-    cidr: 10.1.8.130/32
-  - name: pomerium2
-    cidr: 10.1.8.131/32
+    cidr: 10.1.8.66/32
+
 
 pve_cluster_firewall_ipsets:
   - name: management
     items:
       - type: alias
         name: subnet-home
+      - type: alias
+        name: monitoring
   - name: proxmox
     items:
       - type: alias
@@ -37,12 +47,18 @@ pve_cluster_firewall_ipsets:
     items:
       - type: alias
         name: pomerium1
-      - type: alias
-        name: pomerium2
   - name: mqtt
     items:
       - type: alias
         name: mqtt
+  - name: monitoring
+    items:
+      - type: alias
+        name: monitoring
+  - name: homepage
+    items:
+      - type: alias
+        name: homepage
 
 pve_cluster_firewall_security_groups: []
   # - name: my-group

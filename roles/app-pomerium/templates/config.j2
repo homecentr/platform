@@ -19,20 +19,21 @@ cookie_secret: {{ app_pomerium_cookie_secret }}
 
 routes:
 {% for host in groups['all'] %}
-{% for record in hostvars[host].app_pomerium_routes | default([]) %}
-  - from: {{ route.from }}
-    to: {{ route.to }}
-    {% if route.auth_mode == 'administrators' -%}
+{% for route in hostvars[host].app_pomerium_routes | default([]) %}
+  - from: https://{{ route.hostname }}.{{ domain }}
+    to: {{ route.protocol | default("http") }}://{{ hostvars[host].ansible_host }}:{{ route.target_port | default(80) }}
+{% if route.auth_mode == 'administrators' %}
     policy:
       - allow:
           or:
             - claim/groups: "{{ app_pomerium_groups_administrators }}"
-    {% elif route.auth_mode == 'users' %}
+{% elif route.auth_mode == 'users' %}
     policy:
       - allow:
           or:
             - claim/groups: "{{ app_pomerium_groups_users }}"
-    {% endif %}
-
+{% else %}
+    allow_public_unauthenticated_access: true
+{% endif %}
 {% endfor %}
 {% endfor %}

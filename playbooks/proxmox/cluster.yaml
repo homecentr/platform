@@ -14,20 +14,20 @@
 
     - name: Configure cluster-level options
       ansible.builtin.import_role:
-        name: ../roles/pve_cluster_options
+        name: ../../roles/pve_cluster_options
       tags: cluster_options
 
     - name: Configure cluster-level firewall
       ansible.builtin.import_role:
-        name: ../roles/pve_cluster_firewall
+        name: ../../roles/pve_cluster_firewall
       tags: firewall
 
     - name: Configure HA
       ansible.builtin.import_role:
-        name: ../roles/pve_cluster_ha
+        name: ../../roles/pve_cluster_ha
       tags: ha
 
     - name: Install and configure getssl
       ansible.builtin.import_role:
-        name: ../roles/pve_cluster_getssl
+        name: ../../roles/pve_cluster_getssl
       tags: getssl

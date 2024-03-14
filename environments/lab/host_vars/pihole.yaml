@@ -22,6 +22,23 @@ app_pihole_forwarders:
   - 1.1.1.1
   - 1.0.0.1
 
+app_pomerium_routes:
+  - hostname: pihole-lab
+    auth_mode: administrators
+
 app_pihole_records:
   - hostname: pihole-lab
-    type: ansible_host
+    type: pomerium_proxy
+
+app_gatus_monitored_endpoints:
+  - name: Web UI
+    group: Pi-hole
+    type: https-pomerium-proxy
+    host: pihole-lab.homecentr.one
+  - name: DNS
+    group: Pi-hole
+    type: dns
+    host: 10.1.8.64
+    dns_query_name: "login-lab.homecentr.one"
+    dns_query_type: "A"
+    dns_query_answer: 10.1.8.66

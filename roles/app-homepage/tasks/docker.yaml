@@ -1,0 +1,10 @@
+- name: Create compose file
+  ansible.builtin.copy:
+    dest: /etc/homepage/docker-compose.yaml
+    force: true
+    content: "{{ lookup('template', 'docker-compose.j2') }}"
+
+- name: Start docker stack
+  community.docker.docker_compose_v2:
+    project_src: /etc/homepage
+    state: "{{ 'restarted' if app_homepage_config.changed or app_homepage_icons.changed else 'present' }}"

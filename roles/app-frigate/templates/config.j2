@@ -1,0 +1,46 @@
+mqtt:
+  enabled: False
+
+record:
+  enabled: True
+  retain:
+    days: 1
+  events:
+    retain:
+      default: 1
+      mode: motion
+
+detect:
+  enabled: false
+
+go2rtc:
+  streams:
+{% for camera in app_frigate_cameras %}
+{% if camera.type == "reolink" %}
+    {{ camera.name }}_main:
+      #- "rtsp://{{ camera.username }}:{{ camera.password }}@{{ camera.ip }}/h265Preview_01_main"
+      - "ffmpeg:http://{{ camera.ip }}/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={{ camera.username }}&password={{ camera.password }}#video=copy#audio=copy"
+    {{ camera.name }}_sub:
+      #- "rtsp://{{ camera.username }}:{{ camera.password }}@{{ camera.ip }}/h264Preview_01_sub"
+      - "ffmpeg:http://{{ camera.ip }}/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user={{ camera.username }}&password={{ camera.password }}"
+{% else %}
+TBA: Doorbell
+{% endif %}
+{% endfor %}
+
+cameras:
+{% for camera in app_frigate_cameras %}
+  {{ camera.name }}:
+    ffmpeg:
+      inputs:
+        - path: rtsp://127.0.0.1:8554/{{ camera.name }}_main?video=copy&audio=aac
+          input_args: preset-rtsp-restream
+          roles:
+            - record
+        - path: rtsp://127.0.0.1:8554/{{ camera.name }}_sub?video=copy
+          input_args: preset-rtsp-restream
+          roles:
+            - detect
+    live:
+      stream_name: {{ camera.name }}_sub
+{% endfor %}

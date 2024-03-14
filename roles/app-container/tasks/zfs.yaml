@@ -1,0 +1,7 @@
+- name: Create dataset
+  loop: "{{ container_vars.app_container_mounts | selectattr('type', 'equalto', 'zfs') }}"
+  loop_control:
+    loop_var: mount
+  community.general.zfs:
+    name: "{{ mount.zfs_pool_name }}/subvol-{{ app_container_info.vmid }}-disk-{{ mount.disk_index }}"
+    state: present

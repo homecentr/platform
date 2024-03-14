@@ -1,3 +1,61 @@
 metrics: true
+# storage:
+#     path: /var/lib/gatus/gatus.db
+#     type: sqlite
+    
 endpoints:
-{{ app_gatus_monitored_endpoints | to_yaml }}
+{% for host in groups['all'] %}
+{% for endpoint in hostvars[host].app_gatus_monitored_endpoints | default([]) %}
+- name: {{ endpoint.name }}
+{% if endpoint.group | default('') != '' %}
+  group: {{ endpoint.group }}
+{% endif %}
+  interval: {{ endpoint.interval | default('30s') }}
+  client:
+    dns-resolver: tcp://{{ hostvars['pihole'].ansible_host }}:53
+{% if endpoint.type == "ping" %}
+  url: "icmp://{{ endpoint.host | default(hostvars[host].ansible_host) }}"
+  conditions:
+    - "[CONNECTED] == true"
+{% elif endpoint.type == "http" %}
+  url: "http://{{ endpoint.host | default(hostvars[host].ansible_host) }}:{{ endpoint.port | default(80) }}{{ endpoint.path | default('') }}"
+  conditions:
+    - "[STATUS] == 200"
+{% elif endpoint.type == "https" %}
+  url: "https://{{ endpoint.host | default(hostvars[host].ansible_host) }}:{{ endpoint.port | default(443) }}{{ endpoint.path | default('') }}"
+  conditions:
+    - "[STATUS] == 200"
+    - "[CERTIFICATE_EXPIRATION] > 72h"
+{% elif endpoint.type == "https-pomerium-proxy"%}
+  url: "https://{{ endpoint.host }}{{ endpoint.path | default('') }}"
+  conditions:
+    - "[STATUS] == 200"
+    - "[CERTIFICATE_EXPIRATION] > 72h"
+{% elif endpoint.type == "tcp" %}
+  url: "tcp://{{ endpoint.host | default(hostvars[host].ansible_host) }}:{{ endpoint.port }}"
+  conditions:
+    - "[CONNECTED] == true"
+{% elif endpoint.type == "wss" %}
+  url: "wss://{{ endpoint.host | default(hostvars[host].ansible_host) }}:{{ endpoint.port }}"
+  body: "status"
+  conditions:
+    - "[CONNECTED] == true"
+    - "[BODY].result >= 0"
+{% elif endpoint.type == "ws" %}
+  url: "ws://{{ endpoint.host | default(hostvars[host].ansible_host) }}:{{ endpoint.port }}"
+  body: "status"
+  conditions:
+    - "[CONNECTED] == true"
+    - "[BODY].result >= 0"
+{% elif endpoint.type == "dns" %}
+  url: {{ endpoint.host | default(hostvars[host].ansible_host) }}
+  dns:
+    query-name: "{{ endpoint.dns_query_name }}"
+    query-type: "{{ endpoint.dns_query_type }}"
+  conditions:
+    - "[BODY] == {{ endpoint.dns_query_answer }}"
+    - "[DNS_RCODE] == NOERROR"
+{% endif %}
+
+{% endfor %}
+{% endfor %}

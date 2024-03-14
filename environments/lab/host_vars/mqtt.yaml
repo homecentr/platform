@@ -20,5 +20,3 @@ app_container_pve_replication_nodes:
 app_pihole_records:
   - hostname: mqtt-lab
     type: ansible_host
-
-# TODO: Gatus monitoring

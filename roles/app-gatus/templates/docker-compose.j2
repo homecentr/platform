@@ -8,5 +8,6 @@ services:
       - "8080:8080"
     volumes:
       - /etc/gatus/config.yaml:/config/config.yaml
+      - /var/lib/gatus:/var/lib/gatus
 
 # TODO: Mount directory with metrics state

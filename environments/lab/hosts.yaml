@@ -6,12 +6,13 @@ all:
         pve2:
         pve3:
     containers:
-      hosts:
+      hosts:      
+        frigate:
+        homepage:
+        monitoring:
+        mqtt:
         pihole:
         pomerium:
-        mqtt:
-        monitoring:
-        frigate:
       children:
         cloudflared_containers:
           hosts:

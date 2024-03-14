@@ -6,8 +6,6 @@ pct set {{ app_container_id }}
  {%- for mount in (app_container_mounts | default([])) %}
  {%- if mount.type == "bind" %}
  --mp{{ loop.index - 1 }} "{{ mount.hostpath }},mp={{ mount.target_path }}"
- {%- else %}
- --mp{{ loop.index - 1 }} "{{ mount.zfs_pool }}:{{ zfs_dataset_name }},size={{ mount.size }},replicate={{ '1' if (mount.replicate | default(true)) else '0' }},,mp={{ mount.target_path }}"
  {%- endif %}
  {%- endfor %}
  {%- if app_container_getssl_certificates is defined %}

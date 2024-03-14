@@ -32,3 +32,11 @@ app_container_getssl_certificates:
 app_pihole_records:
   - hostname: login-lab
     type: ansible_host
+
+app_gatus_monitored_endpoints:
+  - name: Pomerium
+    group: Pomerium
+    type: https
+    host: login-lab.homecentr.one
+    path: /healthz
+    

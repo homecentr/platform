@@ -1,0 +1,11 @@
+- name: Create homepage group with fixed GID
+  ansible.builtin.group:
+    name: homepage
+    gid: "{{ app_homepage_gid }}"
+
+- name: Create homepage user with fixed UID
+  ansible.builtin.user:
+    name: homepage
+    group: homepage
+    uid: "{{ app_homepage_uid }}"
+    create_home: true

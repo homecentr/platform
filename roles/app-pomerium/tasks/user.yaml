@@ -1,0 +1,11 @@
+- name: Create pomerium group with fixed GID
+  ansible.builtin.group:
+    name: pomerium
+    gid: "{{ app_pomerium_gid }}"
+
+- name: Create pomerium user with fixed UID
+  ansible.builtin.user:
+    name: pomerium
+    group: pomerium
+    uid: "{{ app_pomerium_uid }}"
+    create_home: true

@@ -7,3 +7,13 @@ ups_name: dummy-ups1
 
 # GetSSL
 getssl_cron_renewal_hour: 17
+
+# Monitoring
+app_gatus_monitored_endpoints:
+  - name: pve2 / ping
+    group: Proxmox VE
+    type: ping
+  - name: pve2 / http
+    group: Proxmox VE
+    type: https
+    host: pve2-lab.homecentr.one

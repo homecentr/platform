@@ -1,0 +1,13 @@
+- name: Create config files
+  register: app_homepage_config
+  ansible.builtin.copy:
+    dest: "/etc/homepage/config/{{ item.name }}"
+    force: true
+    content: "{{ item.content }}"
+  loop:
+    - name: bookmarks.yaml
+      content: "{{ app_homepage_bookmarks | to_yaml }}"
+    - name: settings.yaml
+      content: "{{ app_homepage_settings | to_yaml }}"
+    - name: widgets.yaml
+      content: "{{ app_homepage_widgets | to_yaml }}"
