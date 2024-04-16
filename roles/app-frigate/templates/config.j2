@@ -19,10 +19,11 @@ go2rtc:
 {% if camera.type == "reolink" %}
     {{ camera.name }}_main:
       #- "rtsp://{{ camera.username }}:{{ camera.password }}@{{ camera.ip }}/h265Preview_01_main"
-      - "ffmpeg:http://{{ camera.ip }}/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={{ camera.username }}&password={{ camera.password }}#video=copy#audio=copy"
+      - "ffmpeg:rtsp://{{ camera.username }}:{{ camera.password }}@{{ camera.ip }}/h264Preview_01_main"
+      #- "ffmpeg:http://{{ camera.ip }}/flv?port=1935&app=bcs&stream=channel0_main.bcs&user={{ camera.username }}&password={{ camera.password }}#video=copy#audio=copy"
     {{ camera.name }}_sub:
-      #- "rtsp://{{ camera.username }}:{{ camera.password }}@{{ camera.ip }}/h264Preview_01_sub"
-      - "ffmpeg:http://{{ camera.ip }}/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user={{ camera.username }}&password={{ camera.password }}"
+      - "ffmpeg:rtsp://{{ camera.username }}:{{ camera.password }}@{{ camera.ip }}/h264Preview_01_sub"
+      #- "ffmpeg:http://{{ camera.ip }}/flv?port=1935&app=bcs&stream=channel0_ext.bcs&user={{ camera.username }}&password={{ camera.password }}"
 {% else %}
 TBA: Doorbell
 {% endif %}
@@ -41,6 +42,6 @@ cameras:
           input_args: preset-rtsp-restream
           roles:
             - detect
-    live:
-      stream_name: {{ camera.name }}_sub
+    # live:
+    #   stream_name: {{ camera.name }}_sub
 {% endfor %}

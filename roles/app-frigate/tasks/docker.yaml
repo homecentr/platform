@@ -7,4 +7,4 @@
 - name: Start docker stack
   community.docker.docker_compose_v2:
     project_src: /etc/frigate
-    state: "{{ 'restarted' if app_frigate_config.changed or app_homepage_icons.changed else 'present' }}"
+    state: "{{ 'restarted' if app_frigate_config.changed else 'present' }}"

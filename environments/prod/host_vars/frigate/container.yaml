@@ -15,7 +15,7 @@ app_container_network_interfaces:
 
 app_container_mounts:
   - type: disk
-    storage_name: nvr-pool
+    storage_name: dpool-nvr
     index: 0
     size_gb: 2500
     target_path: /nvr

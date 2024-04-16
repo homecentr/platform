@@ -16,4 +16,4 @@ app_gatus_monitored_endpoints:
   - name: pve3 / http
     group: Proxmox VE
     type: https
-    host: pve3-lab.homecentr.one
+    host: pve3.homecentr.one
