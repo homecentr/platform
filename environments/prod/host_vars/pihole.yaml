@@ -22,6 +22,11 @@ app_pihole_forwarders:
   - 1.1.1.1
   - 1.0.0.1
 
+app_pihole_custom_forwarders:
+  # Forward lab queries to lab nameserver
+  - domain_pattern: "*-lab.homecentr.one"
+    nameserver: 10.1.8.64
+
 app_pomerium_routes:
   - hostname: pihole
     auth_mode: administrators

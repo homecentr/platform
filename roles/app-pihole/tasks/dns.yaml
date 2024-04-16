@@ -15,3 +15,12 @@
     group: pihole
     mode: 0644
     content: "{{ lookup('template', 'dnsmasq-local.j2') }}"
+
+- name: Configure explicit domain specific forwarders
+  notify: restart_dns
+  ansible.builtin.copy:
+    dest: /etc/dnsmasq.d/custom-forwarders.conf
+    owner: pihole
+    group: pihole
+    mode: 0644
+    content: "{{ lookup('template', 'dnsmasq-forwarders.j2') }}"
