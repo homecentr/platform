@@ -1,0 +1,7 @@
+[core]
+methods=PLAIN,LOGIN,CRAM-MD5
+
+[users]
+{% for user in app_haraka_users %}
+{{ user.username }}={{ user.password }}
+{% endfor %}

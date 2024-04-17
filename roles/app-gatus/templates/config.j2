@@ -1,7 +1,8 @@
 metrics: true
-# storage:
-#   path: /var/lib/gatus/gatus.db
-#   type: sqlite
+
+storage:
+  type: sqlite
+  path: /var/gatus/gatus.db
 
 endpoints:
 {% for host in groups['all'] %}

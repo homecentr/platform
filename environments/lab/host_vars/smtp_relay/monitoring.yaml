@@ -1,0 +1,12 @@
+# TBA using STARTTLS (?)
+# app_gatus_monitored_endpoints:
+#   - name: Web UI / container
+#     group: Unifi Controller
+#     type: https
+#     host: ct-unifi-controller-lab
+#     insecure: true
+#     port: 8443
+#   - name: Web UI / via proxy
+#     group: Unifi Controller
+#     type: https-pomerium-proxy
+#     host: unifi-lab.homecentr.one

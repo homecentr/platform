@@ -5,7 +5,7 @@
 
 - name: Create state directory
   ansible.builtin.file:
-    path: /var/lib/gatus
+    path: /var/gatus
     state: directory
 
 - name: Create config file

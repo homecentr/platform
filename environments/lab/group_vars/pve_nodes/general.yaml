@@ -25,6 +25,16 @@ pve_cluster_ha_groups:
         priority: 1000
     restricted: false
     nofailback: false
+  - name: critical-priority-pve3
+    nodes:
+      - name: pve1
+        priority: 1
+      - name: pve2
+        priority: 1
+      - name: pve3
+        priority: 1000
+    restricted: false
+    nofailback: false
   - name: critical
     nodes:
       - name: pve1

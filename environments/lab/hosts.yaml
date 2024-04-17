@@ -13,6 +13,7 @@ all:
         mqtt:
         pihole:
         pomerium:
+        smtp_relay:
         unifi_controller:
       children:
         cloudflared_containers:

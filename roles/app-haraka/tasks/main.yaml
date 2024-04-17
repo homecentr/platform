@@ -1,0 +1,37 @@
+- name: Create user with fixed UID/GID
+  ansible.builtin.include_tasks:
+    file: user.yaml
+
+- name: Create config directory
+  ansible.builtin.file:
+    path: /etc/haraka
+    state: directory
+    owner: haraka
+    group: haraka
+    mode: "0750"
+
+- name: Create config file
+  register: app_haraka_config
+  ansible.builtin.copy:
+    dest: "/etc/haraka/{{ item.dest }}"
+    owner: haraka
+    group: haraka
+    mode: "0640"
+    force: true
+    content: "{{ lookup('template', item.template) }}"
+  loop:
+    - template: config_auth.j2
+      dest: auth_flat_file.ini
+    - template: config_relay.j2
+      dest: relay_via_external.ini
+
+- name: Create compose file
+  ansible.builtin.copy:
+    dest: /etc/haraka/docker-compose.yaml
+    force: true
+    content: "{{ lookup('template', 'docker-compose.j2') }}"
+
+- name: Start docker stack
+  community.docker.docker_compose_v2:
+    project_src: /etc/haraka
+    state: "{{ 'restarted' if app_haraka_config.changed else 'present' }}"
