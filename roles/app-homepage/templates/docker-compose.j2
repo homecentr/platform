@@ -3,6 +3,11 @@ services:
   homepage:
     image: ghcr.io/gethomepage/homepage:{{ app_homepage_image_tag }}
     container_name: homepage
+    restart: unless-stopped
+    working_dir: /app
+    entrypoint: ["node", "server.js"]
+    healthcheck:
+      disable: true
     environment:
       PUID: {{ app_homepage_uid }}
       PGID: {{ app_homepage_gid }}

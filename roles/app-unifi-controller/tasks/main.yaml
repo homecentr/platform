@@ -1,0 +1,7 @@
+- name: Install MongoDB
+  ansible.builtin.include_tasks:
+    file: mongodb.yaml
+
+- name: Install Unifi Controller
+  ansible.builtin.include_tasks:
+    file: unifi.yaml

@@ -29,9 +29,23 @@ app_container_getssl_certificates:
     group: 7000
     mode: 0440
 
+app_pomerium_routes:
+  - hostname: pve
+    auth_mode: public # Proxmox has its own authentication
+    protocol: https
+    target_port: 8006
+    tls_upstream_server_name: pve.homecentr.one
+    backend:
+      - 10.1.2.11
+      - 10.1.2.12
+      - 10.1.2.13
+
 app_pihole_records:
   - hostname: login
     type: ansible_host
+
+  - hostname: pve
+    type: pomerium_proxy
 
 app_gatus_monitored_endpoints:
   - name: Pomerium
@@ -39,4 +53,10 @@ app_gatus_monitored_endpoints:
     type: https
     host: login.homecentr.one
     path: /healthz
+
+  # Can check directly root because the site is not authenticated by pomerium
+  - name: Web UI balancing proxy
+    group: Proxmox VE
+    type: https-pomerium-proxy
+    host: pve.homecentr.one
     

@@ -36,10 +36,12 @@ app_pihole_records:
     type: pomerium_proxy
 
 app_gatus_monitored_endpoints:
-  - name: Web UI
+  - name: Web UI / container
     group: Pi-hole
-    type: https-pomerium-proxy
-    host: pihole.homecentr.one
+    type: http
+    host: ct-pihole
+    port: 80
+
   - name: DNS
     group: Pi-hole
     type: dns

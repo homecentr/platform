@@ -3,11 +3,11 @@
   ansible.builtin.copy:
     dest: "/etc/homepage/config/{{ item.name }}"
     force: true
-    content: "{{ item.content }}"
+    content: "{{ item.content | to_nice_yaml }}"
   loop:
     - name: bookmarks.yaml
-      content: "{{ app_homepage_bookmarks | to_yaml }}"
+      content: "{{ app_homepage_bookmarks }}"
     - name: settings.yaml
-      content: "{{ app_homepage_settings | to_yaml }}"
+      content: "{{ app_homepage_settings }}"
     - name: widgets.yaml
-      content: "{{ app_homepage_widgets | to_yaml }}"
+      content: "{{ app_homepage_widgets }}"

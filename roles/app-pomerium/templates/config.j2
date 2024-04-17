@@ -21,7 +21,23 @@ routes:
 {% for host in groups['all'] %}
 {% for route in hostvars[host].app_pomerium_routes | default([]) %}
   - from: https://{{ route.hostname }}.{{ domain }}
+    tls_skip_verify: {{ route.tls_skip_verify | default(false) }}
+{% if route.backend | default(none) is none %}
     to: {{ route.protocol | default("http") }}://{{ hostvars[host].ansible_host }}:{{ route.target_port | default(80) }}
+{% elif route.backend is string %}
+    to: {{ route.protocol | default("http") }}://{{ route.backend }}:{{ route.target_port | default(80) }}
+{% else %}
+    to:
+{% for backend_host in route.backend %}
+      - {{ route.protocol | default("http") }}://{{ backend_host }}:{{ route.target_port | default(80) }}
+{% endfor%}
+{% endif %}
+{% if route.path | default('') != '' %}
+    path: {{ route.path }}
+{% endif %}
+{% if route.tls_upstream_server_name | default(none) is not none %}
+    tls_upstream_server_name: {{ route.tls_upstream_server_name }}
+{% endif %}
 {% if route.auth_mode == 'administrators' %}
     policy:
       - allow:
@@ -32,7 +48,7 @@ routes:
       - allow:
           or:
             - claim/groups: "{{ app_pomerium_groups_users }}"
-{% else %}
+{% elif route.auth_mode == 'public' %}
     allow_public_unauthenticated_access: true
 {% endif %}
 {% endfor %}

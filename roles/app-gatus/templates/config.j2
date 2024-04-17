@@ -1,8 +1,8 @@
 metrics: true
 # storage:
-#     path: /var/lib/gatus/gatus.db
-#     type: sqlite
-    
+#   path: /var/lib/gatus/gatus.db
+#   type: sqlite
+
 endpoints:
 {% for host in groups['all'] %}
 {% for endpoint in hostvars[host].app_gatus_monitored_endpoints | default([]) %}
@@ -13,6 +13,9 @@ endpoints:
   interval: {{ endpoint.interval | default('30s') }}
   client:
     dns-resolver: tcp://{{ hostvars['pihole'].ansible_host }}:53
+{% if endpoint.insecure | default(false) == true %}
+    insecure: true
+{% endif %}
 {% if endpoint.type == "ping" %}
   url: "icmp://{{ endpoint.host | default(hostvars[host].ansible_host) }}"
   conditions:
@@ -25,8 +28,10 @@ endpoints:
   url: "https://{{ endpoint.host | default(hostvars[host].ansible_host) }}:{{ endpoint.port | default(443) }}{{ endpoint.path | default('') }}"
   conditions:
     - "[STATUS] == 200"
+{% if not (endpoint.insecure | default(false)) %}
     - "[CERTIFICATE_EXPIRATION] > 72h"
-{% elif endpoint.type == "https-pomerium-proxy"%}
+{% endif %}
+{% elif endpoint.type == "https-pomerium-proxy"%} 
   url: "https://{{ endpoint.host }}{{ endpoint.path | default('') }}"
   conditions:
     - "[STATUS] == 200"

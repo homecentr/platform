@@ -18,9 +18,14 @@ app_container_pve_ha_group_name: noncritical
 app_container_pve_replication_nodes:
   - pve1
 
-app_homepage_image_tag: v0.8.9
+app_homepage_image_tag: v0.8.11
 
 app_pomerium_routes:
+  - hostname: homepage
+    target_port: 3000
+    path: /api/healthcheck
+    auth_mode: public
+
   - hostname: homepage
     target_port: 3000
     auth_mode: users
@@ -30,12 +35,15 @@ app_pihole_records:
     type: pomerium_proxy
 
 app_gatus_monitored_endpoints:
-  - name: Homepage / container
+  - name: Web UI / container
     group: Homepage
     type: http
     host: ct-homepage
     port: 3000
-  - name: Homepage / via proxy
+    path: /api/healthcheck
+
+  - name: Web UI / via proxy
     group: Homepage
     type: https-pomerium-proxy
     host: homepage.homecentr.one
+    path: /api/healthcheck

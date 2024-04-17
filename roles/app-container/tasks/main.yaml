@@ -1,4 +1,4 @@
-- name: Install Docker dependencies
+- name: Install Docker dependencies on Proxmox host
   ansible.builtin.include_tasks:
     file: docker.yaml
 
