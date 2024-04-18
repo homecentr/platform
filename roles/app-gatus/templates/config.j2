@@ -12,9 +12,8 @@ endpoints:
   group: {{ endpoint.group }}
 {% endif %}
   interval: {{ endpoint.interval | default('30s') }}
-  client:
-    dns-resolver: tcp://{{ hostvars['pihole'].ansible_host }}:53
 {% if endpoint.insecure | default(false) == true %}
+  client:
     insecure: true
 {% endif %}
 {% if endpoint.type == "ping" %}
@@ -61,6 +60,11 @@ endpoints:
   conditions:
     - "[BODY] == {{ endpoint.dns_query_answer }}"
     - "[DNS_RCODE] == NOERROR"
+{% elif endpoint.type == "starttls" %}
+  url: starttls://{{ endpoint.host | default(hostvars[host].ansible_host) }}:{{ endpoint.port }}
+  conditions:
+    - "[CONNECTED] == true"
+#    - "[CERTIFICATE_EXPIRATION] > 48h"
 {% endif %}
 
 {% endfor %}

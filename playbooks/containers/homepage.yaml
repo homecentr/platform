@@ -5,13 +5,13 @@
   any_errors_fatal: true
   tasks:
     - name: Create application container
-      ansible.builtin.include_role:
+      ansible.builtin.import_role:
         name: ../../roles/app-container
       vars:
         container_inventory_name: homepage
       tags: [ container ]
 
-- name: Setup Monitoring container
+- name: Setup Homepage container
   hosts: homepage
   become: true
   become_method: ansible.builtin.sudo

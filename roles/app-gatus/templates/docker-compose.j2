@@ -7,5 +7,5 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - /etc/gatus/config.yaml:/config/config.yaml
       - /var/gatus:/var/gatus
+      - /etc/gatus/config.yaml:/config/config.yaml:ro

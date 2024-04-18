@@ -2,6 +2,10 @@
   ansible.builtin.include_tasks:
     file: user.yaml
 
+- name: Disable postfix
+  ansible.builtin.include_tasks:
+    file: disable-postfix.yaml
+
 - name: Create config directory
   ansible.builtin.file:
     path: /etc/haraka

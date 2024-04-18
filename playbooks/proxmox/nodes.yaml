@@ -72,6 +72,8 @@
     - name: Create host records for servers
       ansible.builtin.import_role:
         name: ../../roles/hosts
+      vars:
+        hosts_group_name: pve_nodes
       tags:
         - hosts
 

@@ -3,12 +3,4 @@
     path: /etc/hosts
     regexp: "^.*\\W+{{ item | replace('.', '\\.') }}.*"
     line: "{{ hostvars[item]['ansible_host'] }} {{ hostvars[item]['ansible_hostname'] }} {{ hostvars[item]['ansible_hostname'] }}.{{ domain }}"
-  with_items: "{{ groups['all'] }}"
-
-- name: Add additional hosts
-  ansible.builtin.lineinfile:
-    path: /etc/hosts
-    regexp: "^.*\\W+{{ item.ip | replace('.', '\\.') }}\\W+{{ item.host | replace('.', '\\.') }}\\W*$"
-    line: "{{ item.ip }} {{ item.host }}"
-  with_items: "{{ hosts_additional }}"
-  when: hosts_additional is defined and hosts_additional | length
+  with_items: "{{ groups[hosts_group_name] }}"

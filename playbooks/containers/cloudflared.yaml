@@ -4,14 +4,18 @@
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
-    - name: Create application container
-      loop: "{{ groups['cloudflared_containers'] }}"
-      loop_control:
-        loop_var: container_inventory_name
-      ansible.builtin.include_role:
+    - name: Create application container cloudflared1
+      ansible.builtin.import_role:
         name: ../../roles/app-container
       vars:
-        container_inventory_name: "{{ container_inventory_name }}"
+        container_inventory_name: "cloudflared1"
+      tags: [ container ]
+
+    - name: Create application container cloudflared2
+      ansible.builtin.import_role:
+        name: ../../roles/app-container
+      vars:
+        container_inventory_name: "cloudflared2"
       tags: [ container ]
 
 - name: Setup Cloudflared containers

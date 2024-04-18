@@ -26,3 +26,6 @@ pct set {{ app_container_id }}
  {%- if app_container_swap is defined %}
  --swap {{ app_container_swap }}
  {%- endif %}
+ {%- if app_container_nameserver is defined %}
+ --nameserver {{ app_container_nameserver }}
+ {%- endif %}

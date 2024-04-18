@@ -7,7 +7,7 @@ services:
       - "25:2525"
       - "9904:9904"
     volumes:
-      - /getssl/wildcard.crt:/haraka/config/tls_cert.pem:ro
+      - /getssl/wildcard_fullchain.crt:/haraka/config/tls_cert.pem:ro
       - /getssl/wildcard.key:/haraka/config/tls_key.pem:ro
       - /etc/haraka/auth_flat_file.ini:/haraka/config/auth_flat_file.ini:ro
       - /etc/haraka/relay_via_external.ini:/haraka/config/relay_via_external.ini:ro
