@@ -1,3 +1,5 @@
+ups_name: dummy-ups1
+
 ups_devices:
   - name: dummy-ups1
     driver: dummy-ups

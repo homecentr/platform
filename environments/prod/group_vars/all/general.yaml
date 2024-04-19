@@ -1,3 +1,0 @@
-ansible_user: lholota
-ansible_python_interpreter: "/usr/bin/python3"
-domain: homecentr.one

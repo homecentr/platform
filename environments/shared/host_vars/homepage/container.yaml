@@ -1,0 +1,38 @@
+ansible_host: "{{ subnets.services | ansible.utils.ipmath(72) }}"
+ansible_hostname: "ct-homepage{{ env.suffix }}"
+
+app_container_docker_support: true
+app_container_memory: 512
+app_container_storage_size_gb: 1
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(72) }}/24"
+    ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
+
+app_container_pve_node: pve2
+app_container_pve_ha_group_name: noncritical
+app_container_pve_replication_nodes:
+  - pve1
+
+app_homepage_image_tag: v0.8.9
+
+app_pomerium_routes:
+  - hostname: "homepage{{ env.suffix }}"
+    target_port: 3000
+    auth_mode: users
+
+app_pihole_records:
+  - hostname: "homepage{{ env.suffix }}"
+    type: pomerium_proxy
+
+app_gatus_monitored_endpoints:
+  - name: Homepage / container
+    group: Homepage
+    type: http
+    host: "ct-homepage{{ env.suffix }}"
+    port: 3000
+  - name: Homepage / via proxy
+    group: Homepage
+    type: https-pomerium-proxy
+    host: "homepage{{ env.suffix }}.homecentr.one"

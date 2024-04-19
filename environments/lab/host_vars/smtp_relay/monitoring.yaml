@@ -1,6 +1,0 @@
-app_gatus_monitored_endpoints:
-  - name: Haraka
-    group: SMTP Relay
-    type: starttls
-    host: smtp-lab.homecentr.one
-    port: 25

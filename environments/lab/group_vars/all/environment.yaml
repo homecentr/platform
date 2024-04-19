@@ -1,0 +1,13 @@
+env:
+  name: lab
+  suffix: -lab
+  suffix_display: -Lab
+  domain: homecentr.one
+
+subnets:
+  services:
+    cidr: 10.1.8.0/24
+    prefix: 10.1.8
+  services_storage:
+    cidr: 192.168.9.0/24
+    prefix: 192.168.9

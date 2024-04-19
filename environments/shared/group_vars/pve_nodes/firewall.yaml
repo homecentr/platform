@@ -4,19 +4,19 @@ pve_cluster_firewall_aliases:
   - name: subnet-home
     cidr: 10.1.3.0/24
   - name: subnet-services
-    cidr: 10.1.8.0/24
+    cidr: "{{ subnets.services }}"
 
-  - name: pve1
-    cidr: 10.1.8.11/32
-  - name: pve2
-    cidr: 10.1.8.12/32
-  - name: pve3
-    cidr: 10.1.8.13/32
+  - name: "pve1{{ env.suffix }}"
+    cidr: "{{ subnets.services | ansible.utils.ipmath(11) }}/32"
+  - name: "pve2{{ env.suffix }}"
+    cidr: "{{ subnets.services | ansible.utils.ipmath(12) }}/32"
+  - name: "pve3{{ env.suffix }}"
+    cidr: "{{ subnets.services | ansible.utils.ipmath(13) }}/32"
 
-  - name: cloudflared1
-    cidr: 10.1.8.70/32
-  - name: cloudflared2
-    cidr: 10.1.8.71/32
+  - name: "cloudflared1{{ env.suffix }}"
+    cidr: "{{ subnets.services | ansible.utils.ipmath(70) }}/32"
+  - name: "cloudflared2{{ env.suffix }}"
+    cidr: "{{ subnets.services | ansible.utils.ipmath(71) }}/32"
 
   - name: mqtt
     cidr: 10.1.8.67/32

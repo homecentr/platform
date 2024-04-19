@@ -1,0 +1,16 @@
+# Common
+ansible_host: "{{ subnets.services | ansible.utils.ipmath(13) }}"
+ansible_hostname: "pve3{{ env.suffix }}"
+
+# GetSSL
+getssl_cron_renewal_hour: 18
+
+# Monitoring
+app_gatus_monitored_endpoints:
+  - name: pve3 / ping
+    group: Proxmox VE
+    type: ping
+  - name: pve3 / http
+    group: Proxmox VE
+    type: https
+    host: "pve3{{ env.suffix }}.homecentr.one"

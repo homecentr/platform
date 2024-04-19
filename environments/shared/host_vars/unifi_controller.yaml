@@ -1,0 +1,39 @@
+ansible_host: "{{ subnets.services | ansible.utils.ipmath(73) }}"
+ansible_hostname: "ct-unifi-controller{{ env.suffix }}"
+
+app_container_memory: 1024
+app_container_swap: 1024
+app_container_storage_size_gb: 5
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(73) }}/24"
+    ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
+
+app_container_pve_node: pve1
+app_container_pve_ha_group_name: non-critical
+app_container_pve_replication_nodes:
+  - pve2
+
+app_pihole_records:
+  - hostname: "unifi{{ env.suffix }}"
+    type: pomerium_proxy
+
+app_pomerium_routes:
+  - hostname: "unifi{{ env.suffix }}"
+    protocol: https
+    tls_skip_verify: true
+    target_port: 8443
+    auth_mode: public # Controller has its own authentication
+
+app_gatus_monitored_endpoints:
+  - name: Web UI / container
+    group: Unifi Controller
+    type: https
+    host: "ct-unifi-controller{{ env.suffix }}"
+    insecure: true
+    port: 8443
+  - name: Web UI / via proxy
+    group: Unifi Controller
+    type: https-pomerium-proxy
+    host: "unifi{{ env.suffix }}.homecentr.one"

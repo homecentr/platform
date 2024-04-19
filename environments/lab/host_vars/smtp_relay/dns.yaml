@@ -1,3 +1,0 @@
-app_pihole_records:
-  - hostname: smtp-lab
-    type: ansible_host

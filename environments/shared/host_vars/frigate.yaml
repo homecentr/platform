@@ -1,0 +1,50 @@
+ansible_host: "{{ subnets.services | ansible.utils.ipmath(69) }}"
+ansible_hostname: "ct-frigate{{ env.suffix }}"
+
+app_container_docker_support: true
+app_container_ostemplate: local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst
+app_container_memory: 2048
+app_container_storage_size_gb: 5
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(69) }}/24"
+    ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
+
+# TODO: Per environment
+app_container_mounts:
+  - type: disk
+    storage_name: dpool
+    index: 2
+    size_gb: 2
+    target_path: /nvr
+
+app_container_pve_node: pve2
+app_container_pve_ha_group_name: noncritical
+app_container_pve_replication_nodes:
+  - pve1
+
+# TODO: Per env
+app_frigate_image_tag: 0.13.2
+app_frigate_cache_size_gb: 1
+app_frigate_shm_size_gb: 1
+
+app_pihole_records:
+  - hostname: "frigate{{ env.suffix }}"
+    type: pomerium_proxy
+
+app_pomerium_routes:
+  - hostname: "frigate{{ env.suffix }}"
+    target_port: 5000
+    auth_mode: users
+
+app_gatus_monitored_endpoints:
+  - name: Web UI / container
+    group: Frigate
+    type: http
+    host: "ct-frigate{{ env.suffix }}"
+    port: 5000
+  - name: Web UI / via proxy
+    group: Frigate
+    type: https-pomerium-proxy
+    host: "frigate{{ env.suffix }}.homecentr.one"

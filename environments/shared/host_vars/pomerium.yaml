@@ -1,0 +1,48 @@
+ansible_host: "{{ subnets.services | ansible.utils.ipmath(66) }}"
+ansible_hostname: "ct-pomerium{{ env.suffix }}"
+
+app_container_memory: 512
+app_container_storage_size_gb: 2
+app_container_pve_replication_cron_expression: "*/5"
+app_container_mapped_uids:
+  - 7000
+app_container_mapped_gids:
+  - 7000
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(66) }}/24"
+    ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
+app_container_pve_node: pve1
+app_container_pve_ha_group_name: critical-priority-pve1
+app_container_pve_replication_nodes:
+  - pve2
+
+app_container_getssl_certificates:
+  - name: "*.homecentr.one"
+    fullchain_filename: "wildcard_fullchain.crt"
+    cert_filename: "wildcard.crt"
+    key_filename: "wildcard.key"
+    user: 7000
+    group: 7000
+    mode: 0440
+
+app_pihole_records:
+  - hostname: "login{{ env.suffix }}"
+    type: ansible_host
+
+app_gatus_monitored_endpoints:
+  - name: Pomerium
+    group: Pomerium
+    type: https
+    host: "login{{ env.suffix }}.homecentr.one"
+    path: /healthz
+
+app_pomerium_hostname: "login{{ env.suffix }}.homecentr.one"
+
+app_pomerium_groups_administrators: b77c210d-8ae3-4292-9e95-c7d42a2f254f
+app_pomerium_groups_users: ba84af15-129a-42c3-806c-62700ea31a7c
+
+app_pomerium_certificates:
+  - fullchain_path: /getssl/wildcard_fullchain.crt
+    key_path: /getssl/wildcard.key

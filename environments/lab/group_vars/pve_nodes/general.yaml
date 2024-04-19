@@ -1,65 +1,8 @@
-# This is required for VNC proxy between the nodes
-ssh_allow_root_login_trusted_clients:
-  - pve1
-  - pve2
-  - pve3
-
 pve_zfs_max_arc_size_gb: 0.5
 
 pve_cluster_options_migration_network: 192.168.8.0/24
 
-pve_cluster_ha_groups:
-  - name: critical-priority-pve1
-    nodes:
-      - name: pve1
-        priority: 1000
-      - name: pve2
-        priority: 1
-    restricted: false
-    nofailback: false
-  - name: critical-priority-pve2
-    nodes:
-      - name: pve1
-        priority: 1
-      - name: pve2
-        priority: 1000
-    restricted: false
-    nofailback: false
-  - name: critical-priority-pve3
-    nodes:
-      - name: pve1
-        priority: 1
-      - name: pve2
-        priority: 1
-      - name: pve3
-        priority: 1000
-    restricted: false
-    nofailback: false
-  - name: critical
-    nodes:
-      - name: pve1
-        priority: 1
-      - name: pve2
-        priority: 1
-    restricted: false
-    nofailback: false
-  - name: non-critical
-    nodes:
-      - name: pve1
-        priority: 1
-      - name: pve2
-        priority: 1
-    restricted: true
-    nofailback: false
-
-pve_domain: homecentr.one
-pve_nameservers:
-  - 1.1.1.1
-  - 1.0.0.1
-
+# TODO: Move this to secrets and use external SMTP
 pve_smtp_host: 10.1.8.130
 pve_smtp_port: 25
 pve_smtp_tls: false
-
-pve_ct_templates:
-- http://download.proxmox.com/images/system/debian-12-standard_12.2-1_amd64.tar.zst

@@ -1,0 +1,46 @@
+ansible_host: "{{ subnets.services | ansible.utils.ipmath(65) }}"
+ansible_hostname: "ct-smtp-relay{{ env.suffix }}"
+
+app_container_docker_support: true
+app_container_memory: 256
+app_container_storage_size_gb: 2
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(65) }}/24"
+    ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
+
+app_container_pve_node: pve3
+app_container_pve_ha_group_name: critical-priority-pve3
+app_container_pve_replication_nodes:
+  - pve1
+  - pve2
+
+app_container_mapped_uids:
+  - 7000
+app_container_mapped_gids:
+  - 7000
+
+app_container_getssl_certificates:
+  - name: "*.homecentr.one"
+    fullchain_filename: "wildcard_fullchain.crt"
+    cert_filename: "wildcard.crt"
+    key_filename: "wildcard.key"
+    user: 7000
+    group: 7000
+    mode: 0440
+
+app_haraka_uid: 7000
+app_haraka_gid: 7000
+app_haraka_image_tag: 1.1.0
+
+app_pihole_records:
+  - hostname: "smtp{{ env.suffix }}"
+    type: ansible_host
+
+app_gatus_monitored_endpoints:
+  - name: Haraka
+    group: SMTP Relay
+    type: starttls
+    host: "smtp{{ env.suffix }}.homecentr.one"
+    port: 25
