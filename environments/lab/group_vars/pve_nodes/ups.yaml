@@ -1,8 +1,0 @@
-ups_name: dummy-ups1
-
-ups_devices:
-  - name: dummy-ups1
-    driver: dummy-ups
-    description: Dummy UPS
-    port: evolution500.seq
-    monitored_by: pve1

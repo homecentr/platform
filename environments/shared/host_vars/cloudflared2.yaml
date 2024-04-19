@@ -1,4 +1,4 @@
-ansible_host: "{{ subnets.services | ansible.utils.ipmath(71) }}"
+ansible_host: "{{ ipam.cloudflared2 }}"
 ansible_hostname: "ct-cloudflared2{{ env.suffix }}"
 
 app_container_memory: 512
@@ -7,8 +7,8 @@ app_container_storage_size_gb: 1
 app_container_network_interfaces:
   - name: eth0
     bridge: vmbr0
-    ipv4_address: 10.1.8.71/24
-    ipv4_gateway: 10.1.8.1
+    ipv4_address: "{{ ipam.cloudflared2 }}/24"
+    ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
 
 app_container_pve_node: pve2
 app_container_pve_ha_group_name: critical-priority-pve2

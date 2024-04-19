@@ -1,5 +1,5 @@
 # Common
-ansible_host: "{{ subnets.services | ansible.utils.ipmath(12) }}"
+ansible_host: "{{ ipam.pve2 }}"
 ansible_hostname: "pve2{{ env.suffix }}"
 
 # GetSSL
@@ -10,6 +10,7 @@ app_gatus_monitored_endpoints:
   - name: pve2 / ping
     group: Proxmox VE
     type: ping
+    host: "pve2{{ env.suffix }}.homecentr.one"
   - name: pve2 / http
     group: Proxmox VE
     type: https

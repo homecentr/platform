@@ -1,8 +1,10 @@
 pve_zfs_max_arc_size_gb: 0.5
 
-pve_cluster_options_migration_network: 192.168.8.0/24
+ups_name: dummy-ups1
 
-# TODO: Move this to secrets and use external SMTP
-pve_smtp_host: 10.1.8.130
-pve_smtp_port: 25
-pve_smtp_tls: false
+ups_devices:
+  - name: dummy-ups1
+    driver: dummy-ups
+    description: Dummy UPS
+    port: evolution500.seq
+    monitored_by: pve1

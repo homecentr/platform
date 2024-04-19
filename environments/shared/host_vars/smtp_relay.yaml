@@ -1,4 +1,4 @@
-ansible_host: "{{ subnets.services | ansible.utils.ipmath(65) }}"
+ansible_host: "{{ ipam.smtp_relay }}"
 ansible_hostname: "ct-smtp-relay{{ env.suffix }}"
 
 app_container_docker_support: true
@@ -7,7 +7,7 @@ app_container_storage_size_gb: 2
 app_container_network_interfaces:
   - name: eth0
     bridge: vmbr0
-    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(65) }}/24"
+    ipv4_address: "{{ ipam.smtp_relay }}/24"
     ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
 
 app_container_pve_node: pve3

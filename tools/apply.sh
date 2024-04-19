@@ -27,7 +27,7 @@ shift
 
 export ANSIBLE_CONFIG="./ansible.cfg"
 
-COMMAND="ansible-playbook -i $INVENTORY $PLAYBOOK ${@:1}"
+COMMAND="ansible-playbook -i ./environments/shared -i $INVENTORY $PLAYBOOK ${@:1}"
 
 echo $COMMAND
 

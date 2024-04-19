@@ -1,4 +1,4 @@
-ansible_host: "{{ subnets.services | ansible.utils.ipmath(72) }}"
+ansible_host: "{{ ipam.homepage }}"
 ansible_hostname: "ct-homepage{{ env.suffix }}"
 
 app_container_docker_support: true
@@ -7,7 +7,7 @@ app_container_storage_size_gb: 1
 app_container_network_interfaces:
   - name: eth0
     bridge: vmbr0
-    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(72) }}/24"
+    ipv4_address: "{{ ipam.homepage }}/24"
     ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
 
 app_container_pve_node: pve2
@@ -30,7 +30,7 @@ app_gatus_monitored_endpoints:
   - name: Homepage / container
     group: Homepage
     type: http
-    host: "ct-homepage{{ env.suffix }}"
+    host: "ct-homepage{{ env.suffix }}.homecentr.one"
     port: 3000
   - name: Homepage / via proxy
     group: Homepage

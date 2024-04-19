@@ -1,4 +1,4 @@
-ansible_host: "{{ subnets.services | ansible.utils.ipmath(68) }}"
+ansible_host: "{{ ipam.monitoring }}"
 ansible_hostname: "ct-monitoring{{ env.suffix }}"
 
 app_container_docker_support: true
@@ -7,7 +7,7 @@ app_container_storage_size_gb: 5
 app_container_network_interfaces:
   - name: eth0
     bridge: vmbr0
-    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(68) }}/24"
+    ipv4_address: "{{ ipam.monitoring }}/24"
     ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
 
 app_container_pve_node: pve2
@@ -18,10 +18,10 @@ app_container_pve_replication_nodes:
 app_gatus_image_tag: v5.7.0
 
 app_pomerium_routes:
-  - hostname: "gatus{{ env.suffix }}"
+  - hostname: "status{{ env.suffix }}"
     target_port: 8080
     auth_mode: public
 
 app_pihole_records:
-  - hostname: "gatus{{ env.suffix }}"
+  - hostname: "status{{ env.suffix }}"
     type: pomerium_proxy

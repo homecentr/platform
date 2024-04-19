@@ -1,5 +1,5 @@
-# ??? app_container_memory: 2048
-app_container_storage_name: dpool1
+app_container_memory: 2048
+app_container_storage_name: dpool
 app_container_storage_size_gb: 5
 
 app_container_mounts:
@@ -9,4 +9,5 @@ app_container_mounts:
     size_gb: 2
     target_path: /nvr
 
-app_frigate_image_tag: 0.13.2
+app_frigate_cache_size_gb: 1
+app_frigate_shm_size_gb: 1

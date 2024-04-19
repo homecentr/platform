@@ -1,4 +1,4 @@
-ansible_host: "{{ subnets.services | ansible.utils.ipmath(64) }}"
+ansible_host: "{{ ipam.pihole }}"
 ansible_hostname: "ct-pihole{{ env.suffix }}"
 
 app_container_nameserver: 1.1.1.1
@@ -7,7 +7,7 @@ app_container_storage_size_gb: 5
 app_container_network_interfaces:
   - name: eth0
     bridge: vmbr0
-    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(64) }}/24"
+    ipv4_address: "{{ ipam.pihole }}/24"
     ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
 
 app_container_pve_node: pve1
@@ -36,7 +36,7 @@ app_gatus_monitored_endpoints:
   - name: DNS
     group: Pi-hole
     type: dns
-    host: "{{ subnets.services | ansible.utils.ipmath(64) }}"
+    host: "{{ ipam.pihole }}"
     dns_query_name: "login{{ env.suffix }}.homecentr.one"
     dns_query_type: "A"
-    dns_query_answer: "{{ subnets.services | ansible.utils.ipmath(66) }}"
+    dns_query_answer: "{{ ipam.pomerium }}"

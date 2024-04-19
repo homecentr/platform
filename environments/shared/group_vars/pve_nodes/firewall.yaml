@@ -7,26 +7,32 @@ pve_cluster_firewall_aliases:
     cidr: "{{ subnets.services }}"
 
   - name: "pve1{{ env.suffix }}"
-    cidr: "{{ subnets.services | ansible.utils.ipmath(11) }}/32"
+    cidr: "{{ ipam.pve1 }}/32"
   - name: "pve2{{ env.suffix }}"
-    cidr: "{{ subnets.services | ansible.utils.ipmath(12) }}/32"
+    cidr: "{{ ipam.pve2 }}/32"
   - name: "pve3{{ env.suffix }}"
-    cidr: "{{ subnets.services | ansible.utils.ipmath(13) }}/32"
+    cidr: "{{ ipam.pve3 }}/32"
 
-  - name: "cloudflared1{{ env.suffix }}"
-    cidr: "{{ subnets.services | ansible.utils.ipmath(70) }}/32"
-  - name: "cloudflared2{{ env.suffix }}"
-    cidr: "{{ subnets.services | ansible.utils.ipmath(71) }}/32"
-
-  - name: mqtt
-    cidr: 10.1.8.67/32
-
-  - name: homepage
-    cidr: 10.1.8.72/32
-
-  - name: pomerium1
-    cidr: 10.1.8.66/32
-
+  - name: "ct-pihole{{ env.suffix }}"
+    cidr: "{{ ipam.pihole }}/32"
+  - name: "ct-smtp-relay{{ env.suffix }}"
+    cidr: "{{ ipam.smtp_relay }}/32"
+  - name: "ct-pomerium{{ env.suffix }}"
+    cidr: "{{ ipam.pomerium }}/32"
+  - name: "ct-mqtt{{ env.suffix }}"
+    cidr: "{{ ipam.mqtt }}/32"
+  - name: "ct-monitoring{{ env.suffix }}"
+    cidr: "{{ ipam.monitoring }}/32"
+  - name: "ct-frigate{{ env.suffix }}"
+    cidr: "{{ ipam.frigate }}/32"
+  - name: "ct-cloudflared1{{ env.suffix }}"
+    cidr: "{{ ipam.cloudflared }}/32"
+  - name: "ct-cloudflared2{{ env.suffix }}"
+    cidr: "{{ ipam.cloudflared }}/32"
+  - name: "ct-homepage{{ env.suffix }}"
+    cidr: "{{ ipam.homepage }}/32"
+  - name: ct-unifi-controller{{ env.suffix }}"
+    cidr: "{{ ipam.unifi_controller }}/32"
 
 pve_cluster_firewall_ipsets:
   - name: management
@@ -38,26 +44,16 @@ pve_cluster_firewall_ipsets:
   - name: proxmox
     items:
       - type: alias
-        name: pve1
+        name: "pve1{{ env.suffix }}"
       - type: alias
-        name: pve2
+        name: "pve1{{ env.suffix }}"
       - type: alias
-        name: pve3
-  - name: pomerium
+        name: "pve1{{ env.suffix }}"
+  - name: cloudflared
     items:
       - type: alias
-        name: pomerium1
-  - name: mqtt
-    items:
+        name: "ct-cloudflared1{{ env.suffix }}"
       - type: alias
-        name: mqtt
-  - name: monitoring
-    items:
-      - type: alias
-        name: monitoring
-  - name: homepage
-    items:
-      - type: alias
-        name: homepage
+        name: "ct-cloudflared2{{ env.suffix }}"
 
 pve_cluster_firewall_security_groups: []

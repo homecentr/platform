@@ -1,4 +1,4 @@
-ansible_host: "{{ subnets.services | ansible.utils.ipmath(73) }}"
+ansible_host: "{{ ipam.unifi_controller }}"
 ansible_hostname: "ct-unifi-controller{{ env.suffix }}"
 
 app_container_memory: 1024
@@ -7,7 +7,7 @@ app_container_storage_size_gb: 5
 app_container_network_interfaces:
   - name: eth0
     bridge: vmbr0
-    ipv4_address: "{{ subnets.services | ansible.utils.ipmath(73) }}/24"
+    ipv4_address: "{{ ipam.unifi_controller }}/24"
     ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
 
 app_container_pve_node: pve1
@@ -30,7 +30,7 @@ app_gatus_monitored_endpoints:
   - name: Web UI / container
     group: Unifi Controller
     type: https
-    host: "ct-unifi-controller{{ env.suffix }}"
+    host: "ct-unifi-controller{{ env.suffix }}.homecentr.one"
     insecure: true
     port: 8443
   - name: Web UI / via proxy
