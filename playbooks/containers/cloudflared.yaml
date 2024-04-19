@@ -19,7 +19,7 @@
       tags: [ container ]
 
 - name: Setup Cloudflared containers
-  hosts: cloudflared_containers
+  hosts: cloudflared
   become: true
   become_method: ansible.builtin.sudo
   any_errors_fatal: true

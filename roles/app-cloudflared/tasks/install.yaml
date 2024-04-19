@@ -11,6 +11,7 @@
     state: present
 
 - name: Install cloudflared package
+  register: app_cloudflared_package
   ansible.builtin.apt:
-    name: cloudflared
+    name: "cloudflared={{ app_cloudflared_package_version }}"
     state: present
