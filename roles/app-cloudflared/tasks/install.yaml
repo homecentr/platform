@@ -14,4 +14,5 @@
   register: app_cloudflared_package
   ansible.builtin.apt:
     name: "cloudflared={{ app_cloudflared_package_version }}"
+    update_cache: true
     state: present

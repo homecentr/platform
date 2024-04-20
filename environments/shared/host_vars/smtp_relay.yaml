@@ -2,7 +2,7 @@ ansible_host: "{{ ipam.smtp_relay }}"
 ansible_hostname: "ct-smtp-relay{{ env.suffix }}"
 
 app_container_docker_support: true
-app_container_memory: 256
+app_container_memory: 512
 app_container_storage_size_gb: 2
 app_container_network_interfaces:
   - name: eth0
@@ -10,10 +10,9 @@ app_container_network_interfaces:
     ipv4_address: "{{ ipam.smtp_relay }}/24"
     ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
 
-app_container_pve_node: pve3
-app_container_pve_ha_group_name: critical-priority-pve3
+app_container_pve_node: pve1
+app_container_pve_ha_group_name: critical-priority-pve1
 app_container_pve_replication_nodes:
-  - pve1
   - pve2
 
 app_container_mapped_uids:

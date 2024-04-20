@@ -1,0 +1,2 @@
+pve_zfs_max_arc_size_gb: 0.5
+ups_name: ups1

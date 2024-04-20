@@ -11,7 +11,6 @@ all:
         homepage:
         monitoring:
         mqtt:
-        pihole:
         pomerium:
         smtp_relay:
         unifi_controller:
@@ -20,3 +19,7 @@ all:
           hosts:
             cloudflared1:
             cloudflared2:
+        pihole:
+          hosts:
+            pihole1:
+            pihole2:

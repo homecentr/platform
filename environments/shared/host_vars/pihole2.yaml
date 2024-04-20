@@ -1,0 +1,34 @@
+ansible_host: "{{ ipam.pihole2 }}"
+ansible_hostname: "ct-pihole2{{ env.suffix }}"
+
+app_container_network_interfaces:
+  - name: eth0
+    bridge: vmbr0
+    ipv4_address: "{{ ipam.pihole2 }}/24"
+    ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
+
+app_container_pve_node: pve2
+app_container_pve_ha_group_name: critical-priority-pve2
+app_container_pve_replication_nodes:
+  - pve1
+
+app_pomerium_routes:
+  - hostname: "pihole2{{ env.suffix }}"
+    auth_mode: administrators
+
+app_pihole_records:
+  - hostname: "pihole2{{ env.suffix }}"
+    type: pomerium_proxy
+
+app_gatus_monitored_endpoints:
+  - name: pihole2 / Web UI
+    group: Pi-hole
+    type: https-pomerium-proxy
+    host: "pihole2{{ env.suffix }}.homecentr.one"
+  - name: pihole2 / DNS
+    group: Pi-hole
+    type: dns
+    host: "{{ ipam.pihole2 }}"
+    dns_query_name: "login{{ env.suffix }}.homecentr.one"
+    dns_query_type: "A"
+    dns_query_answer: "{{ ipam.pomerium }}"

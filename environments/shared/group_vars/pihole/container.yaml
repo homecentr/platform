@@ -1,0 +1,8 @@
+app_container_nameserver: 1.1.1.1
+app_container_memory: 512
+app_container_storage_size_gb: 5
+
+app_pihole_version: 5.17.3
+app_pihole_forwarders:
+  - 1.1.1.1
+  - 1.0.0.1

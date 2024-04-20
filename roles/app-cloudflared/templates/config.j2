@@ -9,4 +9,7 @@ ingress:
           noTLSVerify: true
     {% endfor %}
 
+    - hostname: {{ app_cloudflared_healthcheck_hostname }}
+      service: http_status: 204
+
     - service: http_status:404

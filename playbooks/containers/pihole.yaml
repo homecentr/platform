@@ -4,11 +4,18 @@
   become_method: ansible.builtin.sudo
   any_errors_fatal: true
   tasks:
-    - name: Create application container
+    - name: Create phole1 container
       ansible.builtin.import_role:
         name: ../../roles/app-container
       vars:
-        container_inventory_name: "pihole"
+        container_inventory_name: "pihole1"
+      tags: [ container ]
+
+    - name: Create phole2 container
+      ansible.builtin.import_role:
+        name: ../../roles/app-container
+      vars:
+        container_inventory_name: "pihole2"
       tags: [ container ]
 
 - name: Setup Pihole containers

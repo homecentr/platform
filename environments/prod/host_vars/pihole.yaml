@@ -1,0 +1,4 @@
+app_pihole_custom_forwarders:
+  # Forward lab queries to lab nameserver
+  - domain_pattern: "*-lab.homecentr.one"
+    nameserver: 10.1.8.64
