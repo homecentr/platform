@@ -9,6 +9,7 @@
     state: directory
 
 - name: Create config file
+  register: app_gatus_config
   ansible.builtin.copy:
     dest: /etc/gatus/config.yaml
     force: true
@@ -20,8 +21,7 @@
     force: true
     content: "{{ lookup('template', 'docker-compose.j2') }}"
 
-# Gatus picks up updates in the config file by itself without the need to restart the service
 - name: Start docker stack
   community.docker.docker_compose_v2:
     project_src: /etc/gatus
-    state: "present"
+    state: "{{ 'restarted' if app_gatus_config.changed else 'present' }}"
