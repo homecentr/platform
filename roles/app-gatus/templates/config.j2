@@ -12,9 +12,12 @@ endpoints:
   group: {{ endpoint.group }}
 {% endif %}
   interval: {{ endpoint.interval | default('30s') }}
-{% if endpoint.insecure | default(false) == true %}
   client:
+{% if endpoint.insecure | default(false) == true %}
     insecure: true
+{% endif %}
+{% if endpoint.dns_resolver | default('') != '' %}
+    dns-resolver: {{ endpoint.dns_resolver }}
 {% endif %}
 {% if endpoint.type == "ping" %}
   url: "icmp://{{ endpoint.host | default(hostvars[host].ansible_host) }}"
@@ -64,7 +67,7 @@ endpoints:
   url: starttls://{{ endpoint.host | default(hostvars[host].ansible_host) }}:{{ endpoint.port }}
   conditions:
     - "[CONNECTED] == true"
-#    - "[CERTIFICATE_EXPIRATION] > 48h"
+    - "[CERTIFICATE_EXPIRATION] > 48h"
 {% endif %}
 
 {% endfor %}

@@ -14,5 +14,3 @@ app_container_pve_node: pve2
 app_container_pve_ha_group_name: critical-priority-pve2
 app_container_pve_replication_nodes:
   - pve1
-
-app_cloudflared_package_version: 2024.4.0

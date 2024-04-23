@@ -15,5 +15,9 @@ app_container_pve_ha_group_name: critical-priority-pve1
 app_container_pve_replication_nodes:
   - pve2
   
-app_cloudflared_package_version: 2024.4.0
-app_cloudflared_healthcheck_hostname: "tunnel-health{{ env.suffix }}.homecentr.one"
+app_gatus_monitored_endpoints:
+  - name: Cloudflare Tunnel
+    group: Cloudflared
+    type: https
+    dns_resolver: tcp://1.1.1.1:53
+    host: "tunnel-health{{ env.suffix }}.homecentr.one"

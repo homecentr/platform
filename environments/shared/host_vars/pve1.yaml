@@ -6,7 +6,7 @@ ansible_hostname: "pve1{{ env.suffix }}"
 getssl_cron_renewal_hour: 16
 
 app_pomerium_routes:
-  - hostname: pve
+  - hostname: "pve{{ env.suffix }}"
     auth_mode: public # Proxmox has its own authentication
     protocol: https
     target_port: 8006
@@ -18,7 +18,7 @@ app_pomerium_routes:
 
 # DNS
 app_pihole_records:
-  - hostname: pve
+  - hostname: "pve{{ env.suffix }}"
     type: pomerium_proxy
 
 # Monitoring

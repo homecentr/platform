@@ -21,7 +21,7 @@ routes:
 {% for host in groups['all'] %}
 {% for route in hostvars[host].app_pomerium_routes | default([]) %}
   - from: https://{{ route.hostname }}.{{ domain }}
-    tls_skip_verify: {{ route.tls_skip_verify | default(false) }}
+    tls_skip_verify: {{ 'true' if route.tls_skip_verify | default(false) else 'false' }}
 {% if route.backend | default(none) is none %}
     to: {{ route.protocol | default("http") }}://{{ hostvars[host].ansible_host }}:{{ route.target_port | default(80) }}
 {% elif route.backend is string %}

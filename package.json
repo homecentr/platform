@@ -11,11 +11,19 @@
     "lab:clear-keys": "./tools/clearkeys.sh",
     "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh lab proxmox/nodes -u root -e ansible_user=root --tags init -k",
     "lab:apply": "./tools/apply.sh lab",
+    "lab:test:local": "./tools/tests.sh 'lab.local' ./tests --skiptags remoteonly -e local:lab --suiteRetries 3",
+    "lab:test:remote": "",
     "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh prod proxmox/nodes -u root -e ansible_user=root --tags init -k",
     "prod:apply": "./tools/apply.sh prod",
     "validate-values": "node ./tools/validations.js"
   },
   "devDependencies": {
-    "@homecentr/yaml-diff": "1.1.7"
+    "@homecentr/yaml-diff": "1.1.7",
+    "dotenv": "^16.4.5",
+    "env-cmd": "^10.1.0",
+    "nightwatch": "^3.6.1"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.13"
   }
 }
