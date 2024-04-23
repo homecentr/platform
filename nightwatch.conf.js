@@ -12,7 +12,7 @@ module.exports = {
     on_failure : true,
     on_error : false,
     path : "tests/screenshots"
-  }
+  },
 
   webdriver: {},
 
