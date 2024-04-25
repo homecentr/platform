@@ -32,6 +32,9 @@ routes:
       - {{ route.protocol | default("http") }}://{{ backend_host }}:{{ route.target_port | default(80) }}
 {% endfor%}
 {% endif %}
+{% if not (route.backend | default('') is string) %}
+    lb_policy: {{ route.backend_lb_policy | default('ROUND_ROBIN') }}
+{% endif %}
 {% if route.path | default('') != '' %}
     path: {{ route.path }}
 {% endif %}

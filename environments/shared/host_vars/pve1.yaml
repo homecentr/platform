@@ -15,6 +15,7 @@ app_pomerium_routes:
       - "{{ ipam.pve1 }}"
       - "{{ ipam.pve2 }}"
       - "{{ ipam.pve3 }}"
+    backend_lb_policy: RING_HASH
 
 # DNS
 app_pihole_records:

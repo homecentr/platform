@@ -1,14 +1,3 @@
-- name: Load current container config file
-  register: app_container_config
-  ansible.builtin.slurp:
-    path: "/etc/pve/lxc/{{ app_container_info.vmid }}.conf"
-
-- name: Update config with lxc.idmap
-  ansible.builtin.copy:
-    force: true
-    dest: "/etc/pve/lxc/{{ app_container_info.vmid }}.conf"
-    content: "{{ lookup('template', 'lxc-idmap.j2', template_vars=dict(current_config=(app_container_config.content | b64decode)) | combine(container_vars)) }}"
-
 - name: Add mapped uids to setuid
   loop: "{{ container_vars.app_container_mapped_uids | default([]) }}"
   loop_control:

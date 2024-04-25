@@ -11,7 +11,7 @@ app_container_network_interfaces:
     ipv4_gateway: "{{ subnets.services | ansible.utils.ipmath(1) }}"
 
 app_container_pve_node: pve2
-app_container_pve_ha_group_name: noncritical
+app_container_pve_ha_group_name: non-critical
 app_container_pve_replication_nodes:
   - pve1
 

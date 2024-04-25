@@ -15,7 +15,7 @@
 - name: Wait for the container to be created
   retries: 10
   delay: 3
-  until: (app_container_info_raw is defined) and (app_container_info_raw.proxmox_vms | length) > 0
+  until: (app_container_info_raw is defined) and (app_container_info_raw.proxmox_vms | default([]) | length) > 0
   register: app_container_info_raw
   community.general.proxmox_vm_info:
     api_user: root@pam

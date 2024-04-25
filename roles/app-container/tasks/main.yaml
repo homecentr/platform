@@ -22,10 +22,16 @@
   vars:
     container_vars: "{{ hostvars[container_inventory_name] }}"
 
-- name: Configure mapped UID/GID
+- name: Configure mapped UID/GID in container config file
   when: inventory_hostname == hostvars[container_inventory_name].app_container_pve_node
   ansible.builtin.include_tasks:
-    file: uid-gid-mapping.yaml
+    file: uid-gid-mapping-container.yaml
+  vars:
+    container_vars: "{{ hostvars[container_inventory_name] }}"
+
+- name: Configure mapped UID/GID idmap files
+  ansible.builtin.include_tasks:
+    file: uid-gid-mapping-global.yaml
   vars:
     container_vars: "{{ hostvars[container_inventory_name] }}"
 

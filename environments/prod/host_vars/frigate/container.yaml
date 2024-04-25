@@ -4,8 +4,8 @@ app_container_storage_size_gb: 10
 
 app_container_mounts:
   - type: disk
-    storage_name: dpool_nvr
-    index: 2
+    storage_name: dpool-nvr
+    index: 1
     size_gb: 2500
     target_path: /nvr
 
