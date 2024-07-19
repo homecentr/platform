@@ -1,0 +1,35 @@
+- name: PVE guests
+  hosts: pve_guests
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    - name: Create users
+      ansible.builtin.import_role:
+        name: homecentr.system.users
+      tags: [ init, users ]
+
+    - name: Configure SSH
+      ansible.builtin.import_role:
+        name: homecentr.system.ssh
+      tags: [ init, ssh ]
+
+    - name: Set up Message-of-the-day
+      ansible.builtin.import_role:
+        name: homecentr.system.motd
+      tags: [ motd ]
+
+    - name: Set up unattended upgrades
+      ansible.builtin.import_role:
+        name: homecentr.system.unattended_upgrades
+      tags: [ upgrades ]
+
+    - name: Set up etckeeper
+      ansible.builtin.import_role:
+        name: homecentr.system.etckeeper
+      tags: [ etckeeper ]
+
+    - name: Set up Node Exporter
+      ansible.builtin.import_role:
+        name: homecentr.system.node_exporter
+      tags: [ node-exporter ]

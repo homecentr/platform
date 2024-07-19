@@ -1,26 +1,22 @@
 ---
 collections:
-  - name: ansible.posix
-    version: 1.4.0
-  - name: ansible.utils
-    version: 2.7.0
-  - name: oasis_roles.system
-  - name: community.general
-    version: 8.4.0
-  - name: gluster.gluster
-    version: 1.0.2
-  - name: kubernetes.core
-    version: 2.3.2
-  - name: community.crypto
-    version: 2.5.0
-  - name: community.sops
-    version: 1.6.7
+  # - name: ansible.posix
+  #   version: 1.5.4
+  # - name: ansible.utils
+  #   version: 2.7.0
+  # - name: community.general
+  #   version: 8.4.0
+  # - name: community.crypto
+  #   version: 2.5.0
+  # - name: community.sops
+  #   version: 1.6.7
+  - name: prometheus.prometheus
   - name: https://github.com/homecentr/ansible-collection-system
     type: git
-    version: origin/fix/ssh #master
+    version: origin/feat/simplify #master
   - name: https://github.com/homecentr/ansible-collection-proxmox
     type: git
-    version: origin/fix/https-forward-2 # master
+    version: origin/feat/simplify # master
 
 roles:
   - name: geerlingguy.pip
@@ -30,9 +26,5 @@ roles:
   - name: geerlingguy.clamav
   - name: geerlingguy.docker
     version: 7.1.0
-  - name: geerlingguy.helm
-    version: 1.0.1
   - name: geerlingguy.node_exporter
     version: 2.0.0
-  - name: lablabs.rke2
-    version: 1.28.0

@@ -1,9 +1,3 @@
-- import_playbook: proxmox/nodes.yaml
-- import_playbook: proxmox/cluster.yaml
-- import_playbook: containers/pihole.yaml
-- import_playbook: containers/cloudflared.yaml
-- import_playbook: containers/mqtt.yaml
-- import_playbook: containers/pomerium.yaml
-- import_playbook: containers/homepage.yaml
-- import_playbook: containers/monitoring.yaml
-- import_playbook: containers/frigate.yaml
+- ansible.builtin.import_playbook: pve-nodes.yaml
+- ansible.builtin.import_playbook: pve-guests.yaml
+  

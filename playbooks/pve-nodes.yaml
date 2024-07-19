@@ -1,0 +1,63 @@
+- name: Proxmox Virtual Environment Configuration
+  hosts: pve_nodes
+  become: true
+  become_method: ansible.builtin.sudo
+  any_errors_fatal: true
+  tasks:
+    # Must run before users to make sure the apt repositories are configured in order to install sudo
+    - name: Configure proxmox apt repositories
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_apt
+      tags: [ init, apt ]
+
+    # Root's password must be set so that it can be used to communicate with Proxmox API
+    - name: Create users
+      ansible.builtin.import_role:
+        name: homecentr.system.users
+      tags: [ init, users ]
+
+    - name: Configure SSH
+      ansible.builtin.import_role:
+        name: homecentr.system.ssh
+      tags: [ init, ssh ]
+
+    - name: Configure https port forwarding
+      ansible.builtin.import_role:
+        name: homecentr.proxmox.pve_https_forward
+      tags: [ pve-https-forward ]
+
+    - name: Install and configure Network UPS tools
+      ansible.builtin.import_role:
+        name: homecentr.system.ups
+      tags: [ ups ]
+
+    - name: Set up Message-of-the-day
+      ansible.builtin.import_role:
+        name: homecentr.system.motd
+      vars:
+        motd_enable_ups_status: "true"
+      tags: [ motd ]
+
+    - name: Install lynis
+      ansible.builtin.import_role:
+        name: homecentr.system.lynis
+      tags: [ lynis ]
+
+    - name: Create init container script
+      ansible.builtin.copy:
+        dest: /usr/sbin/pct-init-container
+        mode: 0750
+        owner: root
+        group: root
+        content: "{{ lookup('template', 'init-container.sh.j2') }}"
+      tags: [ container-init-script ]
+
+    - name: Set up etckeeper
+      ansible.builtin.import_role:
+        name: homecentr.system.etckeeper
+      tags: [ etckeeper ]
+
+    - name: Set up Node Exporter
+      ansible.builtin.import_role:
+        name: homecentr.system.node_exporter
+      tags: [ node-exporter ]
