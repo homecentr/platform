@@ -1,8 +1,0 @@
-{% for zone in pve_cluster_vxlans %}
-{% for vnet in zone.vnets %}
-vnet: {{ vnet.name }}
-    zone {{ zone.name }}
-    tag {{ vnet.tag }}
-
-{% endfor %}
-{% endfor %}

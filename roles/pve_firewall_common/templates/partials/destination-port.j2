@@ -1,3 +1,0 @@
-{%- if rule.destination_port | default("") != "" %}
- -dport {{ rule.destination_port }}
-{%- endif %}

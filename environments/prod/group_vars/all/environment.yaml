@@ -1,9 +1,0 @@
-env:
-  name: prod
-  suffix: ""
-  suffix_display: ""
-  domain: homecentr.one
-
-subnets:
-  services: 10.1.2.0/24
-  services_storage: 10.1.7.0/24

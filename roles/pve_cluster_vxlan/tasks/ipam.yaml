@@ -1,7 +1,0 @@
-- name: Configure IPAM and DHCP ranges for subnet
-  changed_when: true
-  loop: "{{ lookup('template', 'subnet-list.j2') | from_yaml }}"
-  loop_control:
-    loop_var: subnet
-  ansible.builtin.command:
-    cmd: "pvesh set /cluster/sdn/vnets/{{ subnet.vnet_name }}/subnets/{{ subnet.id }}"

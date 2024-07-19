@@ -1,8 +1,0 @@
-- name: Configure migration network
-  run_once: true
-  ansible.builtin.lineinfile:
-    path: /etc/pve/datacenter.cfg
-    create: false
-    regexp: "^migration:.*"
-    line: "network={{ pve_cluster_options_migration_network }},type=secure"
-  when: pve_cluster_options_migration_network is defined and pve_cluster_options_migration_network != ""

@@ -1,9 +1,0 @@
-env:
-  name: lab
-  suffix: -lab
-  suffix_display: -Lab
-  domain: homecentr.one
-
-subnets:
-  services: 10.1.8.0/24
-  services_storage: 192.168.8.0/24

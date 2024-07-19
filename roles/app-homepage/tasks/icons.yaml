@@ -1,9 +1,0 @@
-- name: Copy icon
-  register: app_homepage_icons
-  ansible.builtin.copy:
-    src: "{{ item }}"
-    dest: "/etc/homepage/icons/{{ item | basename }}"
-    owner: homepage
-    group: homepage
-    mode: "0440"
-  with_fileglob: "files/*"

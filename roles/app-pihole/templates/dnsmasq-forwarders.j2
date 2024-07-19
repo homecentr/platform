@@ -1,3 +1,0 @@
-{% for custom_forwarder in app_pihole_custom_forwarders | default([]) %}
-server=/{{ custom_forwarder.domain_pattern }}/{{ custom_forwarder.nameserver }}
-{% endfor %}

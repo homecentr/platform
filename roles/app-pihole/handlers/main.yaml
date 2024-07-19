@@ -1,8 +1,0 @@
-- name: restart_dns
-  ansible.builtin.command:
-    cmd: pihole restartdns
-
-- name: restart_lighttpd
-  ansible.builtin.systemd_service:
-    name: lighttpd
-    state: restarted

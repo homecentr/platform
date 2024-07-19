@@ -1,5 +1,0 @@
-app_container_ostemplate: local:vztmpl/debian-12-standard_12.2-1_amd64.tar.zst
-app_container_pve_replication_cron_expression: "*/5"
-app_container_pve_ha_group_name: non-critical
-
-app_container_nameserver: "{{ ipam.pihole1 }},{{ ipam.pihole2 }}"

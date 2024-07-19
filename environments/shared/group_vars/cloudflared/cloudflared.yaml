@@ -1,2 +1,0 @@
-app_cloudflared_package_version: 2024.4.0
-app_cloudflared_healthcheck_hostname: "tunnel-health{{ env.suffix }}.homecentr.one"

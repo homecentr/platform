@@ -1,5 +1,0 @@
-[group {{ group.name }}]
-
-{% for rule in group.rules %}
-{{ lookup('template', '../../pve_firewall_common/templates/firewall-rule.j2',template_vars=(dict(rule=rule,default_scope=default_scope))) }}
-{% endfor %}

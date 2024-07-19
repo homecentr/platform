@@ -1,6 +1,0 @@
-- name: Add redirect from root to /admin
-  notify: restart_lighttpd
-  ansible.builtin.lineinfile:
-    path: /etc/lighttpd/lighttpd.conf
-    line: url.redirect = ("^/$" => "/admin" )
-    create: false
