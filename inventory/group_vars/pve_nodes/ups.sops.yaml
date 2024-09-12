@@ -1,4 +1,5 @@
 ups_observer_password: ENC[AES256_GCM,data:6hOusAECGlOcRfvlfrScBQCT,iv:+WSb3FOVY9XaNzW32aJBXI4d9f6sp+MvuIBP2h7JvGk=,tag:W0ZF3EZd7wFQPN9dWSCSDw==,type:str]
+ups_alert_pagerduty_routing_key: ENC[AES256_GCM,data:dWMdNjUOKyFEU5TiYFCl2skrXu824f8Qdm3+PagjQZQ=,iv:qKQky+VElTA7EV2+maopsN6GKDeLBpd48HSHIQ4a/Fs=,tag:Vo6GdxR2ThHWZZu9V6Q5WA==,type:str]
 sops:
     kms: []
     gcp_kms: []
@@ -14,8 +15,8 @@ sops:
             czhTc3hjY2diUmZuaFdOMDRKVmVZZncKoQ1GwgWjY773aUPwIno02YMr43VI+gge
             FV5SPn/6dBuGtycIHc1V6Fh23xbRTTQGZgPaQW19koKVMrJQQ9ravA==
             -----END AGE ENCRYPTED FILE-----
-    lastmodified: "2024-07-08T14:57:20Z"
-    mac: ENC[AES256_GCM,data:Zja+1RBG31quXHXNbGdiyRUkmX5nzAaIi7IWWRR20l5b9ziN/ik1goChD1KIKxjMOfmTcSinW/TGLlJJ1ZNEWA/oaqDmY51xbg2m7x85j3u2O30/A0uJLsUZxp1wWQI085UOBDVwg6lA5qb66S4F+/zCjWLyU6885Qlt7it/zzg=,iv:mArkS0nazzivJ0YvLkLGj+N+Sg/7GToJQqIWFLdj/fw=,tag:SaMul47eT87WECVeYURvCQ==,type:str]
+    lastmodified: "2024-09-12T16:08:22Z"
+    mac: ENC[AES256_GCM,data:tjLH4LkwBhLVR9vwQsRGLoZyVUX47oJmt1awTpRoB/VoOPjGCUoyuR5v/yDflG/6HTQLC6rhn5fbakX8yHS0dtSAvqpxqZhu9elapjBVH+7KjE3fzAD1gLBoK2KIfLrk70S2gBj7TMBYKBc5kCM6dWBppRyUHZAtaaQ2waFzlJ4=,iv:rvN2He1Pispf/RR2QA9VSuuscTrNasU0STgT7cDwk2A=,tag:FYyQbag1MKBoEwXdK9oCow==,type:str]
     pgp:
         - created_at: "2023-06-05T09:01:58Z"
           enc: |

@@ -33,3 +33,14 @@
       ansible.builtin.import_role:
         name: homecentr.system.node_exporter
       tags: [ node-exporter ]
+
+    - name: Set up Docker
+      when: docker_enabled | default(false)
+      ansible.builtin.import_role:
+        name: homecentr.system.docker
+      tags: [ docker ]
+
+    - name: Set up Promtail
+      ansible.builtin.import_role:
+        name: homecentr.system.promtail
+      tags: [ promtail ]

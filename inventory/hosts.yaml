@@ -40,38 +40,58 @@ all:
               ansible_host: 10.1.2.66
             cloudflared2:
               ansible_host: 10.1.2.67
+            cloudflared3:
+              ansible_host: 10.1.2.69
             pbs:
               ansible_host: 10.1.2.68
             monitoring:
               ansible_host: 10.1.2.70
+              docker_enabled: true
+              promtail_docker_logs_enabled: true
             homepage:
               ansible_host: 10.1.2.71
             mqtt:
               ansible_host: 10.1.2.72
             frigate:
               ansible_host: 10.1.2.73
+              docker_enabled: true
+              docker_enable_nvidia_runtime: true
+              promtail_docker_logs_enabled: true
             snipeit:
               ansible_host: 10.1.2.74
+              docker_enabled: true
+              promtail_docker_logs_enabled: true
             haraka:
               ansible_host: 10.1.2.75
+              docker_enabled: true
+              promtail_docker_logs_enabled: true
             unifi_controller:
               ansible_host: 10.1.2.76
             docs:
               ansible_host: 10.1.2.77
+              docker_enabled: true
+              promtail_docker_logs_enabled: true
             autosnap:
               ansible_host: 10.1.2.78
             myspeed:
               ansible_host: 10.1.2.80
             immich:
               ansible_host: 10.1.2.82
+              docker_enabled: true
+              docker_enable_nvidia_runtime: true
+              promtail_docker_logs_enabled: true
+            traefik1:
+              ansible_host: 10.1.2.83
+            traefik2:
+              ansible_host: 10.1.2.84
+            traefik3:
+              ansible_host: 10.1.2.85
+            home_assistant:
+              ansible_host: 10.1.2.86
+              docker_enabled: true
+              promtail_docker_logs_enabled: true
         vm:
           hosts:
-            pomerium:
-              ansible_host: 10.1.2.69
-              ansible_hostname: app-pomerium
             coder:
               ansible_host: 10.1.2.79
               ansible_hostname: app-coder
-            nextcloud:
-              ansible_host: 10.1.2.81
-              ansible_hostname: app-nextcloud
