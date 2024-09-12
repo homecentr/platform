@@ -4,6 +4,8 @@ ups_devices:
     description: Eaton 1100
     port: auto
     monitored_by: pve1
+    low_battery_charge: 20 # Defines shutdown threshold
+    low_battery_runtime: 180 # Defines shutdown threshold
     # vendor: 0463
     # product: ffff
 
@@ -12,5 +14,7 @@ ups_devices:
     description: Eaton 1500
     port: auto
     monitored_by: pve2
+    low_battery_charge: 20 # Defines shutdown threshold
+    low_battery_runtime: 180 # Defines shutdown threshold
     # vendor: 0463
     # product: ffff
