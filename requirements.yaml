@@ -13,10 +13,10 @@ collections:
   - name: prometheus.prometheus
   - name: https://github.com/homecentr/ansible-collection-system
     type: git
-    version: origin/feat/simplify #master
+    version: master
   - name: https://github.com/homecentr/ansible-collection-proxmox
     type: git
-    version: origin/feat/simplify # master
+    version: master
 
 roles:
   - name: geerlingguy.pip

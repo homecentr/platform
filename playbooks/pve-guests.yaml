@@ -34,6 +34,12 @@
         name: homecentr.system.node_exporter
       tags: [ node-exporter ]
 
+    - name: Install nvidia driver
+      when: install_nvidia_driver | default(false)
+      ansible.builtin.import_role:
+        name: homecentr.system.nvidia_driver
+      tags: [ nvidia-driver ]
+
     - name: Set up Docker
       when: docker_enabled | default(false)
       ansible.builtin.import_role:

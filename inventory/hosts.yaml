@@ -47,6 +47,7 @@ all:
             monitoring:
               ansible_host: 10.1.2.70
               docker_enabled: true
+              docker_enable_tcp: true
               promtail_docker_logs_enabled: true
             homepage:
               ansible_host: 10.1.2.71
@@ -55,29 +56,39 @@ all:
             frigate:
               ansible_host: 10.1.2.73
               docker_enabled: true
+              docker_enable_tcp: true
               docker_enable_nvidia_runtime: true
               promtail_docker_logs_enabled: true
             snipeit:
               ansible_host: 10.1.2.74
               docker_enabled: true
+              docker_enable_tcp: true
               promtail_docker_logs_enabled: true
             haraka:
               ansible_host: 10.1.2.75
               docker_enabled: true
+              docker_enable_tcp: true
               promtail_docker_logs_enabled: true
             unifi_controller:
               ansible_host: 10.1.2.76
             docs:
               ansible_host: 10.1.2.77
               docker_enabled: true
+              docker_enable_tcp: true
               promtail_docker_logs_enabled: true
             autosnap:
               ansible_host: 10.1.2.78
             myspeed:
               ansible_host: 10.1.2.80
+            nextcloud:
+              ansible_host: 10.1.2.81
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
             immich:
               ansible_host: 10.1.2.82
               docker_enabled: true
+              docker_enable_tcp: true
               docker_enable_nvidia_runtime: true
               promtail_docker_logs_enabled: true
             traefik1:
@@ -89,6 +100,24 @@ all:
             home_assistant:
               ansible_host: 10.1.2.86
               docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            media:
+              ansible_host: 10.1.2.87
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+              docker_enable_nvidia_runtime: true
+              install_nvidia_driver: true
+            management:
+              ansible_host: 10.1.2.88
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            outline:
+              ansible_host: 10.1.2.89
+              docker_enabled: true
+              docker_enable_tcp: true
               promtail_docker_logs_enabled: true
         vm:
           hosts:
