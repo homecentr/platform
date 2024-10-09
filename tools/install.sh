@@ -3,5 +3,8 @@
 # yarn install is executed automatically
 
 ansible-galaxy install -r ./requirements.yaml --force
-ansible-playbook ./playbooks/local/setup.yaml
-ansible-playbook -i ./inventory/ ./playbooks/local/ssh.yaml
+
+if [ -z "${SKIP_PLAYBOOKS}" ]; then
+    ansible-playbook ./playbooks/local/setup.yaml
+    ansible-playbook -i ./inventory/ ./playbooks/local/ssh.yaml
+fi
