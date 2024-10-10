@@ -24,7 +24,7 @@ all:
       children:
         lxc:
           vars:
-            node_exporter_args: "--collector.disable-defaults --collector.os --collector.uname --collector.textfile --collector.textfile.directory /var/lib/prometheus/node-exporter"
+            node_exporter_args: --collector.disable-defaults --collector.os --collector.uname --collector.textfile --collector.textfile.directory /var/lib/prometheus/node-exporter
           hosts:
             pihole1:
               ansible_host: 10.1.2.64

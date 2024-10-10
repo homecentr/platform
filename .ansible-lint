@@ -3,7 +3,9 @@ exclude_paths:
   - .github/
   - node_modules/
   - "**/*.sops.yml"
+  - "**/*.sops.yaml"
   - ".sops.yaml"
+  - "**/inventory/hosts.yaml"
 
 use_default_rules: true
 
