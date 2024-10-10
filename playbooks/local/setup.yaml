@@ -1,0 +1,43 @@
+- name: Install required packages
+  hosts: localhost
+  connection: local
+  become: true
+  become_method: ansible.builtin.sudo
+  tasks:
+    - name: Get distro codename
+      register: ubuntu_lsb_release
+      changed_when: false
+      ansible.builtin.command:
+        cmd: lsb_release -sc
+
+    - name: Add Cloudflare apt key
+      ansible.builtin.get_url:
+        url: https://pkg.cloudflare.com/cloudflare-main.gpg
+        dest: /usr/share/keyrings/cloudflare-main.gpg
+        owner: "root"
+        group: "root"
+        mode: "0644"
+
+    - name: Add Cloudflare repository
+      ansible.builtin.apt_repository:
+        repo: "deb [signed-by=/usr/share/keyrings/cloudflare-main.gpg] https://pkg.cloudflare.com/cloudflared {{ ubuntu_lsb_release.stdout }} main"
+        filename: cloudflare
+        update_cache: true
+        state: present
+
+    - name: Install required python modules
+      ansible.builtin.include_role:
+        name: geerlingguy.pip
+      vars:
+        pip_package: python3-pip
+        pip_install_packages:
+          - netaddr
+          - stormssh
+          - ansible-lint
+
+    - name: Install required packages
+      ansible.builtin.package:
+        name:
+          - sshpass
+          - cloudflared
+          - grepcidr

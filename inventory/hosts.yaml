@@ -1,0 +1,126 @@
+all:
+  vars:
+    ansible_user: lholota
+    domain: homecentr.one
+    ups_shutdown_command: "systemctl stop ve-ha-crm & systemctl stop pve-ha-lrm && /sbin/shutdown -h +0"
+  children:
+    pve_nodes:
+      hosts:
+        pve1:
+          ansible_host: 10.1.2.16
+          ansible_hostname: pve1
+          ups_name: ups1
+        pve2:
+          ansible_host: 10.1.2.17
+          ansible_hostname: pve2
+          ups_name: ups2
+        pve3:
+          ansible_host: 10.1.2.18
+          ansible_hostname: pve3
+          ups_name: ups1
+    pve_guests:
+      vars:
+        unattended_upgrades_additional_security_only: false # apply all updates
+      children:
+        lxc:
+          vars:
+            node_exporter_args: --collector.disable-defaults --collector.os --collector.uname --collector.textfile --collector.textfile.directory /var/lib/prometheus/node-exporter
+          hosts:
+            pihole1:
+              ansible_host: 10.1.2.64
+              ssh_allowed_users:
+                - lholota
+                - gravity
+            pihole2:
+              ansible_host: 10.1.2.65
+              ssh_allowed_users:
+                - lholota
+                - gravity
+            cloudflared1:
+              ansible_host: 10.1.2.66
+            cloudflared2:
+              ansible_host: 10.1.2.67
+            cloudflared3:
+              ansible_host: 10.1.2.69
+            pbs:
+              ansible_host: 10.1.2.68
+            monitoring:
+              ansible_host: 10.1.2.70
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            homepage:
+              ansible_host: 10.1.2.71
+            mqtt:
+              ansible_host: 10.1.2.72
+            frigate:
+              ansible_host: 10.1.2.73
+              docker_enabled: true
+              docker_enable_tcp: true
+              docker_enable_nvidia_runtime: true
+              promtail_docker_logs_enabled: true
+            snipeit:
+              ansible_host: 10.1.2.74
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            haraka:
+              ansible_host: 10.1.2.75
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            unifi_controller:
+              ansible_host: 10.1.2.76
+            docs:
+              ansible_host: 10.1.2.77
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            autosnap:
+              ansible_host: 10.1.2.78
+            myspeed:
+              ansible_host: 10.1.2.80
+            nextcloud:
+              ansible_host: 10.1.2.81
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            immich:
+              ansible_host: 10.1.2.82
+              docker_enabled: true
+              docker_enable_tcp: true
+              docker_enable_nvidia_runtime: true
+              promtail_docker_logs_enabled: true
+            traefik1:
+              ansible_host: 10.1.2.83
+            traefik2:
+              ansible_host: 10.1.2.84
+            traefik3:
+              ansible_host: 10.1.2.85
+            home_assistant:
+              ansible_host: 10.1.2.86
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            media:
+              ansible_host: 10.1.2.87
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+              docker_enable_nvidia_runtime: true
+              install_nvidia_driver: true
+            management:
+              ansible_host: 10.1.2.88
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+            outline:
+              ansible_host: 10.1.2.89
+              docker_enabled: true
+              docker_enable_tcp: true
+              promtail_docker_logs_enabled: true
+        vm:
+          hosts:
+            coder:
+              ansible_host: 10.1.2.79
+              ansible_hostname: app-coder

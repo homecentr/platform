@@ -6,16 +6,18 @@
   "license": "GPL",
   "private": true,
   "scripts": {
+    "install": "./tools/install.sh",
     "lint": "ANSIBLE_CONFIG=\"./ansible.cfg\" ansible-lint",
-    "setup:local": "ansible-galaxy install -r ./requirements.yml --force && ansible-playbook ./playbooks/_local.yml",
-    "lab:clear-keys": "./tools/clearkeys.sh",
-    "lab:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh lab proxmox -u root -e ansible_user=root --tags init -k",
-    "lab:apply": "./tools/apply.sh lab",
-    "prod:init": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh prod proxmox -u root -e ansible_user=root --tags init -k",
-    "prod:apply": "./tools/apply.sh prod",
-    "validate-values": "node ./tools/validations.js"
+    "init:pve": "ANSIBLE_HOST_KEY_CHECKING=False ./tools/apply.sh pve-nodes -u root -e ansible_user=root --tags init -k",
+    "apply": "./tools/apply.sh"
   },
   "devDependencies": {
-    "@homecentr/yaml-diff": "1.1.7"
+    "@homecentr/yaml-diff": "1.1.7",
+    "dotenv": "^16.4.5",
+    "env-cmd": "^10.1.0",
+    "nightwatch": "^3.6.1"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.13"
   }
 }

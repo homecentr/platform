@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+read -r -d '' SCRIPT << EOM
+set -e
+
+apt-get update
+apt-get install -y sudo
+
+# Enable passwordless sudo
+sed -i -E 's/%sudo\s+ALL=\(ALL:ALL\)\s+ALL/%sudo   ALL=(ALL:ALL) NOPASSWD: ALL/' /etc/sudoers
+
+{% for user in users_admin_users %}
+id -u {{ user.username }} > /dev/null || adduser --disabled-password --gecos GECOS {{ user.username }}
+
+usermod -a -G sudo {{ user.username }}
+
+# Create home dir
+mkdir -p /home/{{ user.username }}
+chown {{ user.username }} /home/{{ user.username }}
+chgrp {{ user.username }} /home/{{ user.username }}
+chmod 0700 /home/{{ user.username }}
+
+# Create .ssh directory
+mkdir -p /home/{{ user.username }}/.ssh
+chown {{ user.username }} /home/{{ user.username }}/.ssh
+chgrp {{ user.username }} /home/{{ user.username }}/.ssh
+chmod 0700 /home/{{ user.username }}/.ssh
+
+# Configure public keys
+echo "" > /home/{{ user.username }}/.ssh/authorized_keys
+{% for public_key in user.public_keys %}
+echo "{{ public_key }}" >> /home/{{ user.username }}/.ssh/authorized_keys
+{% endfor %}
+{% endfor %}
+
+# Add allowed ssh users
+SSH_ALLOWED_USERS="AllowUsers {{ ssh_allowed_users | join(' ') }}"
+grep -q "AllowedUsers " /etc/ssh/sshd_config || echo "$SSH_ALLOWED_USERS" >> /etc/ssh/sshd_config
+
+# Apply sshd changes
+systemctl restart sshd
+
+echo "Done :)"
+EOM
+
+pct exec $1 -- bash -c "$SCRIPT"
