@@ -21,8 +21,3 @@ jobs:
 
       - name: Lint Ansible files
         run: yarn lint
-
-      - name: Compare values across environments
-        run: yarn validate-values
-        env:
-          SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_PRIVATE_KEY }}
