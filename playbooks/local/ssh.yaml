@@ -30,9 +30,12 @@
         create: false
         marker: "# {mark} Homecentr SSH configuration"
         block: |
+          # Locally connecting to an actual host, canonicalization works
           Match host=pve*.{{ domain }},app-*.{{ domain }} exec "dig -t a '%h' +short | tail -n1 | grepcidr '10.0.0.0/8'"
             ForwardAgent yes
 
-          Match host=pve*.{{ domain }},app-*.{{ domain }} exec "dig -t a '%h' +short | tail -n1 | grepcidr -v '10.0.0.0/8'"
+          # Remotely the raw hostname does not exist (only with prefix), therefore canonicalization does not work
+          # so we have to add the domain manually
+          Match host=pve*,app-* exec "dig -t a 'ssh-%h.{{ domain }}' +short | tail -n1 | grepcidr -v '10.0.0.0/8'"
             ForwardAgent yes
-            ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h
+            ProxyCommand /usr/local/bin/cloudflared access ssh --hostname "ssh-%h.{{ domain }}"
