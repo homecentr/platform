@@ -18,4 +18,4 @@ jobs:
 
       - name: SOPS
         run: |
-          sops decrypt ./inventory/group_vars/all/users.sops.yaml
+          sops decrypt --config ./.sops.yaml ./inventory/group_vars/all/users.sops.yaml
