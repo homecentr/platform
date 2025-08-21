@@ -2,7 +2,7 @@ all:
   vars:
     ansible_user: lholota
     domain: homecentr.one
-    ups_shutdown_command: "systemctl stop ve-ha-crm & systemctl stop pve-ha-lrm && /sbin/shutdown -h +0"
+    ups_shutdown_command: "systemctl stop pve-ha-crm & systemctl stop pve-ha-lrm && /sbin/shutdown -h +0"
   children:
     pve_nodes:
       hosts:
@@ -71,7 +71,7 @@ all:
               promtail_docker_logs_enabled: true
             unifi_controller:
               ansible_host: 10.1.2.76
-            docs:
+            netboot:
               ansible_host: 10.1.2.77
               docker_enabled: true
               docker_enable_tcp: true
@@ -119,6 +119,10 @@ all:
               docker_enabled: true
               docker_enable_tcp: true
               promtail_docker_logs_enabled: true
+            dhcp1:
+              ansible_host: 10.1.2.90
+            dhcp2:
+              ansible_host: 10.1.2.91
         vm:
           hosts:
             coder:
