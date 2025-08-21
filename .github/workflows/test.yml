@@ -1,0 +1,22 @@
+name: Test
+on:
+  push:
+
+jobs: 
+  validate:
+    runs-on: ubuntu-latest
+    env: 
+      SOPS_AGE_KEY: ${{ secrets.SOPS_AGE_PRIVATE_KEY }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@master
+
+      - name: Install pre-requisites
+        run: |
+          sudo wget -q -O /usr/bin/sops https://github.com/mozilla/sops/releases/download/v3.7.3/sops-v3.7.3.linux.amd64
+          sudo chmod a+x /usr/bin/sops
+
+      - name: SOPS
+        run: |
+          
+          sops decrypt ./secrets.yaml > secrets.yam
